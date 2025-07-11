@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LocalServe – Find Local Services</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .main-header {
+      background: url('images/file.jpg') center/cover no-repeat;
+      height: 300px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .main-header h1 {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    .main-header p {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .search-box {
+      margin-top: 20px;
+      display: flex;
+      width: 100%;
+      max-width: 500px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-box input {
+      flex: 1;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .search-box button {
+      background-color: #357edd;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 30px 20px 10px;
+    }
+
+    .category-card {
+      background: white;
+      border-radius: 12px;
+      padding: 15px 25px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .category-card img {
+      width: 30px;
+      height: 30px;
+      margin-bottom: 10px;
+    }
+
+    .category-card span {
+      font-weight: 600;
+      display: block;
+    }
+
+    .form-container {
+      background: white;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    .plan-options {
+      display: flex;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .plan-options label {
+      font-weight: 500;
+    }
+
+    .submit-button {
+      background-color: #004aad;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+
+    /* Fullscreen Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.92);
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background: #fff;
+      margin: 40px auto;
+      border-radius: 16px;
+      max-width: 800px;
+      width: 95vw;
+      padding: 0;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .close {
+      color: #fff;
+      position: absolute;
+      top: 18px;
+      right: 32px;
+      font-size: 2.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 2;
+      text-shadow: 0 2px 8px #000;
+    }
+
+    .modal-carousel {
+      width: 100%;
+      position: relative;
+      background: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 340px;
+      border-radius: 16px 16px 0 0;
+      overflow: hidden;
+    }
+
+    .modal-carousel img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+      background: #222;
+      border-radius: 0;
+    }
+
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(30, 30, 30, 0.5);
+      border: none;
+      color: #fff;
+      font-size: 2.5rem;
+      padding: 0 18px;
+      cursor: pointer;
+      border-radius: 50%;
+      z-index: 2;
+      transition: background 0.2s;
+    }
+
+    .carousel-arrow.left {
+      left: 10px;
+    }
+
+    .carousel-arrow.right {
+      right: 10px;
+    }
+
+    .carousel-arrow:hover {
+      background: rgba(30, 30, 30, 0.85);
+    }
+
+    .modal-details {
+      padding: 32px 24px 24px 24px;
+      width: 100%;
+    }
+
+    .auth-tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+
+    .auth-tabs button {
+      background: #e9eef7;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px 8px 0 0;
+      font-size: 1rem;
+      cursor: pointer;
+      color: #004aad;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .auth-tabs button.active {
+      background: #004aad;
+      color: #fff;
+    }
+
+    .auth-pane {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 700px) {
+      .modal-content {
+        max-width: 98vw;
+      }
+
+      .modal-details {
+        padding: 18px 6px 18px 6px;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <h1>Find trusted local services near you</h1>
+    <p>From bakers to plumbers – all in one place</p>
+  </header>
+
+  <!-- Example for your categories section -->
+<div class="categories">
+  <div class="category-card" data-category="Gardening">
+    <img src="images/gardening.png" alt="Gardening">
+    <span>Gardening</span>
+  </div>
+  <div class="category-card" data-category="Plumbing">
+    <img src="images/plumbing.png" alt="Plumbing">
+    <span>Plumbing</span>
+  </div>
+  <div class="category-card" data-category="Electrical">
+    <img src="images/electrical.png" alt="Electrical">
+    <span>Electrical</span>
+  </div>
+  <div class="category-card" data-category="Construction">
+    <img src="images/construction.png" alt="Construction">
+    <span>Construction</span>
+  </div>
+</div>
+  <!-- Business Submission Form -->
+    <div id="authPaneSignUp" class="auth-pane">
+  <div class="form-container">
+    <h2>List Your Business</h2>
+    <form id="businessForm" onsubmit="saveAndRedirect(event)">
+      <div class="form-group">
+        <label for="businessName">Business Name</label>
+        <input type="text" id="businessName" name="businessName" required>
+      </div>
+      <div class="form-group">
+        <label for="type">Type of Service</label>
+        <input type="text" id="type" name="type" placeholder="e.g. Plumbing, Baking" required>
+      </div>
+      <div class="form-group">
+        <label for="desc">Description</label>
+        <textarea id="desc" name="desc" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" required pattern="[0-9+\s()-]{7,}">
+      </div>
+      <div class="form-group">
+        <label>Plan</label>
+        <div class="plan-options">
+          <label>
+            <input type="radio" name="plan" value="Standard" checked>
+            <b>Standard</b> (R150)
+            <span style="display:block;font-size:12px;color:#555;">
+            
+            </span>
+          </label>
+          <label>
+            <input type="radio" name="plan" value="Premium">
+            <b>Premium</b> (R230)
+            <span style="display:block;font-size:12px;color:#555;">
+            </span>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="images">Upload Photos (max 5)</label>
+        <input type="file" id="images" name="images" accept="image/*" multiple required>
+        <div id="imagePreview" style="margin-top:10px; display:flex; gap:8px;"></div>
+      </div>
+      <button type="submit" class="submit-button">Submit Business</button>
+    </form>
+  </div>
+
+  <!-- Fullscreen Modal for Business Details -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div class="modal-carousel">
+        <button class="carousel-arrow left" onclick="prevImage(event)">&#10094;</button>
+        <img id="modalImage" src="" alt="Business Image" />
+        <button class="carousel-arrow right" onclick="nextImage(event)">&#10095;</button>
+      </div>
+      <div class="modal-details">
+        <h2 id="modalTitle"></h2>
+        <p id="modalDescription"></p>
+        <p><strong>Type of Service:</strong> <span id="modalType"></span></p>
+        <p><strong>Phone:</strong> <span id="modalPhone"></span></p>
+        <p><strong>Plan:</strong> <span id="modalPlan"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="FireBase.js" type="module"></script>
+  <script>
+const imageInput = document.getElementById('images');
+let lastValidFiles = null;
+
+imageInput.addEventListener('change', function(event) {
+  const files = event.target.files;
+  const preview = document.getElementById('imagePreview');
+  preview.innerHTML = '';
+
+  if (files.length > 5) {
+    alert('You can only upload a maximum of 5 images.');
+    // Restore previous valid selection
+    if (lastValidFiles) {
+      imageInput.files = lastValidFiles;
+      // Re-render preview for previous valid files
+      for (let i = 0; i < lastValidFiles.length; i++) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.width = '60px';
+          img.style.height = '60px';
+          img.style.objectFit = 'cover';
+          img.style.border = '2px solid #eee';
+          img.style.borderRadius = '8px';
+          img.title = `Image ${i + 1}`;
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(lastValidFiles[i]);
+      }
+    }
+    return;
+  }
+
+  // Save this selection as the last valid one
+  lastValidFiles = files;
+
+  for (let i = 0; i < files.length; i++) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.style.width = '60px';
+      img.style.height = '60px';
+      img.style.objectFit = 'cover';
+      img.style.border = '2px solid #eee';
+      img.style.borderRadius = '8px';
+      img.title = `Image ${i + 1}`;
+      preview.appendChild(img);
+    };
+    reader.readAsDataURL(files[i]);
+  }
+});
+
+function saveAndRedirect(event) {
+  event.preventDefault();
+
+  const businessData = {
+    businessName: document.getElementById('businessName').value,
+    type: document.getElementById('type').value,
+    desc: document.getElementById('desc').value,
+    phone: document.getElementById('phone').value,
+    plan: document.querySelector('input[name="plan"]:checked').value,
+    images: []
+  };
+
+  // Collect images as base64 (optional)
+  const imageFiles = document.getElementById('images').files;
+  if (imageFiles.length > 0) {
+    const readers = [];
+    for (let i = 0; i < imageFiles.length; i++) {
+      const reader = new FileReader();
+      readers.push(new Promise((resolve) => {
+        reader.onload = function(e) {
+          resolve(e.target.result);
+        };
+        reader.readAsDataURL(imageFiles[i]);
+      }));
+    }
+    Promise.all(readers).then(images => {
+      businessData.images = images;
+      // Save to localStorage and redirect immediately
+      localStorage.setItem('businessData', JSON.stringify(businessData));
+      window.location.href = 'preview.html';
+      // Send to Google Sheet in the background
+      sendToGoogleSheet(businessData);
+    });
+  } else {
+    // Save to localStorage and redirect immediately
+    localStorage.setItem('businessData', JSON.stringify(businessData));
+    window.location.href = 'preview.html';
+    // Send to Google Sheet in the background
+    sendToGoogleSheet(businessData);
+  }
+}
+
+function sendToGoogleSheet(data) {
+  const submitBtn = document.querySelector('.submit-button');
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+  fetch('YOUR_WEB_APP_URL_HERE', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  }).finally(() => {
+    alert('Business submitted!');
+    document.getElementById('businessForm').reset();
+    document.getElementById('imagePreview').innerHTML = '';
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Business";
+    // Save to localStorage and redirect to preview
+    localStorage.setItem('businessData', JSON.stringify(data));
+    window.location.href = 'preview.html';
+  });
+}
+
+let modalImages = [];
+let currentImageIndex = 0;
+
+function openModalFromData(businessData) {
+  modalImages = businessData.images && businessData.images.length ? businessData.images : [];
+  currentImageIndex = 0;
+  document.getElementById('modalTitle').textContent = businessData.businessName;
+  document.getElementById('modalDescription').textContent = businessData.desc;
+  document.getElementById('modalType').textContent = businessData.type;
+  document.getElementById('modalPhone').textContent = businessData.phone;
+  document.getElementById('modalPlan').textContent = businessData.plan;
+  showModalImage();
+  const modal = document.getElementById('modal');
+  modal.style.display = 'block';
+  modal.classList.add('fade-in');
+  setTimeout(() => modal.classList.remove('fade-in'), 300);
+}
+
+// The .fade-in CSS is already present in the <style> block above and should not be here.
+
+// Keyboard close
+document.addEventListener('keydown', function(e) {
+  if (e.key === "Escape") closeModal();
+});
+
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+function showModalImage() {
+  if (modalImages.length > 0) {
+    document.getElementById('modalImage').src = modalImages[currentImageIndex];
+  } else {
+    document.getElementById('modalImage').src = '';
+  }
+}
+
+function prevImage(e) {
+  e.stopPropagation();
+  if (modalImages.length > 0) {
+    currentImageIndex = (currentImageIndex - 1 + modalImages.length) % modalImages.length;
+    showModalImage();
+  }
+}
+
+function nextImage(e) {
+  e.stopPropagation();
+  if (modalImages.length > 0) {
+    currentImageIndex = (currentImageIndex + 1) % modalImages.length;
+    showModalImage();
+  }
+}
+
+document.getElementById('categorySearch').addEventListener('input', function() {
+  const query = this.value.toLowerCase();
+  document.querySelectorAll('.category-card').forEach(card => {
+    const category = card.getAttribute('data-category').toLowerCase();
+    card.style.display = category.includes(query) ? '' : 'none';
+  });
+});
+
+function showAuthTab(tab) {
+  const isSignUp = tab === 'signup';
+  document.getElementById('signupPane').style.display = isSignUp ? 'flex' : 'none';
+  document.getElementById('loginPane').style.display = isSignUp ? 'none' : 'flex';
+  document.getElementById('tabSignUp').classList.toggle('active', isSignUp);
+  document.getElementById('tabLogin').classList.toggle('active', !isSignUp);
+}
+
+showAuthTab('signup');
+  </script>
+  <!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Business Preview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #f4f8fb;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .header-image {
+      width: 100%;
+      height: 180px;
+      background: url('images/m.jpg') center/cover no-repeat;
+      border-radius: 0 0 18px 18px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .container {
+      max-width: 500px;
+      margin: -60px auto 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 32px rgba(53,126,221,0.13), 0 1.5px 4px rgba(0,0,0,0.04);
+      padding: 36px 28px 28px 28px;
+      position: relative;
+      z-index: 2;
+      transition: box-shadow 0.2s;
+    }
+    .container:hover {
+      box-shadow: 0 10px 40px rgba(53,126,221,0.18), 0 2px 8px rgba(0,0,0,0.06);
+    }
+    h1 {
+      text-align: center;
+      color: #222;
+      margin-bottom: 28px;
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
+    .preview-block {
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e3eaf5;
+      padding-bottom: 18px;
+    }
+    .preview-block p {
+      margin: 12px 0;
+      font-size: 1.08rem;
+      color: #222;
+    }
+    .plan-badge {
+      display: inline-block;
+      background: linear-gradient(90deg, #357edd 60%, #285bb5 100%);
+      color: #fff;
+      font-size: 0.98rem;
+      font-weight: 600;
+      border-radius: 16px;
+      padding: 5px 18px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(53,126,221,0.10);
+    }
+    .photos-section {
+      margin-top: 24px;
+      margin-bottom: 24px;
+    }
+    .photos-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #357edd;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+    .photos-gallery {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .photos-gallery img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(53,126,221,0.08);
+      border: 1.5px solid #e3eaf5;
+      background: #f8fafc;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      animation: fadeInImg 0.5s;
+    }
+    .photos-gallery img:hover {
+      transform: scale(1.08);
+      box-shadow: 0 4px 16px rgba(53,126,221,0.18);
+    }
+    @keyframes fadeInImg {
+      from { opacity: 0; transform: scale(0.95);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    .confirm-btn {
+      display: block;
+      width: 100%;
+      padding: 14px 0;
+      background: linear-gradient(90deg, #357edd 60%, #285bb5 100%);
+      color: #fff;
+      font-size: 1.15rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(53,126,221,0.10);
+      transition: background 0.2s;
+      margin-top: 18px;
+      letter-spacing: 0.5px;
+    }
+    .confirm-btn:hover {
+      background: linear-gradient(90deg, #285bb5 60%, #357edd 100%);
+    }
+    .phone-link {
+      color: #357edd;
+      text-decoration: none;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      background: #e9eef7;
+      padding: 2px 10px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .phone-link:hover {
+      background: #d0e3fa;
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 18px 6px 18px 6px;
+      }
+      .header-image {
+        height: 110px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-image"></div>
+  <div class="container">
+    <h1>Business Preview</h1>
+    <div id="preview" class="preview-block"></div>
+    <div class="photos-section">
+      <div class="photos-title">Photos</div>
+      <div id="photos" class="photos-gallery"></div>
+    </div>
+    <button class="confirm-btn" onclick="confirmAndPay()">Confirm and Pay</button>
+  </div>
+  <script>
+    const PLAN_BENEFITS = {
+      "Standard": [
+        "1 month listing",
+        "Up to 3 images",
+        "Basic support"
+      ],
+      "Premium": [
+        "2 month listing",
+        "Up to 5 images",
+        "Featured placement",
+        "Priority support"
+      ]
+    };
+
+    const data = JSON.parse(localStorage.getItem('businessData'));
+    if (data) {
+      // Plan benefits HTML
+      let planBenefits = "";
+      if (PLAN_BENEFITS[data.plan]) {
+        planBenefits = `<ul style="margin:8px 0 0 0; padding-left:18px; color:#357edd; font-size:0.98rem;">` +
+          PLAN_BENEFITS[data.plan].map(b => `<li>${b}</li>`).join('') +
+          `</ul>`;
+      }
+
+      document.getElementById('preview').innerHTML = `
+        <span class="plan-badge">${data.plan || ''} Plan</span>
+        <p><strong>Business Name:</strong> ${data.businessName}</p>
+        <p><strong>Type of Service:</strong> ${data.type}</p>
+        <p><strong>Description:</strong> ${data.desc}</p>
+        <p><strong>Phone:</strong> <a href="tel:${data.phone.replace(/\D/g,'')}" class="phone-link">${data.phone}</a></p>
+        ${planBenefits}
+      `;
+
+      const photosDiv = document.getElementById('photos');
+      if (data.images && data.images.length > 0) {
+        data.images.forEach((src, idx) => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = `Business photo ${idx + 1}`;
+          img.onerror = function() {
+            this.src = 'images/no-image.png';
+            this.alt = 'No image available';
+          };
+          photosDiv.appendChild(img);
+        });
+      } else {
+        photosDiv.innerHTML = '<span style="color:#888;">No photos uploaded.</span>';
+      }
+    } else {
+      document.getElementById('preview').innerHTML = '<p>No business data found.</p>';
+      document.getElementById('photos').innerHTML = '';
+    }
+
+    function confirmAndPay() {
+      window.location.href = 'payment.html';
+    }
+  </script>
+</body>
+</html>
