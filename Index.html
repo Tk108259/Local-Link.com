@@ -561,7 +561,7 @@ function sendToGoogleSheet(data) {
   const submitBtn = document.querySelector('.submit-button');
   submitBtn.disabled = true;
   submitBtn.textContent = "Submitting...";
-  fetch('YOUR_WEB_APP_URL_HERE', {
+  fetch('https://script.google.com/macros/s/AKfycbytS33CINXpwYZvXQCoZzd238vhdSbZDjdieRBjhYwlStm9S9Ay8JieRjIHUX-i2j-Djg/exec', {
     method: 'POST',
     mode: 'no-cors',
     headers: {
