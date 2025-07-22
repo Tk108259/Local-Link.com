@@ -140,6 +140,25 @@
         height: 110px;
       }
     }
+    <script>
+  const data = JSON.parse(localStorage.getItem('businessData'));
+  if (data) {
+    document.body.innerHTML = `
+      <div style="padding: 20px; max-width: 600px; margin: auto;">
+        <h2>${data.businessName}</h2>
+        <p><strong>Type:</strong> ${data.type}</p>
+        <p><strong>Description:</strong> ${data.desc}</p>
+        <p><strong>Phone:</strong> ${data.phone}</p>
+        <p><strong>Plan:</strong> ${data.plan}</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          ${data.images.map(img => `<img src="${img}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">`).join('')}
+        </div>
+      </div>
+    `;
+  } else {
+    document.body.innerHTML = '<p>No preview data found.</p>';
+  }
+</script>
   </style>
 </head>
 <body>
