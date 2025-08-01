@@ -566,11 +566,6 @@ function saveAndRedirect(event) {
       // Send to Google Sheet in the background
       sendToGoogleSheet(businessData);
     });
-function sendToGoogleSheet(data) {
-  const submitBtn = document.querySelector('.submit-button');
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Submitting...";
-  submitBtn.classList.add('loading');
 
   function sendToGoogleSheet(data) {
   const submitBtn = document.querySelector('.submit-button');
