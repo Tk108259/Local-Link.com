@@ -388,6 +388,9 @@
     <h1>Find trusted local services near you</h1>
     <p>From bakers to plumbers – all in one place</p>
   </header>
+<div style="text-align:center; margin-top:20px;">
+  <input type="text" id="categorySearch" placeholder="Search for a category..." style="padding:10px; width:90%; max-width:400px; border-radius:8px; border:1px solid #ccc;">
+</div>
 
   <!-- Example for your categories section -->
 <div class="categories">
@@ -434,14 +437,14 @@
         <div class="plan-options">
           <label>
             <input type="radio" name="plan" value="Standard" checked>
-            <b>Standard</b> (R150)
+            <b>Standard</b> (R180)
             <span style="display:block;font-size:12px;color:#555;">
             
             </span>
           </label>
           <label>
             <input type="radio" name="plan" value="Premium">
-            <b>Premium</b> (R230)
+            <b>Premium</b> (R250)
             <span style="display:block;font-size:12px;color:#555;">
             </span>
           </label>
@@ -563,15 +566,6 @@ function saveAndRedirect(event) {
       // Send to Google Sheet in the background
       sendToGoogleSheet(businessData);
     });
-  } else {
-    // Save to localStorage and redirect immediately
-    localStorage.setItem('businessData', JSON.stringify(businessData));
-    window.location.href = 'preview.html';
-    // Send to Google Sheet in the background
-    sendToGoogleSheet(businessData);
-  }
-}
-
 function sendToGoogleSheet(data) {
   const submitBtn = document.querySelector('.submit-button');
   submitBtn.disabled = true;
@@ -595,12 +589,20 @@ function sendToGoogleSheet(data) {
     document.getElementById('imagePreview').innerHTML = '';
     submitBtn.disabled = false;
     submitBtn.textContent = "Submit Business";
-    // Do NOT redirect here!
-    // localStorage.setItem('businessData', JSON.stringify(data));
-    // window.location.href = 'preview.html';
+    
   });
 }
+function sendToGoogleSheet(data) {
+  const submitBtn = document.querySelector('.submit-button');
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
 
+  fetch('https://script.google.com/macros/s/AKfycbytS33CINXpwYZvXQCoZzd238vhdSbZDjdieRBjhYwlStm9S9Ay8JieRjIHUX-i2j-Djg/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(data)
   }).finally(() => {
     alert('Business submitted!');
@@ -608,11 +610,11 @@ function sendToGoogleSheet(data) {
     document.getElementById('imagePreview').innerHTML = '';
     submitBtn.disabled = false;
     submitBtn.textContent = "Submit Business";
-    // Save to localStorage and redirect to preview
     localStorage.setItem('businessData', JSON.stringify(data));
     window.location.href = 'preview.html';
   });
 }
+
 
 let modalImages = [];
 let currentImageIndex = 0;
@@ -632,9 +634,6 @@ function openModalFromData(businessData) {
   setTimeout(() => modal.classList.remove('fade-in'), 300);
 }
 
-// The .fade-in CSS is already present in the <style> block above and should not be here.
-
-// Keyboard close
 document.addEventListener('keydown', function(e) {
   if (e.key === "Escape") closeModal();
 });
@@ -666,14 +665,6 @@ function nextImage(e) {
     showModalImage();
   }
 }
-
-document.getElementById('categorySearch').addEventListener('input', function() {
-  const query = this.value.toLowerCase();
-  document.querySelectorAll('.category-card').forEach(card => {
-    const category = card.getAttribute('data-category').toLowerCase();
-    card.style.display = category.includes(query) ? '' : 'none';
-  });
-});
 
 function showAuthTab(tab) {
   const isSignUp = tab === 'signup';
