@@ -458,7 +458,6 @@
       <button type="submit" class="submit-button">Submit Business</button>
     </form>
   </div>
-
   <!-- Fullscreen Modal for Business Details -->
   <div id="modal" class="modal">
     <div class="modal-content">
@@ -579,17 +578,48 @@ function sendToGoogleSheet(data) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data)
-  }).finally(() => {
-    alert('Business submitted!');
-    document.getElementById('businessForm').reset();
-    document.getElementById('imagePreview').innerHTML = '';
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Submit Business";
-    localStorage.setItem('businessData', JSON.stringify(data));
+  // ...existing code...
+function saveAndRedirect(event) {
+  event.preventDefault();
+
+  const businessData = {
+    businessName: document.getElementById('businessName').value,
+    type: document.getElementById('type').value,
+    desc: document.getElementById('desc').value,
+    phone: document.getElementById('phone').value,
+    plan: document.querySelector('input[name="plan"]:checked').value,
+    images: []
+  };
+
+  const imageFiles = document.getElementById('images').files;
+  if (imageFiles.length > 0) {
+    const readers = [];
+    for (let i = 0; i < imageFiles.length; i++) {
+      const reader = new FileReader();
+      readers.push(new Promise((resolve) => {
+        reader.onload = function(e) {
+          resolve(e.target.result);
+        };
+        reader.readAsDataURL(imageFiles[i]);
+      }));
+    }
+    Promise.all(readers)
+      .then(images => {
+        businessData.images = images;
+        localStorage.setItem('businessData', JSON.stringify(businessData));
+        window.location.href = 'preview.html';
+      })
+      .catch(() => {
+        // If image reading fails, still save and redirect
+        localStorage.setItem('businessData', JSON.stringify(businessData));
+        window.location.href = 'preview.html';
+      });
+  } else {
+    localStorage.setItem('businessData', JSON.stringify(businessData));
     window.location.href = 'preview.html';
-  });
+  }
 }
+// ...existing code...
 
 
 let modalImages = [];
@@ -657,3 +687,4 @@ showAuthTab('signup');
 
 </body>
 </html>
+
