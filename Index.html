@@ -432,17 +432,16 @@
         <label for="phone">Phone Number</label>
         <input type="tel" id="phone" name="phone" required pattern="[0-10\s()-]{7,}">
       </div>
-        <input type="text" name="Location" id="location" placeholder="Business Location" required>
       <div class="form-group">
-        <label>Plan</label>
+  <label for="location">Business Location</label>
+  <input type="text" name="location" id="location" placeholder="Business Location" required>
+</div> 
+      <label>Plan</label>
         <div class="plan-options">
           <label>
             <input type="radio" name="plan" value="Standard" checked>
             <b>Standard</b> (R200)
             <span style="display:block;font-size:12px;color:#555;">
-          <div class="form-group">
-              <label for="location">Location</label>
-            <input type="text" name="Location" id="location" placeholder="Business Location" required>
             </span>
           </label>
           <label>
@@ -546,8 +545,19 @@ function saveAndRedirect(event) {
     plan: document.querySelector('input[name="plan"]:checked').value,
     images: []
   };
+function saveAndRedirect(event) {
+  event.preventDefault();
 
-  // Collect images as base64 (optional)
+  const businessData = {
+    businessName: document.getElementById('businessName').value,
+    type: document.getElementById('type').value,
+    desc: document.getElementById('desc').value,
+    phone: document.getElementById('phone').value,
+    location: document.getElementById('location').value, // ✅ added location
+    plan: document.querySelector('input[name="plan"]:checked').value,
+    images: []
+  };
+
   const imageFiles = document.getElementById('images').files;
   if (imageFiles.length > 0) {
     const readers = [];
@@ -560,15 +570,21 @@ function saveAndRedirect(event) {
         reader.readAsDataURL(imageFiles[i]);
       }));
     }
-    Promise.all(readers).then(images => {
-      businessData.images = images;
-      // Save to localStorage and redirect immediately
-      localStorage.setItem('businessData', JSON.stringify(businessData));
-      window.location.href = 'preview.html';
-      // Send to Google Sheet in the background
-      sendToGoogleSheet(businessData);
-    });
-  });
+
+    Promise.all(readers)
+      .then(images => {
+        businessData.images = images;
+        localStorage.setItem('businessData', JSON.stringify(businessData));
+        window.location.href = 'preview.html'; // ✅ this will now work
+      })
+      .catch(() => {
+        localStorage.setItem('businessData', JSON.stringify(businessData));
+        window.location.href = 'preview.html';
+      });
+  } else {
+    localStorage.setItem('businessData', JSON.stringify(businessData));
+    window.location.href = 'preview.html';
+  }
 }
 function sendToGoogleSheet(data) {
   const submitBtn = document.querySelector('.submit-button');
@@ -690,6 +706,7 @@ showAuthTab('signup');
 
 </body>
 </html>
+
 
 
 
