@@ -548,13 +548,12 @@ imageInput.addEventListener('change', function(event) {
     for (let i = 0; i < imageFiles.length; i++) {
       const reader = new FileReader();
       readers.push(new Promise((resolve) => {
-        reader.onload = function(e) {
-          resolve(e.target.result);
-        };
-        reader.readAsDataURL(imageFiles[i]);
-      }));
-    }
-
+  reader.onload = function(e) {
+    resolve(e.target.result);
+  };
+  reader.readAsDataURL(imageFiles[i]); // ✅ THIS IS CORRECT
+}));
+      
     Promise.all(readers)
       .then(images => {
         businessData.images = images;
@@ -699,6 +698,7 @@ showAuthTab('signup');
 
 </body>
 </html>
+
 
 
 
