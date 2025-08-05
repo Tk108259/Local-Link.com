@@ -440,13 +440,13 @@
         <div class="plan-options">
           <label>
             <input type="radio" name="plan" value="Standard" checked>
-            <b>Standard</b> (R200)
+            <b>Standard</b> (R200) <P>Get your business listed</P>
             <span style="display:block;font-size:12px;color:#555;">
             </span>
           </label>
           <label>
             <input type="radio" name="plan" value="Premium">
-            <b>Premium</b> (R250)
+            <b>Premium</b> (R250) <p>Your Business is first to pop up in selected category</p>
             <span style="display:block;font-size:12px;color:#555;">
             </span>
           </label>
@@ -514,7 +514,7 @@ imageInput.addEventListener('change', function(event) {
     return;
   }
 
-  // Save this selection as the last valid one
+  
   lastValidFiles = files;
 
   for (let i = 0; i < files.length; i++) {
@@ -545,19 +545,6 @@ function saveAndRedirect(event) {
     plan: document.querySelector('input[name="plan"]:checked').value,
     images: []
   };
-function saveAndRedirect(event) {
-  event.preventDefault();
-
-  const businessData = {
-    businessName: document.getElementById('businessName').value,
-    type: document.getElementById('type').value,
-    desc: document.getElementById('desc').value,
-    phone: document.getElementById('phone').value,
-    location: document.getElementById('location').value, // ✅ added location
-    plan: document.querySelector('input[name="plan"]:checked').value,
-    images: []
-  };
-
   const imageFiles = document.getElementById('images').files;
   if (imageFiles.length > 0) {
     const readers = [];
@@ -620,14 +607,7 @@ function saveAndRedirect(event) {
           resolve(e.target.result);
         };
         reader.readAsDataURL(imageFiles[i]);
-      }));
-    }
-    Promise.all(readers)
-      .then(images => {
-        businessData.images = images;
-        localStorage.setItem('businessData', JSON.stringify(businessData));
-        window.location.href = 'preview.html';
-      })
+      }))
       .catch(() => {
         // If image reading fails, still save and redirect
         localStorage.setItem('businessData', JSON.stringify(businessData));
@@ -706,6 +686,7 @@ showAuthTab('signup');
 
 </body>
 </html>
+
 
 
 
