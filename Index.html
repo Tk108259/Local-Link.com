@@ -534,9 +534,6 @@ imageInput.addEventListener('change', function(event) {
   }
 });
 
-function saveAndRedirect(event) {
-  event.preventDefault();
-
   const businessData = {
     businessName: document.getElementById('businessName').value,
     type: document.getElementById('type').value,
@@ -584,7 +581,15 @@ function sendToGoogleSheet(data) {
     headers: {
       'Content-Type': 'application/json'
     },
-  // ...existing code...
+  const businessData = {
+    businessName: document.getElementById('businessName').value,
+    type: document.getElementById('type').value,
+    desc: document.getElementById('desc').value,
+    phone: document.getElementById('phone').value,
+    plan: document.querySelector('input[name="plan"]:checked').value,
+    images: []
+  };
+
 function saveAndRedirect(event) {
   event.preventDefault();
 
@@ -594,6 +599,7 @@ function saveAndRedirect(event) {
     desc: document.getElementById('desc').value,
     phone: document.getElementById('phone').value,
     plan: document.querySelector('input[name="plan"]:checked').value,
+    location: document.getElementById('location').value,
     images: []
   };
 
@@ -607,9 +613,17 @@ function saveAndRedirect(event) {
           resolve(e.target.result);
         };
         reader.readAsDataURL(imageFiles[i]);
-      }))
+      }));
+    }
+
+    Promise.all(readers)
+      .then(images => {
+        businessData.images = images;
+        localStorage.setItem('businessData', JSON.stringify(businessData));
+        window.location.href = 'preview.html';
+      })
       .catch(() => {
-        // If image reading fails, still save and redirect
+        // fallback redirect even if image read fails
         localStorage.setItem('businessData', JSON.stringify(businessData));
         window.location.href = 'preview.html';
       });
@@ -618,7 +632,6 @@ function saveAndRedirect(event) {
     window.location.href = 'preview.html';
   }
 }
-// ...existing code...
 
 
 let modalImages = [];
@@ -686,6 +699,7 @@ showAuthTab('signup');
 
 </body>
 </html>
+
 
 
 
