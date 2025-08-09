@@ -533,6 +533,9 @@ imageInput.addEventListener('change', function(event) {
     reader.readAsDataURL(files[i]);
   }
 });
+    <script>
+function saveAndRedirect(event) {
+  event.preventDefault();
 
   const businessData = {
     businessName: document.getElementById('businessName').value,
@@ -540,25 +543,28 @@ imageInput.addEventListener('change', function(event) {
     desc: document.getElementById('desc').value,
     phone: document.getElementById('phone').value,
     plan: document.querySelector('input[name="plan"]:checked').value,
+    location: document.getElementById('location').value,
     images: []
   };
+
   const imageFiles = document.getElementById('images').files;
   if (imageFiles.length > 0) {
     const readers = [];
     for (let i = 0; i < imageFiles.length; i++) {
       const reader = new FileReader();
       readers.push(new Promise((resolve) => {
-  reader.onload = function(e) {
-    resolve(e.target.result);
-  };
-  reader.readAsDataURL(imageFiles[i]); // ✅ THIS IS CORRECT
-}));
-      
+        reader.onload = function(e) {
+          resolve(e.target.result);
+        };
+        reader.readAsDataURL(imageFiles[i]);
+      }));
+    }
+
     Promise.all(readers)
       .then(images => {
         businessData.images = images;
         localStorage.setItem('businessData', JSON.stringify(businessData));
-        window.location.href = 'preview.html'; // ✅ this will now work
+        window.location.href = 'preview.html';
       })
       .catch(() => {
         localStorage.setItem('businessData', JSON.stringify(businessData));
@@ -569,6 +575,7 @@ imageInput.addEventListener('change', function(event) {
     window.location.href = 'preview.html';
   }
 }
+</script>
 function sendToGoogleSheet(data) {
   const submitBtn = document.querySelector('.submit-button');
   submitBtn.disabled = true;
@@ -698,6 +705,7 @@ showAuthTab('signup');
 
 </body>
 </html>
+
 
 
 
