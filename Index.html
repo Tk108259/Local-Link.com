@@ -605,40 +605,54 @@ function saveAndRedirect(event) {
     phone: document.getElementById('phone').value,
     plan: document.querySelector('input[name="plan"]:checked').value,
     location: document.getElementById('location').value,
-    images: []
-  };
+    
+<form id="businessForm">
+  <!-- your fields here -->
+  <button type="submit" class="submit-button modern-btn">Submit Business</button>
+</form>
+<div id="formError" style="color:red;margin-top:10px;display:none;"></div>
 
-  const imageFiles = document.getElementById('images').files;
-  if (imageFiles.length > 0) {
-    const readers = [];
-    for (let i = 0; i < imageFiles.length; i++) {
-      const reader = new FileReader();
-      readers.push(new Promise((resolve) => {
-        reader.onload = function(e) {
-          resolve(e.target.result);
-        };
-        reader.readAsDataURL(imageFiles[i]);
-      }));
-    }
-
-    Promise.all(readers)
-      .then(images => {
-        businessData.images = images;
-        localStorage.setItem('businessData', JSON.stringify(businessData));
-        window.location.href = 'preview.html';
-      })
-      .catch(() => {
-        // fallback redirect even if image read fails
-        localStorage.setItem('businessData', JSON.stringify(businessData));
-        window.location.href = 'preview.html';
-      });
-  } else {
-    localStorage.setItem('businessData', JSON.stringify(businessData));
-    window.location.href = 'preview.html';
-  }
+<style>
+/* Modern Button Style */
+.modern-btn {
+  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+  color: #fff;
+  font-size: 1.12rem;
+  font-weight: 600;
+  padding: 13px 0;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(34, 56, 120, 0.13);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  letter-spacing: 0.8px;
+  margin-top: 24px;
+  outline: none;
+  position: relative;
+  overflow: hidden;
 }
-
-
+.modern-btn:before {
+  content: "";
+  background: linear-gradient(120deg, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0) 100%);
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  opacity: 0.7;
+}
+.modern-btn:hover, .modern-btn:focus {
+  background: linear-gradient(90deg, #182848 0%, #4b6cb7 100%);
+  box-shadow: 0 6px 20px rgba(34, 56, 120, 0.16);
+  transform: translateY(-2px) scale(1.02);
+}
+.modern-btn:active {
+  background: linear-gradient(90deg, #355c7d 0%, #182848 100%);
+  box-shadow: 0 2px 6px rgba(34, 56, 120, 0.12);
+  transform: translateY(0) scale(0.98);
+}
+</style>
+<!-- ...other HTML... -->
 let modalImages = [];
 let currentImageIndex = 0;
 
@@ -704,6 +718,7 @@ showAuthTab('signup');
 
 </body>
 </html>
+
 
 
 
