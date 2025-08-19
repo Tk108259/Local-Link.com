@@ -5,42 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LocalServe – Find Trusted Local Services</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
       background-color: #f4f7fc;
       color: #222;
     }
-
-    /* HEADER */
     header {
       background: url('images/file.jpg') center center/cover no-repeat;
       color: white;
       text-align: center;
-      padding: 80px 20px;
+      padding: 90px 20px 60px 20px;
       position: relative;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.09);
     }
     header::before {
       content: "";
       position: absolute;
       inset: 0;
       background: rgba(0,0,0,0.45);
+      z-index: 1;
     }
     header h1, header p, .search-container {
       position: relative;
       z-index: 2;
     }
     header h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
     }
     header p {
-      margin-bottom: 30px;
-      font-size: 1.1rem;
+      margin-bottom: 32px;
+      font-size: 1.18rem;
+      font-weight: 400;
     }
-
-    /* SEARCH BAR */
     .search-container {
       display: flex;
       justify-content: center;
@@ -48,35 +50,53 @@
       max-width: 600px;
       margin: auto;
       flex-wrap: wrap;
+      margin-bottom: 0;
     }
     .search-container input {
       flex: 1;
-      padding: 12px;
+      padding: 14px;
       border: none;
       border-radius: 8px;
       font-size: 16px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.08);
     }
     .search-container button {
-      padding: 12px 20px;
+      padding: 14px 25px;
       border: none;
       border-radius: 8px;
       background: #357edd;
       color: white;
       font-weight: 600;
+      font-size: 16px;
       cursor: pointer;
+      transition: background 0.2s;
     }
-
-    /* POPULAR CATEGORIES */
+    .search-container button:hover {
+      background: #235cb4;
+    }
+    /* CATEGORIES */
     .categories {
       display: flex;
       justify-content: center;
-      gap: 30px;
-      padding: 40px 20px 20px;
+      gap: 35px;
+      padding: 38px 20px 24px;
       flex-wrap: wrap;
     }
     .category {
       text-align: center;
-      font-size: 14px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 0.14s, box-shadow 0.14s;
+      border-radius: 12px;
+      padding: 8px 15px;
+      background: #fff;
+      box-shadow: 0 1px 5px rgba(30,30,70,0.06);
+    }
+    .category:hover, .category.active {
+      background: #dde9fb;
+      color: #357edd;
+      transform: scale(1.05);
+      box-shadow: 0 4px 16px rgba(30,30,70,0.11);
     }
     .category span {
       display: block;
@@ -87,46 +107,61 @@
       border-radius: 50%;
       margin: auto;
       margin-bottom: 8px;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
       color: #357edd;
+      border: 2px solid #d3e2f9;
+      transition: background 0.18s, color 0.18s;
     }
-
-    /* TESTIMONIAL STRIP */
+    /* TESTIMONIAL */
     .testimonial {
       background: #fff;
       text-align: center;
-      padding: 14px;
-      margin: 20px auto;
+      padding: 16px;
+      margin: 22px auto 18px;
       max-width: 900px;
-      border-radius: 12px;
+      border-radius: 13px;
       box-shadow: 0 3px 8px rgba(0,0,0,0.08);
-      font-size: 15px;
+      font-size: 16px;
       font-style: italic;
+      color: #234;
+      font-weight: 500;
     }
-
     /* LISTINGS */
     .listings-section {
       max-width: 1000px;
       margin: auto;
-      padding: 20px;
+      padding: 24px 8px 8px;
+    }
+    .listings-section h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #234;
     }
     .listing-card {
       display: flex;
       align-items: center;
       justify-content: space-between;
       background: #fff;
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 20px;
+      border-radius: 15px;
+      padding: 18px;
+      margin-bottom: 22px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: box-shadow 0.2s, transform 0.18s;
+      cursor: pointer;
+    }
+    .listing-card:hover {
+      box-shadow: 0 8px 24px rgba(30,90,190,.13);
+      transform: translateY(-2px) scale(1.01);
     }
     .listing-card img {
-      width: 120px;
-      height: 120px;
+      width: 110px;
+      height: 110px;
       object-fit: cover;
       border-radius: 10px;
-      margin-right: 20px;
+      margin-right: 17px;
+      box-shadow: 0 1px 5px rgba(30,30,80,0.06);
     }
     .listing-info {
       flex: 1;
@@ -135,6 +170,7 @@
       margin: 0;
       font-size: 18px;
       font-weight: 600;
+      color: #2b2e44;
     }
     .listing-info p {
       margin: 6px 0;
@@ -144,64 +180,146 @@
     .stars {
       color: gold;
       font-size: 14px;
+      letter-spacing: 1px;
     }
     .listing-actions button {
-      padding: 10px 16px;
+      padding: 10px 18px;
       margin-left: 10px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 15px;
+      transition: background 0.15s;
     }
     .btn-blue { background: #357edd; color: #fff; }
+    .btn-blue:hover { background: #235cb4; }
     .btn-gray { background: #e9eef7; color: #333; }
-
-    /* BUSINESS PLANS */
+    .btn-gray:hover { background: #d2ddef; }
+    /* PLANS */
     .plans {
       display: flex;
       justify-content: center;
-      gap: 30px;
-      margin: 50px 0;
+      gap: 32px;
+      margin: 48px 0;
       flex-wrap: wrap;
     }
     .plan {
       background: #fff;
       border-radius: 14px;
-      padding: 20px;
+      padding: 26px 22px;
       width: 260px;
       text-align: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.15s, box-shadow 0.18s;
+    }
+    .plan:hover {
+      transform: scale(1.04);
+      box-shadow: 0 8px 24px rgba(30,90,190,.12);
     }
     .plan h4 {
       margin-bottom: 12px;
-      font-size: 16px;
+      font-size: 17px;
+      font-weight: 600;
     }
     .plan p {
       font-size: 22px;
       margin-bottom: 20px;
       font-weight: bold;
+      color: #234;
     }
     .plan button {
       background: #357edd;
       border: none;
-      padding: 12px 18px;
+      padding: 14px 22px;
       border-radius: 8px;
       color: #fff;
       font-weight: 600;
+      font-size: 15px;
       cursor: pointer;
+      transition: background 0.13s;
     }
-
+    .plan button:hover {
+      background: #235cb4;
+    }
     /* ABOUT US */
     .about {
       max-width: 900px;
       margin: 50px auto;
       background: #fff;
       border-radius: 14px;
-      padding: 30px;
+      padding: 34px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     .about h3 { margin-top: 0; }
     .about ul { padding-left: 18px; }
+    .about button {
+      background:#357edd;
+      color:white;
+      padding:13px 22px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: 15px;
+      transition: background 0.18s;
+    }
+    .about button:hover { background: #235cb4; }
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.50);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px 30px 22px 30px;
+      box-shadow: 0 6px 28px rgba(20,20,40,0.22);
+      min-width: 300px;
+      text-align: center;
+      position: relative;
+      animation: popUp 0.27s cubic-bezier(0.47,1.64,0.41,0.8);
+    }
+    @keyframes popUp {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .stars-rate {
+      font-size: 2rem;
+      color: #eee;
+      cursor: pointer;
+      margin: 0 2px;
+      transition: color 0.14s;
+      display: inline-block;
+    }
+    .stars-rate.selected, .stars-rate:hover, .stars-rate.selected ~ .stars-rate { color: gold; }
+    .modal button {
+      margin-top: 18px;
+      background: #357edd;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      padding: 10px 19px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.14s;
+    }
+    .modal button:hover { background: #235cb4; }
+    @media (max-width: 700px) {
+      .plans { flex-direction: column; gap: 24px;}
+      .categories { gap: 18px; }
+      .listing-card { flex-direction: column; align-items: flex-start; }
+      .listing-card img { margin-bottom: 16px; }
+      .about { padding: 18px; }
+      .modal { min-width: 90vw; }
+    }
   </style>
 </head>
 <body>
@@ -210,52 +328,54 @@
   <header>
     <h1>Find trusted local services near you.</h1>
     <p>From bakers to plumbers — all in one place.</p>
-    <div class="search-container">
-      <input type="text" placeholder="What are you looking for?">
-      <button>Search</button>
-    </div>
+    <form class="search-container" id="searchForm" onsubmit="return false;">
+      <input type="text" placeholder="What are you looking for?" id="searchInput">
+      <button type="submit"><i class="fas fa-search"></i> Search</button>
+    </form>
   </header>
 
   <!-- CATEGORIES -->
-  <div class="categories">
-    <div class="category"><span>🌱</span> Gardening</div>
-    <div class="category"><span>🎂</span> Baking</div>
-    <div class="category"><span>🧹</span> Cleaning</div>
-    <div class="category"><span>🍴</span> Catering</div>
+  <div class="categories" id="categoryList">
+    <div class="category" data-category="Gardening"><span>🌱</span> Gardening</div>
+    <div class="category" data-category="Baking"><span>🎂</span> Baking</div>
+    <div class="category" data-category="Cleaning"><span>🧹</span> Cleaning</div>
+    <div class="category" data-category="Catering"><span>🍴</span> Catering</div>
   </div>
 
   <!-- TESTIMONIAL -->
   <div class="testimonial">
-    ⭐ Fast and friendly service! Found my garden expert in minutes.
+    <span>⭐ Fast and friendly service! Found my garden expert in minutes.</span>
   </div>
 
   <!-- LISTINGS -->
   <section class="listings-section">
-    <h2>How It Works</h2>
+    <h2>Featured Businesses</h2>
 
-    <div class="listing-card">
-      <img src="images/cake1.jpg" alt="">
+    <div class="listing-card" data-category="Baking" onclick="goToDetails('ReasBakery')">
+      <img src="images/cake1.jpg" alt="Rea’s Bakery">
       <div class="listing-info">
         <h3>Rea’s Bakery <span class="stars">★★★★★</span></h3>
         <p>R250 per cake</p>
         <p>Mon, Sat: 8am – 6pm</p>
       </div>
-      <div class="listing-actions">
-        <button class="btn-blue">Contact Now</button>
+      <div class="listing-actions" onclick="event.stopPropagation();">
+        <button class="btn-blue" onclick="contactBusiness('Rea’s Bakery');event.stopPropagation();">Contact Now</button>
       </div>
     </div>
 
-    <div class="listing-card">
-      <img src="images/cake2.jpg" alt="">
+    <div class="listing-card" data-category="Baking" onclick="goToDetails('SweetBakesSA')">
+      <img src="images/cake2.jpg" alt="SweetBakes SA">
       <div class="listing-info">
         <h3>SweetBakes SA <span class="stars">★★★★☆</span></h3>
         <p>R200 – R450</p>
         <p>3.5 km away</p>
       </div>
-      <div class="listing-actions">
-        <button class="btn-gray">View Profile</button>
+      <div class="listing-actions" onclick="event.stopPropagation();">
+        <button class="btn-gray" onclick="goToDetails('SweetBakesSA');event.stopPropagation();">View Profile</button>
       </div>
     </div>
+
+    <!-- Add more listings here with data-category="..." for filtering -->
   </section>
 
   <!-- BUSINESS PROFILE PLANS -->
@@ -263,12 +383,12 @@
     <div class="plan">
       <h4>Standard Listing</h4>
       <p>R1000/month</p>
-      <button>Choose</button>
+      <button onclick="window.location.href='Index.html'">Register Business</button>
     </div>
     <div class="plan">
       <h4>Featured Listing</h4>
       <p>R250/month</p>
-      <button>Choose</button>
+      <button onclick="window.location.href='Index.html'">Register Business</button>
     </div>
   </div>
 
@@ -282,8 +402,92 @@
       <li>Cupcakes</li>
       <li>Event Catering</li>
     </ul>
-    <button style="background:#357edd;color:white;padding:12px 20px;border:none;border-radius:8px;cursor:pointer;">Book Now</button>
+    <button onclick="window.location.href='Index.html'">Book Now</button>
   </div>
 
+  <!-- MODAL: Rate Service -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h3>Rate the Service</h3>
+      <div id="starRating">
+        <span class="stars-rate" data-rate="1">&#9733;</span>
+        <span class="stars-rate" data-rate="2">&#9733;</span>
+        <span class="stars-rate" data-rate="3">&#9733;</span>
+        <span class="stars-rate" data-rate="4">&#9733;</span>
+        <span class="stars-rate" data-rate="5">&#9733;</span>
+      </div>
+      <div id="rateMsg" style="margin-top:10px;font-size:15px;color:#357edd;display:none;">Thank you for your feedback!</div>
+      <button onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // CATEGORY FILTERING
+    document.querySelectorAll('.category').forEach(cat => {
+      cat.addEventListener('click', function() {
+        document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        let catName = this.getAttribute('data-category');
+        document.querySelectorAll('.listing-card').forEach(card => {
+          if (catName === null || card.getAttribute('data-category') === catName)
+            card.style.display = '';
+          else
+            card.style.display = 'none';
+        });
+      });
+    });
+    // SEARCH FILTERING
+    document.getElementById('searchForm').addEventListener('submit', function() {
+      let val = document.getElementById('searchInput').value.trim().toLowerCase();
+      document.querySelectorAll('.listing-card').forEach(card => {
+        let txt = card.innerText.toLowerCase();
+        card.style.display = txt.includes(val) ? '' : 'none';
+      });
+    });
+    // NAVIGATE TO DETAILS
+    function goToDetails(businessId) {
+      // Pass businessId as query ?biz=...
+      window.location.href = `Details.html?biz=${encodeURIComponent(businessId)}`;
+    }
+    // CONTACT MODAL
+    function contactBusiness(businessName) {
+      document.getElementById('modalOverlay').style.display = 'flex';
+      document.getElementById('rateMsg').style.display = 'none';
+      document.querySelectorAll('.stars-rate').forEach(s => s.classList.remove('selected'));
+    }
+    function closeModal() {
+      document.getElementById('modalOverlay').style.display = 'none';
+    }
+    // STAR RATING
+    document.querySelectorAll('.stars-rate').forEach(star => {
+      star.addEventListener('mouseenter', function() {
+        let rate = parseInt(this.getAttribute('data-rate'));
+        document.querySelectorAll('.stars-rate').forEach(s => {
+          if (parseInt(s.getAttribute('data-rate')) <= rate)
+            s.classList.add('selected');
+          else
+            s.classList.remove('selected');
+        });
+      });
+      star.addEventListener('mouseleave', function() {
+        document.querySelectorAll('.stars-rate').forEach(s => s.classList.remove('selected'));
+      });
+      star.addEventListener('click', function() {
+        let rate = parseInt(this.getAttribute('data-rate'));
+        document.querySelectorAll('.stars-rate').forEach(s => {
+          if (parseInt(s.getAttribute('data-rate')) <= rate)
+            s.classList.add('selected');
+          else
+            s.classList.remove('selected');
+        });
+        document.getElementById('rateMsg').style.display = 'block';
+      });
+    });
+    // Allow clicking outside the modal to close
+    document.getElementById('modalOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+  </script>
 </body>
 </html>
+
