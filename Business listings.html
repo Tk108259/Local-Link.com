@@ -3,370 +3,287 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LocalServe – Home</title>
+  <title>LocalServe – Find Trusted Local Services</title>
   <link rel="stylesheet" href="style.css">
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: #f4f7fc;
-      padding: 0;
+      color: #222;
     }
 
+    /* HEADER */
     header {
       background: url('images/file.jpg') center center/cover no-repeat;
       color: white;
-      padding: 60px 20px 30px 20px;
       text-align: center;
-      min-height: 180px;
-      border-radius: 0 0 18px 18px;
+      padding: 80px 20px;
       position: relative;
     }
-
-    header h1, header p {
-      position: relative;
-      z-index: 2;
-      margin: 0;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    }
-
     header::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.25); /* dark overlay for readability */
-      border-radius: 0 0 18px 18px;
-      z-index: 1;
+      background: rgba(0,0,0,0.45);
+    }
+    header h1, header p, .search-container {
+      position: relative;
+      z-index: 2;
+    }
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    header p {
+      margin-bottom: 30px;
+      font-size: 1.1rem;
     }
 
-    .search-bar {
+    /* SEARCH BAR */
+    .search-container {
       display: flex;
       justify-content: center;
-      align-items: center;
-      padding: 10px;
-      background-color: #ffffff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      gap: 10px;
+      max-width: 600px;
+      margin: auto;
       flex-wrap: wrap;
     }
-
-    .search-bar input[type="text"] {
-      padding: 10px;
-      font-size: 16px;
-      width: 60%;
-      max-width: 400px;
-      margin-right: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .search-bar select {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .listings-container {
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 10px;
-    }
-
-    .listing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
-
-    .business-card {
-      background-color: #ffffff;
-      border-radius: 10px;
-      padding: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s;
-    }
-
-    .business-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .business-card images{
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
+    .search-container input {
+      flex: 1;
+      padding: 12px;
+      border: none;
       border-radius: 8px;
-      margin-bottom: 12px;
+      font-size: 16px;
     }
-
-    .business-name {
-      font-size: 18px;
-      font-weight: bold;
-      color: #222;
-      margin-bottom: 8px;
-    }
-
-    .business-description {
-      font-size: 14px;
-      color: #555;
-      margin-bottom: 8px;
-    }
-
-    .phone {
-      font-size: 14px;
-      color: #004aad;
-      font-weight: bold;
-    }
-
-    @media (max-width: 600px) {
-      .search-bar input[type="text"] {
-        width: 100%;
-        margin-bottom: 10px;
-      }
-      .search-bar select {
-        width: 100%;
-      }
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgb(0,0,0);
-      background-color: rgba(0,0,0,0.4);
-      padding-top: 60px;
-    }
-
-    .modal-content {
-      background-color: #fefefe;
-      margin: 5% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      max-width: 500px;
+    .search-container button {
+      padding: 12px 20px;
+      border: none;
       border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
+      background: #357edd;
+      color: white;
+      font-weight: 600;
       cursor: pointer;
     }
 
-    .card-link {
-      color: inherit;
-      text-decoration: none;
-      display: block;
+    /* POPULAR CATEGORIES */
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 40px 20px 20px;
+      flex-wrap: wrap;
     }
+    .category {
+      text-align: center;
+      font-size: 14px;
+    }
+    .category span {
+      display: block;
+      background: #e9eef7;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      border-radius: 50%;
+      margin: auto;
+      margin-bottom: 8px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #357edd;
+    }
+
+    /* TESTIMONIAL STRIP */
+    .testimonial {
+      background: #fff;
+      text-align: center;
+      padding: 14px;
+      margin: 20px auto;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+      font-size: 15px;
+      font-style: italic;
+    }
+
+    /* LISTINGS */
+    .listings-section {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+    .listing-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .listing-card img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-right: 20px;
+    }
+    .listing-info {
+      flex: 1;
+    }
+    .listing-info h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .listing-info p {
+      margin: 6px 0;
+      font-size: 14px;
+      color: #555;
+    }
+    .stars {
+      color: gold;
+      font-size: 14px;
+    }
+    .listing-actions button {
+      padding: 10px 16px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-blue { background: #357edd; color: #fff; }
+    .btn-gray { background: #e9eef7; color: #333; }
+
+    /* BUSINESS PLANS */
+    .plans {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 50px 0;
+      flex-wrap: wrap;
+    }
+    .plan {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px;
+      width: 260px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .plan h4 {
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    .plan p {
+      font-size: 22px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    .plan button {
+      background: #357edd;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ABOUT US */
+    .about {
+      max-width: 900px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 14px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .about h3 { margin-top: 0; }
+    .about ul { padding-left: 18px; }
   </style>
 </head>
 <body>
+
+  <!-- HEADER -->
   <header>
-    <div class="header-tagline">
-      <span>Your One-Stop Local Service Directory</span>
-    </div>
-    <h1>Find Trusted Local Services</h1>
-    <p>Browse and discover services around you</p>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search for services (e.g., plumbing, cakes, repairs)">
-      <select id="categoryFilter">
-        <option value="all">All Categories</option>
-        <option value="gardening">Gardening</option>
-        <option value="plumbing">Plumbing</option>
-        <option value="electrical">Electrical</option>
-        <option value="baking">Baking</option>
-      </select>
+    <h1>Find trusted local services near you.</h1>
+    <p>From bakers to plumbers — all in one place.</p>
+    <div class="search-container">
+      <input type="text" placeholder="What are you looking for?">
+      <button>Search</button>
     </div>
   </header>
 
-  <!-- Move these below the header -->
-  <main>
-    <h2 style="text-align:center; margin-top:32px;">Browse Local Businesses</h2>
-    <div class="filter-buttons" style="text-align:center; margin-bottom:24px;">
-      <button onclick="filterListings('all')">All</button>
-      <button onclick="filterListings('plumbing')">Plumbing</button>
-      <button onclick="filterListings('baking')">Baking</button>
-      <button onclick="filterListings('gardening')">Gardening</button>
-    </div>
-    <div class="listings-container">
-      <div class="listing-grid" id="businessGrid">
-        <!-- Cards will be injected here dynamically -->
+  <!-- CATEGORIES -->
+  <div class="categories">
+    <div class="category"><span>🌱</span> Gardening</div>
+    <div class="category"><span>🎂</span> Baking</div>
+    <div class="category"><span>🧹</span> Cleaning</div>
+    <div class="category"><span>🍴</span> Catering</div>
+  </div>
+
+  <!-- TESTIMONIAL -->
+  <div class="testimonial">
+    ⭐ Fast and friendly service! Found my garden expert in minutes.
+  </div>
+
+  <!-- LISTINGS -->
+  <section class="listings-section">
+    <h2>How It Works</h2>
+
+    <div class="listing-card">
+      <img src="images/cake1.jpg" alt="">
+      <div class="listing-info">
+        <h3>Rea’s Bakery <span class="stars">★★★★★</span></h3>
+        <p>R250 per cake</p>
+        <p>Mon, Sat: 8am – 6pm</p>
+      </div>
+      <div class="listing-actions">
+        <button class="btn-blue">Contact Now</button>
       </div>
     </div>
-  </main>
 
-  <div id="modal" class="modal" style="display:none;">
-    <div class="modal-content" style="max-width:420px; margin:auto; background:#fff; border-radius:14px; box-shadow:0 4px 24px rgba(0,0,0,0.18); padding:28px 24px 24px 24px; position:relative;">
-      <span class="close" onclick="closeModal()" style="position:absolute;top:16px;right:20px;font-size:2rem;cursor:pointer;">&times;</span>
-      <img id="modalImage" src="" alt="" style="width:100%;height:210px;object-fit:cover;border-radius:10px;margin-bottom:18px;box-shadow:0 2px 12px rgba(53,126,221,0.10);" />
-      <h2 id="modalTitle" style="margin-bottom:8px; color:#285bb5;"></h2>
-      <span id="modalCategoryBadge" style="display:inline-block;background:#e9eef7;color:#357edd;font-size:0.98rem;font-weight:600;border-radius:12px;padding:3px 14px;margin-bottom:10px;letter-spacing:0.5px;"></span>
-      <p id="modalDescription" style="color:#444;margin-bottom:14px;"></p>
-      <p style="margin-bottom:8px;"><strong>Service:</strong> <span id="modalService"></span></p>
-      <p style="margin-bottom:8px;">
-        <strong>Phone:</strong>
-        <a href="#" id="modalPhoneLink" style="color:#25d366;text-decoration:none;font-weight:600;display:inline-flex;align-items:center;">
-          <span style="font-size:1.2em;margin-right:5px;">📞</span>
-          <span id="modalPhone"></span>
-        </a>
-      </p>
-      <span class="badge" id="modalPlanBadge" style="background:linear-gradient(90deg,#357edd 60%,#285bb5 100%);font-weight:600;display:inline-block;margin-top:8px;padding:6px 18px;border-radius:16px;color:#fff;letter-spacing:0.5px;">
-        <!-- Plan text will be set by JS -->
-      </span>
+    <div class="listing-card">
+      <img src="images/cake2.jpg" alt="">
+      <div class="listing-info">
+        <h3>SweetBakes SA <span class="stars">★★★★☆</span></h3>
+        <p>R200 – R450</p>
+        <p>3.5 km away</p>
+      </div>
+      <div class="listing-actions">
+        <button class="btn-gray">View Profile</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUSINESS PROFILE PLANS -->
+  <div class="plans">
+    <div class="plan">
+      <h4>Standard Listing</h4>
+      <p>R1000/month</p>
+      <button>Choose</button>
+    </div>
+    <div class="plan">
+      <h4>Featured Listing</h4>
+      <p>R250/month</p>
+      <button>Choose</button>
     </div>
   </div>
 
-  <script>
-    const businesses = [
-      {
-        name: "Sunny Gardens",
-        description: "Affordable gardening, landscaping, and lawn care for your home & office.",
-        phone: "083 123 4567",
-        category: "gardening",
-        service: "Gardening",
-        plan: "Basic",
-        images: [
-          "images/vintage Homes.jpg",
-          "images/gardening2.jpg",
-          "images/gardening3.jpg"
-        ]
-      },
-      {
-        name: "Spark Plug Electrical",
-        description: "Certified electricians for homes and businesses. 24/7 emergency service.",
-        phone: "074 321 9988",
-        category: "electrical",
-        service: "Electrical",
-        plan: "Premium",
-        images: [
-          "images/electrical1.jpg",
-          "images/electrical2.jpg"
-        ]
-      },
-      {
-        name: "Tasty Bakes",
-        description: "Custom cakes, cupcakes & birthday treats made fresh. Vegan options available.",
-        phone: "082 987 6543",
-        category: "baking",
-        service: "Baking",
-        plan: "Standard",
-        images: [
-          "images/baking1.jpg",
-          "images/baking2.jpg",
-          "images/baking3.jpg"
-        ]
-      },
-      {
-        name: "PipeWorks Plumbing",
-        description: "Professional plumbing repairs and installations. No call-out fee.",
-        phone: "072 445 8890",
-        category: "plumbing",
-        service: "Plumbing",
-        plan: "Basic",
-        images: [
-          "images/plumbing1.jpg",
-          "images/plumbing2.jpg"
-        ]
-      },
-      {
-        name: "Elite Auto Detailing",
-        description: "Mobile car wash and detailing. We come to you!",
-        phone: "081 555 1122",
-        category: "automotive",
-        service: "Car Detailing",
-        plan: "Premium",
-        images: [
-          "images/auto1.jpg",
-          "images/auto2.jpg"
-        ]
-      },
-      {
-        name: "Green Thumb Nursery",
-        description: "Wide selection of plants, pots, and garden decor.",
-        phone: "084 333 7788",
-        category: "gardening",
-        service: "Nursery",
-        plan: "Standard",
-        images: [
-          "images/nursery1.jpg"
-        ]
-      }
-    ];
+  <!-- ABOUT US -->
+  <div class="about">
+    <h3>About Us</h3>
+    <p>We’re a small home bakery with a passion for affordable, fresh cakes. We specialize in birthdays, weddings, and cupcakes.</p>
+    <h4>Services Offered</h4>
+    <ul>
+      <li>Custom Cakes</li>
+      <li>Cupcakes</li>
+      <li>Event Catering</li>
+    </ul>
+    <button style="background:#357edd;color:white;padding:12px 20px;border:none;border-radius:8px;cursor:pointer;">Book Now</button>
+  </div>
 
-    const grid = document.getElementById("businessGrid");
-    const searchInput = document.getElementById("searchInput");
-    const categoryFilter = document.getElementById("categoryFilter");
-
-    function renderBusinesses(filterText = "", category = "all") {
-      grid.innerHTML = "";
-      businesses
-        .filter(biz => {
-          const matchesText = biz.name.toLowerCase().includes(filterText.toLowerCase()) ||
-                              biz.description.toLowerCase().includes(filterText.toLowerCase());
-          const matchesCategory = category === "all" || biz.category === category;
-          return matchesText && matchesCategory;
-        })
-        .forEach((biz, idx) => {
-          const card = document.createElement("div");
-          card.className = "business-card";
-          card.innerHTML = `
-            <a href="Details.html?id=${idx}" class="card-link" style="text-decoration:none;color:inherit;">
-              <img src="${biz.images ? biz.images[0] : biz.image}" alt="Business Image">
-              <div class="business-name">${biz.name}</div>
-              <div class="business-description">${biz.description}</div>
-              <div class="phone">Call: ${biz.phone}</div>
-              <span class="badge">${biz.plan || ''} Plan</span>
-            </a>
-          `;
-          grid.appendChild(card);
-        });
-    }
-
-    searchInput.addEventListener("input", () => {
-      renderBusinesses(searchInput.value, categoryFilter.value);
-    });
-
-    categoryFilter.addEventListener("change", () => {
-      renderBusinesses(searchInput.value, categoryFilter.value);
-    });
-
-    function filterListings(category) {
-      document.getElementById('categoryFilter').value = category;
-      renderBusinesses(searchInput.value, category);
-    }
-
-    function openModal(index) {
-      const b = businesses[index];
-      document.getElementById('modalTitle').textContent = b.name;
-      document.getElementById('modalDescription').textContent = b.description;
-      document.getElementById('modalService').textContent = b.service || '';
-      document.getElementById('modalPhone').textContent = b.phone;
-      document.getElementById('modalPhoneLink').href = `tel:${b.phone.replace(/\D/g, '')}`;
-      document.getElementById('modalImage').src = b.images ? b.images[0] : b.image;
-      document.getElementById('modalPlanBadge').textContent = (b.plan ? "★ " + b.plan : '') + " Plan";
-      document.getElementById('modalCategoryBadge').textContent = b.category ? b.category.charAt(0).toUpperCase() + b.category.slice(1) : '';
-      document.getElementById('modal').style.display = 'block';
-    }
-
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-    }
-
-    // Initial render
-    renderBusinesses();
-  </script>
 </body>
 </html>
