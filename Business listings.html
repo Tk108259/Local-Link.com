@@ -359,7 +359,9 @@
         <p>Mon, Sat: 8am – 6pm</p>
       </div>
       <div class="listing-actions" onclick="event.stopPropagation();">
-        <button class="btn-blue" onclick="contactBusiness('Rea’s Bakery');event.stopPropagation();">Contact Now</button>
+        <button class="btn-blue" onclick="contactBusiness('Rea’s Bakery');event.stopPropagation();">
+  <i class="fab fa-whatsapp"></i> Contact Now
+</button>
       </div>
     </div>
 
@@ -451,10 +453,15 @@
     }
     // CONTACT MODAL
     function contactBusiness(businessName) {
-      document.getElementById('modalOverlay').style.display = 'flex';
-      document.getElementById('rateMsg').style.display = 'none';
-      document.querySelectorAll('.stars-rate').forEach(s => s.classList.remove('selected'));
-    }
+  // Replace with your WhatsApp numbers for each business
+  const whatsappNumbers = {
+    "Rea’s Bakery": "27711234567", // Example: 27 is South Africa code
+    // Add more businesses as needed
+  };
+  const number = whatsappNumbers[businessName] || "27711234567"; // Default fallback
+  const message = encodeURIComponent(`Hi, I'm interested in your services!`);
+  window.open(`https://wa.me/${number}?text=${message}`, "_blank");
+}
     function closeModal() {
       document.getElementById('modalOverlay').style.display = 'none';
     }
@@ -490,5 +497,6 @@
   </script>
 </body>
 </html>
+
 
 
