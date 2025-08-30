@@ -7,8 +7,226 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css?family=Segoe+UI:400,700&display=swap" rel="stylesheet">
   <style>
-    /* your CSS untouched, shortened here for clarity */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #f4f6fb 0%, #d1e3f7 100%);
+      min-height: 100vh;
+      color: #222;
+    }
+    .main-header {
+      background: url('images/file.jpg') center/cover no-repeat;
+      min-height: 220px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 32px 12px 22px 12px;
+      border-radius: 0 0 36px 36px;
+      box-shadow: 0 2px 16px rgba(51, 80, 180, 0.12);
+      position: relative;
+    }
+    .main-header h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 0 0 10px 0;
+      letter-spacing: 1.1px;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .main-header p {
+      font-size: 1.1rem;
+      margin-top: 7px;
+      color: #e0e7ef;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.10);
+    }
+    /* Categories */
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      padding: 32px 10px 10px 10px;
+      flex-wrap: wrap;
+    }
+    .category-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 14px 8px 14px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+      min-width: 96px;
+      max-width: 120px;
+      flex: 1 1 90px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: box-shadow 0.2s, border 0.2s, transform 0.13s;
+      margin-bottom: 7px;
+    }
+    .category-card:hover, .category-card.active {
+      border: 2px solid #60a5fa;
+      box-shadow: 0 3px 18px rgba(27, 47, 139, 0.10);
+      transform: translateY(-2px) scale(1.04);
+    }
+    .category-card img {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 2px 6px rgba(30,64,175,0.10));
+    }
+    .category-card span {
+      font-weight: 700;
+      font-size: 1rem;
+      display: block;
+      color: #27408b;
+      letter-spacing: 0.3px;
+    }
+    /* Form */
+    .form-container {
+      background: #fff;
+      max-width: 98vw;
+      margin: 25px auto 0 auto;
+      padding: 18px 10px 12px 10px;
+      border-radius: 16px;
+      box-shadow: 0 6px 22px rgba(0, 48, 150, 0.09);
+      animation: fadeIn 0.55s;
+    }
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1d2c5b;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+    }
+    .form-group {
+      margin-bottom: 13px;
+    }
+    .form-group label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+      color: #234080;
+      letter-spacing: 0.2px;
+      font-size: 1rem;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 8px;
+      border: 1.3px solid #bcd0ea;
+      border-radius: 6px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      background: #f6fafd;
+      transition: border 0.14s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border: 1.3px solid #357edd;
+      background: #f0f6ff;
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 56px;
+    }
+    .plan-options {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .plan-options label {
+      font-weight: 500;
+      background: #f4f9ff;
+      padding: 7px 10px;
+      border-radius: 7px;
+      border: 1px solid #e0e7ef;
+      cursor: pointer;
+      transition: border 0.16s, background 0.17s;
+      flex: 1 1 100px;
+      font-size: 0.98rem;
+    }
+    .plan-options input[type="radio"]:checked + b {
+      color: #357edd;
+    }
+    .plan-options input[type="radio"] {
+      margin-right: 6px;
+    }
+    .plan-options label:hover {
+      border: 1.2px solid #357edd;
+      background: #ecf4ff;
+    }
+    .submit-button {
+      background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+      color: #fff;
+      font-size: 1.08rem;
+      font-weight: 700;
+      padding: 12px 0;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(34, 56, 120, 0.11);
+      transition: background 0.17s, box-shadow 0.15s, transform 0.10s;
+      margin-top: 12px;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.5px;
+    }
+    .submit-button:before {
+      content: "";
+      background: linear-gradient(120deg, rgba(255,255,255,0.15) 30%, rgba(255,255,255,0) 100%);
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      opacity: 0.7;
+    }
+    .submit-button:hover, .submit-button:focus {
+      background: linear-gradient(90deg, #182848 0%, #4b6cb7 100%);
+      box-shadow: 0 7px 18px rgba(34, 56, 120, 0.13);
+      transform: translateY(-1.5px) scale(1.018);
+    }
+    .submit-button:active {
+      background: linear-gradient(90deg, #355c7d 0%, #182848 100%);
+      box-shadow: 0 2px 6px rgba(34, 56, 120, 0.11);
+      transform: scale(0.97);
+    }
+    /* Image Preview */
+    #imagePreview img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 7px;
+      border: 1.2px solid #c7d1e0;
+      margin-right: 4px;
+      margin-bottom: 4px;
+      box-shadow: 0 2px 7px rgba(80,120,180,0.07);
+    }
+    /* Responsive */
+    @media (max-width: 700px) {
+      .main-header { min-height: 100px; padding: 16px 3px 9px 3px; border-radius: 0 0 14px 14px; }
+      .main-header h1 { font-size: 1.1rem; }
+      .main-header p { font-size: 0.97rem; }
+      .form-container { padding: 7px 3px; margin-top: 12px;}
+      .categories { gap: 6px; padding: 15px 2px 2px; }
+      .category-card { padding: 7px 4px; font-size: 0.93rem; min-width: 60px; max-width: unset;}
+      .category-card img { width: 20px; height: 20px; }
+    }
+    @media (max-width: 400px) {
+      .main-header h1 { font-size: 0.93rem; }
+      .form-container { padding: 3px 1px; }
+    }
+    /* Fade-in animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .fade-in { animation: fadeIn 0.35s; }
   </style>
+  <meta name="google-site-verification" content="tT1uTSnTymIdBcYrSeTUApEhLRQ7uJJ6QclKukB0tHs" />
 </head>
 <body>
   <header class="main-header">
@@ -16,7 +234,6 @@
     <p>From bakers to plumbers – all in one place</p>
   </header>
 
-  <!-- Categories -->
   <div class="categories" id="categoryList">
     <div class="category-card" data-category="Gardening">
       <img src="images/gardening.png" alt="Gardening">
@@ -30,13 +247,12 @@
       <img src="images/electrical.png" alt="Electrical">
       <span>Electrical</span>
     </div>
-    <div class="category-card" data-category="Baking">
-      <img src="images/Baking.png" alt="Baking">
+    <div class="category-card" data-category="Construction">
+      <img src="images/Baking.png" alt="Construction">
       <span>Baking</span>
     </div>
   </div>
   
-  <!-- Business Form -->
   <div class="form-container fade-in">
     <h2>List Your Business</h2>
     <form id="businessForm" autocomplete="off">
@@ -74,10 +290,10 @@
             <p style="font-size: 0.93em; margin: 5px 0 0 0; color:#375;">Your Business is first to pop up in selected category</p>
           </label>
           <label>
-            <input type="radio" name="plan" value="Yearly">
+            <input type="radio" name="Yearly Plan" value="Once Off">
             <b>Yearly Plan</b> (R2500)
-            <p style="font-size: 0.94em; margin: 5px 0 0 0; color:#375;">Pay once, no monthly payments, listed for 12 months</p>
-          </label>
+            <p style="font-size: 0.94em; margin: 5px 0 0 0; color:#375;>Pay once no monthly payments ,listed for 12 months</p>
+              </label>
         </div>
       </div>
       <div class="form-group">
@@ -89,9 +305,9 @@
       <div id="formError" style="color:red;margin-top:13px;display:none;"></div>
     </form>
   </div>
-
+  <script src="FireBase.js" type="module"></script>
   <script>
-    // CATEGORY CLICK AUTO-FILL
+    // CATEGORY CLICK FILL
     document.querySelectorAll('.category-card').forEach(card => {
       card.addEventListener('click', function() {
         document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
@@ -110,6 +326,18 @@
       preview.innerHTML = '';
       if (files.length > 5) {
         alert('You can only upload a maximum of 5 images.');
+        if (lastValidFiles) {
+          imageInput.files = lastValidFiles;
+          for (let i = 0; i < lastValidFiles.length; i++) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const img = document.createElement('img');
+              img.src = e.target.result;
+              preview.appendChild(img);
+            };
+            reader.readAsDataURL(lastValidFiles[i]);
+          }
+        }
         return;
       }
       lastValidFiles = files;
@@ -124,8 +352,8 @@
       }
     });
 
-    // FORM SUBMIT
-    document.getElementById('businessForm').addEventListener('submit', async function(event) {
+    // FORM SUBMIT + REDIRECT TO preview.html
+    document.getElementById('businessForm').addEventListener('submit', function(event) {
       event.preventDefault();
       document.getElementById('formError').style.display = 'none';
 
@@ -138,14 +366,13 @@
         location: document.getElementById('location').value.trim(),
         images: []
       };
-
-      // Validation
+      // Validate
       if (!businessData.businessName || !businessData.type || !businessData.desc || !businessData.phone || !businessData.location) {
         document.getElementById('formError').textContent = "Fill in all fields.";
         document.getElementById('formError').style.display = '';
         return;
       }
-
+      // Image upload
       const imageFiles = document.getElementById('images').files;
       if (imageFiles.length === 0) {
         document.getElementById('formError').textContent = "Please upload at least one image.";
@@ -157,41 +384,54 @@
         document.getElementById('formError').style.display = '';
         return;
       }
-
-      try {
-        // Upload images to Cloudinary
-        const uploadPromises = [];
-        for (let i = 0; i < imageFiles.length; i++) {
-          const formDataImg = new FormData();
-          formDataImg.append("file", imageFiles[i]);
-          formDataImg.append("upload_preset", "Business Images"); // your Cloudinary preset
-
-          uploadPromises.push(
-            fetch("https://api.cloudinary.com/v1_1/dafzrkltz/image/upload", {
-              method: "POST",
-              body: formDataImg
-            }).then(res => res.json())
-          );
-        }
-
-        const results = await Promise.all(uploadPromises);
-        businessData.images = results.map(r => r.secure_url);
-
-        // Send to Google Sheets
-        await fetch("https://script.google.com/macros/s/AKfycbwWlh98-yz4TbaBTXvfa10ZlwwvKCkEuibnwX2MHOSRm42GLs1_u_jso9JX_PPzmRhqsw/exec", {
-          method: "POST",
-          body: JSON.stringify(businessData)
-        });
-
-        alert("Business submitted successfully!");
-        window.location.href = "preview.html";
-
-      } catch (err) {
-        document.getElementById('formError').textContent = "An error occurred. Please try again.";
-        document.getElementById('formError').style.display = '';
-        console.error(err);
+      const readers = [];
+      for (let i = 0; i < imageFiles.length; i++) {
+        const reader = new FileReader();
+        readers.push(new Promise((resolve) => {
+          reader.onload = function(e) { resolve(e.target.result); };
+          reader.readAsDataURL(imageFiles[i]);
+        }));
       }
+    // Upload images to Cloudinary
+const uploadPromises = [];
+for (let i = 0; i < imageFiles.length; i++) {
+  const formDataImg = new FormData();
+  formDataImg.append("file", imageFiles[i]);
+  formDataImg.append("upload_preset", "business_upload"); // your unsigned preset name
+
+  uploadPromises.push(
+    fetch("https://api.cloudinary.com/v1_1/Business Images/image/upload", {
+      method: "POST",
+      body: formDataImg
+    }).then(res => res.json())
+  );
+}
+
+Promise.all(uploadPromises).then(results => {
+  businessData.images = results.map(r => r.secure_url);
+
+  // Send to Google Sheets
+  fetch("https://script.google.com/macros/s/AKfycbytS33CINXpwYZvXQCoZzd238vhdSbZDjdieRBjhYwlStm9S9Ay8JieRjIHUX-i2j-Djg/exec", {
+    method: "POST",
+    body: JSON.stringify(businessData)
+  }).then(() => {
+    alert("Business submitted successfully!");
+    window.location.href = "preview.html";
+  }).catch(() => {
+    document.getElementById('formError').textContent = "Failed to save business.";
+    document.getElementById('formError').style.display = '';
+  });
+});
+
+      }).catch(() => {
+        document.getElementById('formError').textContent = "An error occurred while processing images.";
+        document.getElementById('formError').style.display = '';
+      });
     });
   </script>
 </body>
 </html>
+
+
+
+
