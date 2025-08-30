@@ -392,10 +392,37 @@
           reader.readAsDataURL(imageFiles[i]);
         }));
       }
-      Promise.all(readers).then(images => {
-        businessData.images = images;
-        localStorage.setItem('businessData', JSON.stringify(businessData));
-        window.location.href = 'preview.html';
+    // Upload images to Cloudinary
+const uploadPromises = [];
+for (let i = 0; i < imageFiles.length; i++) {
+  const formDataImg = new FormData();
+  formDataImg.append("file", imageFiles[i]);
+  formDataImg.append("upload_preset", "business_upload"); // your unsigned preset name
+
+  uploadPromises.push(
+    fetch("https://api.cloudinary.com/v1_1/Business Images/image/upload", {
+      method: "POST",
+      body: formDataImg
+    }).then(res => res.json())
+  );
+}
+
+Promise.all(uploadPromises).then(results => {
+  businessData.images = results.map(r => r.secure_url);
+
+  // Send to Google Sheets
+  fetch("https://script.google.com/macros/s/AKfycbytS33CINXpwYZvXQCoZzd238vhdSbZDjdieRBjhYwlStm9S9Ay8JieRjIHUX-i2j-Djg/exec", {
+    method: "POST",
+    body: JSON.stringify(businessData)
+  }).then(() => {
+    alert("Business submitted successfully!");
+    window.location.href = "preview.html";
+  }).catch(() => {
+    document.getElementById('formError').textContent = "Failed to save business.";
+    document.getElementById('formError').style.display = '';
+  });
+});
+
       }).catch(() => {
         document.getElementById('formError').textContent = "An error occurred while processing images.";
         document.getElementById('formError').style.display = '';
@@ -404,6 +431,7 @@
   </script>
 </body>
 </html>
+
 
 
 
