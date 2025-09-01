@@ -376,7 +376,7 @@
           formDataImg.append("file", imageFiles[i]);
           formDataImg.append("upload_preset", "Business Images"); // CHANGE to your actual unsigned preset
           // CHANGE "YOUR_CLOUD_NAME" to your actual cloud name below:
-          const response = await fetch("https://api.cloudinary.com/v1_1/dafzrkItz/image/upload", {
+          const response = await fetch("https://api.cloudinary.com/v1_1/dafzrkltz/image/upload", {
             method: "POST",
             body: formDataImg
           });
@@ -422,6 +422,7 @@
   </script>
 </body>
 </html>
+
 
 
 
