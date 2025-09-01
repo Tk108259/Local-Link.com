@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Business Preview</title>
+  <title>Business Preview | Local Link</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -10,6 +10,7 @@
       font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
       padding: 0;
+      min-height: 100vh;
     }
     .header-image {
       width: 100%;
@@ -20,27 +21,37 @@
       display: flex;
       align-items: flex-end;
       justify-content: center;
+      position: relative;
+      box-shadow: 0 2px 12px rgba(53,126,221,0.08);
     }
     .container {
       max-width: 500px;
       margin: -60px auto 40px auto;
       background: #fff;
       border-radius: 16px;
-      box-shadow: 0 6px 32px rgba(53,126,221,0.13), 0 1.5px 4px rgba(0,0,0,0.04);
+      box-shadow: 0 8px 32px rgba(53,126,221,0.13), 0 1.5px 4px rgba(0,0,0,0.04);
       padding: 36px 28px 28px 28px;
       position: relative;
       z-index: 2;
       transition: box-shadow 0.2s;
     }
     .container:hover {
-      box-shadow: 0 10px 40px rgba(53,126,221,0.18), 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 10px 40px rgba(53,126,221,0.22), 0 2px 8px rgba(0,0,0,0.07);
     }
     h1 {
       text-align: center;
-      color: #222;
-      margin-bottom: 28px;
-      font-size: 2rem;
+      color: #357edd;
+      margin-bottom: 10px;
+      font-size: 2.2rem;
       letter-spacing: 1px;
+      font-weight: bold;
+    }
+    .purpose {
+      text-align: center;
+      color: #678;
+      font-size: 1.06rem;
+      margin-bottom: 32px;
+      font-style: italic;
     }
     .preview-block {
       margin-bottom: 24px;
@@ -56,20 +67,26 @@
       display: inline-block;
       background: linear-gradient(90deg, #357edd 60%, #285bb5 100%);
       color: #fff;
-      font-size: 0.98rem;
+      font-size: 1.05rem;
       font-weight: 600;
       border-radius: 16px;
-      padding: 5px 18px;
-      margin-bottom: 8px;
+      padding: 7px 22px;
+      margin-bottom: 12px;
       letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px rgba(53,126,221,0.10);
+      box-shadow: 0 2px 8px rgba(53,126,221,0.15);
+    }
+    .plan-benefits {
+      margin: 16px 0 0 0;
+      padding-left: 18px;
+      color: #357edd;
+      font-size: 0.99rem;
     }
     .photos-section {
       margin-top: 24px;
       margin-bottom: 24px;
     }
     .photos-title {
-      font-weight: 600;
+      font-weight: 700;
       font-size: 1.1rem;
       color: #357edd;
       margin-bottom: 10px;
@@ -79,22 +96,23 @@
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+      margin-bottom: 10px;
     }
     .photos-gallery img {
       width: 90px;
       height: 90px;
       object-fit: cover;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(53,126,221,0.08);
+      box-shadow: 0 2px 8px rgba(53,126,221,0.10);
       border: 1.5px solid #e3eaf5;
       background: #f8fafc;
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
-      animation: fadeInImg 0.5s;
+      animation: fadeInImg 0.4s;
     }
     .photos-gallery img:hover {
       transform: scale(1.08);
-      box-shadow: 0 4px 16px rgba(53,126,221,0.18);
+      box-shadow: 0 4px 16px rgba(53,126,221,0.17);
     }
     @keyframes fadeInImg {
       from { opacity: 0; transform: scale(0.95);}
@@ -103,21 +121,22 @@
     .confirm-btn {
       display: block;
       width: 100%;
-      padding: 14px 0;
+      padding: 15px 0;
       background: linear-gradient(90deg, #357edd 60%, #285bb5 100%);
       color: #fff;
-      font-size: 1.15rem;
-      font-weight: 600;
+      font-size: 1.18rem;
+      font-weight: 700;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(53,126,221,0.10);
-      transition: background 0.2s;
+      transition: background 0.2s, box-shadow 0.2s;
       margin-top: 18px;
       letter-spacing: 0.5px;
     }
     .confirm-btn:hover {
       background: linear-gradient(90deg, #285bb5 60%, #357edd 100%);
+      box-shadow: 0 4px 16px rgba(53,126,221,0.18);
     }
     .phone-link {
       color: #357edd;
@@ -132,6 +151,25 @@
     .phone-link:hover {
       background: #d0e3fa;
     }
+    .info-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .info-list li {
+      margin-bottom: 12px;
+      font-size: 1.08rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-list li strong {
+      width: 140px;
+      color: #357edd;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
     @media (max-width: 600px) {
       .container {
         padding: 18px 6px 18px 6px;
@@ -139,73 +177,74 @@
       .header-image {
         height: 110px;
       }
+      .plan-badge {
+        font-size: 0.95rem;
+        padding: 6px 12px;
+      }
+      .info-list li strong {
+        width: 95px;
+      }
     }
-    <script>
-  const data = JSON.parse(localStorage.getItem('businessData'));
-  if (data) {
-    document.body.innerHTML = `
-      <div style="padding: 20px; max-width: 600px; margin: auto;">
-        <h2>${data.businessName}</h2>
-        <p><strong>Type:</strong> ${data.type}</p>
-        <p><strong>Description:</strong> ${data.desc}</p>
-        <p><strong>Phone:</strong> ${data.phone}</p>
-        <p><strong>Plan:</strong> ${data.plan}</p>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          ${data.images.map(img => `<img src="${img}" style="width:100px;height:100px;object-fit:cover;border-radius:8px;">`).join('')}
-        </div>
-      </div>
-    `;
-  } else {
-    document.body.innerHTML = '<p>No preview data found.</p>';
-  }
-</script>
   </style>
 </head>
 <body>
   <div class="header-image"></div>
   <div class="container">
     <h1>Business Preview</h1>
+    <div class="purpose">
+      Review your business listing before proceeding to payment.<br>
+      Make sure all details and photos are correct!
+    </div>
     <div id="preview" class="preview-block"></div>
     <div class="photos-section">
       <div class="photos-title">Photos</div>
       <div id="photos" class="photos-gallery"></div>
     </div>
-    <button class="confirm-btn" onclick="confirmAndPay()">Confirm and Pay</button>
+    <button class="confirm-btn" onclick="confirmAndPay()">Confirm and Go to Payment</button>
   </div>
   <script>
+    // Plan benefits
     const PLAN_BENEFITS = {
       "Standard": [
-        "1 month listing";
+        "1 month listing",
         "Basic support"
       ],
       "Premium": [
         "Featured placement",
         "Priority support",
-        "First to pop up when searched for similar business or service"
+        "First to pop up for similar business or service"
       ]
     };
 
+    // Load business data
     const data = JSON.parse(localStorage.getItem('businessData'));
-    if (data) {
-      // Plan benefits HTML
-      let planBenefits = "";
-      if (PLAN_BENEFITS[data.plan]) {
-        planBenefits = `<ul style="margin:8px 0 0 0; padding-left:18px; color:#357edd; font-size:0.98rem;">` +
-          PLAN_BENEFITS[data.plan].map(b => `<li>${b}</li>`).join('') +
-          `</ul>`;
-      }
+    const previewDiv = document.getElementById('preview');
+    const photosDiv = document.getElementById('photos');
 
-      document.getElementById('preview').innerHTML = `
-        <span class="plan-badge">${data.plan || ''} Plan</span>
-        <p><strong>Business Name:</strong> ${data.businessName}</p>
-        <p><strong>Type of Service:</strong> ${data.type}</p>
-        <p><strong>Description:</strong> ${data.desc}</p>
-        <p><strong>Phone:</strong> <a href="tel:${data.phone.replace(/\D/g,'')}" class="phone-link">${data.phone}</a></p>
+    if (data) {
+      // Plan badge and benefits
+      let planBadge = data.plan
+        ? `<div class="plan-badge">${data.plan} Plan</div>`
+        : "";
+      let planBenefits = PLAN_BENEFITS[data.plan]
+        ? `<ul class="plan-benefits">${PLAN_BENEFITS[data.plan].map(b => `<li>• ${b}</li>`).join('')}</ul>`
+        : "";
+
+      // Info rows
+      previewDiv.innerHTML = `
+        ${planBadge}
+        <ul class="info-list">
+          <li><strong>Business Name:</strong> ${data.businessName || '<span style="color:#bbb;">Not provided</span>'}</li>
+          <li><strong>Type of Service:</strong> ${data.type || '<span style="color:#bbb;">Not provided</span>'}</li>
+          <li><strong>Description:</strong> ${data.desc || '<span style="color:#bbb;">Not provided</span>'}</li>
+          <li><strong>Phone:</strong> <a href="tel:${data.phone ? data.phone.replace(/\D/g,'') : ''}" class="phone-link">${data.phone || '<span style="color:#bbb;">Not provided</span>'}</a></li>
+        </ul>
         ${planBenefits}
       `;
 
-      const photosDiv = document.getElementById('photos');
-      if (data.images && data.images.length > 0) {
+      // Photos
+      photosDiv.innerHTML = "";
+      if (data.images && Array.isArray(data.images) && data.images.length > 0) {
         data.images.forEach((src, idx) => {
           const img = document.createElement('img');
           img.src = src;
@@ -220,8 +259,8 @@
         photosDiv.innerHTML = '<span style="color:#888;">No photos uploaded.</span>';
       }
     } else {
-      document.getElementById('preview').innerHTML = '<p>No business data found.</p>';
-      document.getElementById('photos').innerHTML = '';
+      previewDiv.innerHTML = '<p style="color:#c33; text-align:center;">No business data found.</p>';
+      photosDiv.innerHTML = '';
     }
 
     function confirmAndPay() {
@@ -230,4 +269,3 @@
   </script>
 </body>
 </html>
-
