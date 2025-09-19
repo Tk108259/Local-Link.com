@@ -349,22 +349,124 @@
 
   <!-- LISTINGS -->
   <section class="listings-section">
+    <!-- ...Keep your <head> and styles as is... -->
+<body>
+  <!-- ...header and categories unchanged... -->
+
+  <!-- LISTINGS -->
+  <section class="listings-section">
     <h2>Featured Businesses</h2>
 
-    <div class="listing-card" data-category="Baking" onclick="goToDetails('Bread Baddie')">
-      <img src="images/Bannana Bread.jpg" alt="Bread Baddie">
-      <img src="images/Scones.jpg" alt="Bread Baddie">
-      <img src="images/Baking_Baddie.jpg" alt="Bread Baddie">
+    <div class="listing-card" 
+         data-category="Baking" 
+         data-biz="BreadBaddie"
+         onclick="goToDetails('BreadBaddie')">
+      <img src="images/Bannana Bread.jpg" alt="Bread Baddie" class="main-img" onclick="event.stopPropagation();openGallery('BreadBaddie')">
       <div class="listing-info">
-        <h3>Bread Baddie<span class="stars">★★★★★</span></h3>
-        <p>We are a bespoke bakery specialising in artisan Bannana bread, scones and crunchies.</p>
+        <h3>Bread Baddie <span class="stars" id="stars-BreadBaddie"></span></h3>
+        <p id="desc-BreadBaddie"></p>
+        <p id="price-BreadBaddie"></p>
+        <p id="distance-BreadBaddie"></p>
       </div>
       <div class="listing-actions" onclick="event.stopPropagation();">
-        <button class="btn-blue" onclick="contactBusiness('Bread Baddie');event.stopPropagation();">
-  <i class="fab fa-whatsapp"></i> Contact Now
-</button>
+        <button class="btn-blue" onclick="contactBusiness('BreadBaddie');event.stopPropagation();">
+          <i class="fab fa-whatsapp"></i> Contact Now
+        </button>
+        <button class="btn-gray" onclick="openGallery('BreadBaddie');event.stopPropagation();">View Gallery</button>
       </div>
     </div>
+
+    <div class="listing-card" 
+         data-category="Baking" 
+         data-biz="SweetBakesSA"
+         onclick="goToDetails('SweetBakesSA')">
+      <img src="images/cake2.jpg" alt="SweetBakes SA" class="main-img" onclick="event.stopPropagation();openGallery('SweetBakesSA')">
+      <div class="listing-info">
+        <h3>SweetBakes SA <span class="stars" id="stars-SweetBakesSA"></span></h3>
+        <p id="desc-SweetBakesSA"></p>
+        <p id="price-SweetBakesSA"></p>
+        <p id="distance-SweetBakesSA"></p>
+      </div>
+      <div class="listing-actions" onclick="event.stopPropagation();">
+        <button class="btn-blue" onclick="contactBusiness('SweetBakesSA');event.stopPropagation();">
+          <i class="fab fa-whatsapp"></i> Contact Now
+        </button>
+        <button class="btn-gray" onclick="openGallery('SweetBakesSA');event.stopPropagation();">View Gallery</button>
+      </div>
+    </div>
+    <!-- ...add more listings as needed... -->
+  </section>
+
+  <!-- IMAGE GALLERY MODAL -->
+  <div class="modal-overlay" id="galleryModal" style="display:none;">
+    <div class="modal" style="max-width: 500px; text-align: center;">
+      <img id="galleryMainImage" src="" style="width:100%;max-height:250px;object-fit:cover;border-radius:8px;">
+      <div id="galleryThumbs" style="margin:14px 0;display:flex;gap:8px;justify-content:center;"></div>
+      <button onclick="closeGallery()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    // BUSINESS DATA
+    const businesses = {
+      BreadBaddie: {
+        images: ["images/Bannana Bread.jpg", "images/Scones.jpg", "images/Baking_Baddie.jpg"],
+        stars: 5,
+        desc: "We are a bespoke bakery specialising in artisan Bannana bread, scones and crunchies.",
+        price: "R200 – R350",
+        distance: "2.5 km away"
+      },
+      SweetBakesSA: {
+        images: ["images/cake2.jpg", "images/cake4.jpg", "images/cake1.jpg"],
+        stars: 4,
+        desc: "Delicious baked goods made with love. Birthdays, weddings, more.",
+        price: "R200 – R450",
+        distance: "3.5 km away"
+      }
+      // Add more businesses as needed
+    };
+
+    // Populate listing info from business data
+    Object.entries(businesses).forEach(([key, biz]) => {
+      document.getElementById('stars-' + key).innerText = '★★★★★☆☆☆☆☆'.slice(5 - biz.stars, 10 - biz.stars);
+      document.getElementById('desc-' + key).innerText = biz.desc;
+      document.getElementById('price-' + key).innerText = biz.price;
+      document.getElementById('distance-' + key).innerText = biz.distance;
+    });
+
+    // IMAGE GALLERY LOGIC
+    function openGallery(bizId) {
+      const biz = businesses[bizId];
+      if (!biz) return;
+      const modal = document.getElementById('galleryModal');
+      const mainImg = document.getElementById('galleryMainImage');
+      const thumbs = document.getElementById('galleryThumbs');
+      mainImg.src = biz.images[0];
+      thumbs.innerHTML = '';
+      biz.images.forEach((img, idx) => {
+        const thumb = document.createElement('img');
+        thumb.src = img;
+        thumb.style.width = '50px';
+        thumb.style.height = '50px';
+        thumb.style.borderRadius = '5px';
+        thumb.style.cursor = 'pointer';
+        thumb.style.border = idx === 0 ? '2px solid #357edd' : '2px solid transparent';
+        thumb.onclick = function() {
+          mainImg.src = img;
+          thumbs.querySelectorAll('img').forEach(t => t.style.border = '2px solid transparent');
+          thumb.style.border = '2px solid #357edd';
+        };
+        thumbs.appendChild(thumb);
+      });
+      modal.style.display = 'flex';
+    }
+    function closeGallery() {
+      document.getElementById('galleryModal').style.display = 'none';
+    }
+    document.getElementById('galleryModal').addEventListener('click', function(e) {
+      if (e.target === this) closeGallery();
+    });
+  </script>
 
     <div class="listing-card" data-category="Baking" onclick="goToDetails('SweetBakesSA')">
       <img src="images/cake2.jpg" alt="SweetBakes SA">
@@ -378,7 +480,6 @@
       </div>
     </div>
 
-    <!-- Add more listings here with data-category="..." for filtering -->
   </section>
 
   <!-- BUSINESS PROFILE PLANS -->
@@ -498,6 +599,7 @@
   </script>
 </body>
 </html>
+
 
 
 
