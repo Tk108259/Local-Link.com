@@ -271,7 +271,7 @@
         });
       });
 
-      // Keyboard accessibility: allow Enter on listing-card to go to details
+      // Keyboard accessibility: allow Enter on listing-card to go to detail
       document.querySelectorAll('.listing-card[role="button"]').forEach(card => {
         card.addEventListener('keydown', function (e) {
           if (e.key === 'Enter' || e.key === ' ') {
