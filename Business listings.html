@@ -1,372 +1,216 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>LocalServe – Find Trusted Local Services</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <title>Business Listings</title>
   <style>
-    /* --- Page basics --- */
-    :root {
-      --primary: #357edd;
-      --muted: #e9eef7;
-      --card-bg: #fff;
-      --shadow: rgba(0,0,0,0.08);
-    }
-    html,body{height:100%;margin:0;font-family:'Segoe UI','Roboto',Arial,sans-serif;background:#f4f7fc;color:#222;}
-    header{
-      background:url('images/file.jpg') center/cover no-repeat;
-      color:white;text-align:center;padding:90px 20px 60px;position:relative;box-shadow:0 4px 14px rgba(0,0,0,0.09);
-    }
-    header::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:1}
-    header h1, header p, .search-container{position:relative;z-index:2}
-    header h1{font-size:2.2rem;margin-bottom:12px;font-weight:700}
-    header p{margin-bottom:32px;font-size:1.18rem}
-    .search-container{display:flex;justify-content:center;gap:10px;max-width:600px;margin:0 auto;flex-wrap:wrap}
-    .search-container input{flex:1;padding:14px;border:none;border-radius:8px;font-size:16px;box-shadow:0 1px 6px rgba(0,0,0,0.08)}
-    .search-container button{padding:14px 20px;border:none;border-radius:8px;background:var(--primary);color:#fff;font-weight:600;cursor:pointer}
-    .search-container button:hover{background:#235cb4}
-
-    /* categories */
-    .categories{display:flex;justify-content:center;gap:28px;padding:28px 20px 8px;flex-wrap:wrap}
-    .category{background:var(--card-bg);padding:8px 14px;border-radius:12px;text-align:center;cursor:pointer;box-shadow:0 1px 5px rgba(30,30,70,0.06);transition:transform .12s}
-    .category.active,.category:hover{transform:scale(1.03);background:#dde9fb;color:var(--primary)}
-    .category span{display:block;background:#e9eef7;width:50px;height:50px;line-height:50px;border-radius:50%;margin:0 auto 8px;font-size:22px;color:var(--primary);border:2px solid #d3e2f9}
-
-    .testimonial{max-width:900px;margin:18px auto;padding:16px;background:#fff;border-radius:12px;box-shadow:0 3px 8px var(--shadow);text-align:center;font-style:italic}
-
-    /* listings */
-    .listings-section{max-width:1000px;margin:18px auto;padding:8px}
-    .listings-section h2{font-size:1.4rem;margin:10px 0 18px;color:#234}
-    .listing-card{display:flex;align-items:center;justify-content:space-between;background:var(--card-bg);border-radius:14px;padding:16px;margin-bottom:18px;box-shadow:0 4px 12px var(--shadow);cursor:pointer;transition:transform .12s,box-shadow .12s}
-    .listing-card:hover{transform:translateY(-2px)}
-    .listing-left{display:flex;align-items:center;gap:14px;flex:1}
-    .listing-card img.main-img{width:110px;height:110px;object-fit:cover;border-radius:10px;box-shadow:0 1px 5px rgba(30,30,80,0.06)}
-    .listing-info{flex:1;min-width:0}
-    .listing-info h3{margin:0;font-size:18px;font-weight:600;color:#2b2e44;display:flex;align-items:center;gap:10px}
-    .listing-info p{margin:6px 0;color:#555;font-size:14px}
-    .stars{color:gold;font-size:14px}
-
-    .listing-actions{display:flex;align-items:center;gap:8px}
-    .listing-actions button{padding:10px 16px;border-radius:8px;border:0;cursor:pointer;font-weight:600}
-    .btn-blue{background:var(--primary);color:#fff}
-    .btn-gray{background:#e9eef7;color:#333}
-
-    /* plans / about */
-    .plans{display:flex;justify-content:center;gap:24px;margin:36px 0;flex-wrap:wrap}
-    .plan{background:#fff;border-radius:14px;padding:20px;width:260px;text-align:center;box-shadow:0 4px 12px var(--shadow)}
-    .plan h4{margin:0 0 8px}
-    .plan p{font-size:22px;margin-bottom:14px;color:#234;font-weight:bold}
-
-    .about{max-width:900px;margin:40px auto;padding:26px;border-radius:12px;background:#fff;box-shadow:0 4px 12px var(--shadow)}
-
-    /* modals */
-    .modal-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.5);align-items:center;justify-content:center}
-    .modal{background:#fff;border-radius:12px;padding:20px;min-width:300px;max-width:92%;text-align:center;box-shadow:0 6px 28px rgba(20,20,40,0.22)}
-    #galleryModal .modal{max-width:600px;padding:18px}
-    #galleryMainImage{width:100%;max-height:320px;object-fit:cover;border-radius:8px}
-    #galleryThumbs{margin:14px 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-    #galleryThumbs img{width:60px;height:60px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent}
-    #galleryThumbs img.selected{border-color:var(--primary)}
-
-    /* rating stars for modal */
-    .stars-rate{font-size:2rem;color:#eee;cursor:pointer;margin:0 6px}
-    .stars-rate.selected,.stars-rate:hover{color:gold}
-
-    @media (max-width:700px){
-      .listing-card{flex-direction:column;align-items:flex-start}
-      .listing-left{width:100%}
-      .listing-actions{width:100%;justify-content:flex-start;margin-top:8px}
-      .plans{flex-direction:column}
-      header{padding:56px 18px 40px}
-    }
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:16px}
+    .listing{border:1px solid #e1e1e1;padding:12px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start}
+    .gallery{width:320px;max-width:40vw;position:relative}
+    .gallery .main{width:100%;height:220px;object-fit:cover;border-radius:6px;background:#f6f6f6}
+    .thumbs{display:flex;gap:6px;margin-top:8px;overflow:auto}
+    .thumbs img{width:56px;height:42px;object-fit:cover;border-radius:4px;cursor:pointer;opacity:.85;border:2px solid transparent}
+    .thumbs img.active{outline:2px solid #3182ce;opacity:1}
+    .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.45);color:#fff;border:none;padding:8px;border-radius:4px;cursor:pointer}
+    .nav-btn.left{left:6px}
+    .nav-btn.right{right:6px}
+    .rating{display:flex;gap:4px;align-items:center}
+    .stars{display:inline-flex;gap:2px}
+    .star{font-size:20px;cursor:pointer;color:#d1d5db}
+    .star.selected{color:#f59e0b}
+    .meta{flex:1}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .thumbs.hidden{display:none}
+    button:focus{outline:2px solid #3182ce}
   </style>
 </head>
 <body>
-  <!-- HEADER -->
-  <header>
-    <h1>Find trusted local services near you.</h1>
-    <p>From bakers to plumbers — all in one place.</p>
-    <form id="searchForm" class="search-container" onsubmit="return false;">
-      <input id="searchInput" type="text" placeholder="What are you looking for?">
-      <button type="submit"><i class="fas fa-search"></i> Search</button>
-    </form>
-  </header>
+  <h1>Business Listings</h1>
 
-  <!-- CATEGORIES -->
-  <div class="categories" id="categoryList">
-    <div class="category" data-category="All"><span>📍</span> All</div>
-    <div class="category" data-category="Gardening"><span>🌱</span> Gardening</div>
-    <div class="category" data-category="Baking"><span>🎂</span> Baking</div>
-    <div class="category" data-category="Electrical"><span>💻</span> Electrical</div>
-    <div class="category" data-category="Plumbing"><span>🪠</span> Plumbing</div>
-  </div>
-
-  <!-- TESTIMONIAL -->
-  <div class="testimonial">⭐ Fast and friendly service! Found my garden expert in minutes.</div>
-
-  <!-- LISTINGS -->
-  <section class="listings-section" id="listingsSection">
-    <h2>Featured Businesses</h2>
-
-    <div class="listing-card" data-category="Baking" data-biz="BreadBaddie" role="button" tabindex="0">
-      <div class="listing-left" onclick="goToDetails('BreadBaddie')">
-        <img src="images/Bannana Bread.jpg" alt="Bread Baddie" class="main-img" onclick="event.stopPropagation(); openGallery('BreadBaddie')">
-        <div class="listing-info">
-          <h3>Bread Baddie <span class="stars" data-stars-for="BreadBaddie"></span></h3>
-          <p class="desc" data-desc-for="BreadBaddie"></p>
-          <p class="price" data-price-for="BreadBaddie"></p>
-          <p class="distance" data-distance-for="BreadBaddie"></p>
-        </div>
-      </div>
-      <div class="listing-actions" onclick="event.stopPropagation();">
-        <button class="btn-blue" onclick="contactBusiness('BreadBaddie');event.stopPropagation();">
-          <i class="fab fa-whatsapp"></i>&nbsp; Contact Now
-        </button>
-        <button class="btn-gray" onclick="openGallery('BreadBaddie');event.stopPropagation();">View Gallery</button>
+  <!-- Example listing structure. In your real page, repeat/list via server-side rendering. Each listing needs data-id and .gallery element with data-images (optional) -->
+  <article class="listing" data-id="listing-123">
+    <div class="gallery" tabindex="0" aria-label="Image gallery for Business A">
+      <button class="nav-btn left" aria-label="Previous image">◀</button>
+      <img class="main" src="images/business-a-1.jpg" alt="Business A main photo" loading="lazy">
+      <button class="nav-btn right" aria-label="Next image">▶</button>
+      <div class="thumbs" aria-hidden="false">
+        <img data-src="images/business-a-1.jpg" alt="Thumbnail 1" loading="lazy">
+        <img data-src="images/business-a-2.jpg" alt="Thumbnail 2" loading="lazy">
+        <img data-src="images/business-a-3.jpg" alt="Thumbnail 3" loading="lazy">
       </div>
     </div>
 
-    <div class="listing-card" data-category="Baking" data-biz="SweetBakesSA" role="button" tabindex="0">
-      <div class="listing-left" onclick="goToDetails('SweetBakesSA')">
-        <img src="images/Baking_Hlogi sample.jpg" alt="Baking With Hlogi" class="main-img" onclick="event.stopPropagation(); openGallery('SweetBakesSA')">
-        <div class="listing-info">
-          <h3>Baking With Hlogi <span class="stars" data-stars-for="SweetBakesSA"></span></h3>
-          <p class="desc" data-desc-for="SweetBakesSA"></p>
-          <p class="price" data-price-for="SweetBakesSA"></p>
-          <p class="distance" data-distance-for="SweetBakesSA"></p>
-        </div>
-      </div>
-      <div class="listing-actions" onclick="event.stopPropagation();">
-        <button class="btn-blue" onclick="contactBusiness('SweetBakesSA');event.stopPropagation();">
-          <i class="fab fa-whatsapp"></i>&nbsp; Contact Now
-        </button>
-        <button class="btn-gray" onclick="openGallery('SweetBakesSA');event.stopPropagation();">View Gallery</button>
+    <div class="meta">
+      <h2>Business A</h2>
+      <p>Great local shop at your service.</p>
+      <div class="rating" aria-live="polite">
+        <span class="stars" role="radiogroup" aria-label="Rate this business">
+          <span class="star" data-value="1" role="radio" aria-checked="false">★</span>
+          <span class="star" data-value="2" role="radio" aria-checked="false">★</span>
+          <span class="star" data-value="3" role="radio" aria-checked="false">★</span>
+          <span class="star" data-value="4" role="radio" aria-checked="false">★</span>
+          <span class="star" data-value="5" role="radio" aria-checked="false">★</span>
+        </span>
+        <span class="rating-value sr-only">Not rated</span>
       </div>
     </div>
-
-    <!-- Add more listing-card items following the same pattern and use data-biz keys that match the businesses object -->
-  </section>
-
-  <!-- IMAGE GALLERY MODAL -->
-  <div class="modal-overlay" id="galleryModal" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Image gallery">
-      <img id="galleryMainImage" src="" alt="Gallery image">
-      <div id="galleryThumbs"></div>
-      <div style="margin-top:12px;">
-        <button onclick="closeGallery()" style="background:var(--primary);color:#fff;border:0;padding:10px 16px;border-radius:8px;cursor:pointer;">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PLANS -->
-  <div class="plans">
-    <div class="plan">
-      <h4>Standard Listing</h4>
-      <p>R200/month</p>
-      <button onclick="window.location.href='Index.html'">Register Business</button>
-    </div>
-    <div class="plan">
-      <h4>Featured Listing</h4>
-      <p>R300/month</p>
-      <button onclick="window.location.href='Index.html'">Register Business</button>
-    </div>
-  </div>
-
-  <!-- RATE MODAL (kept separate) -->
-  <div class="modal-overlay" id="modalOverlay" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Rate the service">
-      <h3>Rate the Service</h3>
-      <div id="starRating">
-        <span class="stars-rate" data-rate="1">&#9733;</span>
-        <span class="stars-rate" data-rate="2">&#9733;</span>
-        <span class="stars-rate" data-rate="3">&#9733;</span>
-        <span class="stars-rate" data-rate="4">&#9733;</span>
-        <span class="stars-rate" data-rate="5">&#9733;</span>
-      </div>
-      <div id="rateMsg" style="margin-top:10px;font-size:15px;color:var(--primary);display:none;">Thank you for your feedback!</div>
-      <button onclick="closeModal()" style="margin-top:12px;background:var(--primary);color:white;border:0;padding:8px 18px;border-radius:7px;">Close</button>
-    </div>
-  </div>
+  </article>
 
   <script>
-    // Run after DOM is ready
-    document.addEventListener('DOMContentLoaded', function () {
+    // Utility: inline SVG fallback placeholder (data URL)
+    const PLACEHOLDER_SVG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">' +
+      '<rect width="600" height="400" fill="#eee"/>' +
+      '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#aaa" font-family="Arial, Helvetica, sans-serif" font-size="24">Image not available</text>' +
+      '</svg>'
+    );
 
-      // Centralized business data. Keys must match data-biz values in the listing cards.
-      const businesses = {
-        BreadBaddie: {
-          key: "BreadBaddie",
-          displayName: "Bread Baddie",
-          images: ["images/Bannana Bread.jpg", "images/Scones.jpg", "images/Baking_Baddie.jpg"],
-          stars: 5,
-          desc: "We are a bespoke bakery specialising in artisan Banana bread, scones and crunchies.",
-          price: "R200 – R350",
-          distance: "2.5 km away",
-          whatsapp: "27814343732"
-        },
-        SweetBakesSA: {
-          key: "SweetBakesSA",
-          displayName: "Baking With Hlogi",
-          images: ["images/Hlogi_Sample 3.jpg", "images/Baking_Hlogi sample.jpg", "images/Hlogi_sample1.jpg"],
-          stars: 5,
-          desc: "You have a sweet tooth — we have the sweetest bakes.",
-          price: "R300 – R800",
-          distance: "Pearlbush - Karenpark",
-          whatsapp: "27815265309"
+    // Apply fallback when images error
+    function applyImageFallback(img){
+      if(!img) return;
+      img.addEventListener('error', function handler(){
+        img.removeEventListener('error', handler);
+        img.src = PLACEHOLDER_SVG;
+      });
+      // If data-src exists and src is empty, set it now
+      if(img.dataset && img.dataset.src && (!img.src || img.src.trim()==='')){
+        img.src = img.dataset.src;
+      }
+    }
+
+    // Initialize all listings
+    document.addEventListener('DOMContentLoaded', () =>{
+      const listings = document.querySelectorAll('.listing');
+      listings.forEach(initListing);
+    });
+
+    function initListing(listing){
+      const id = listing.dataset.id || ('listing-' + Math.random().toString(36).slice(2,9));
+      const gallery = listing.querySelector('.gallery');
+      const main = gallery.querySelector('.main');
+      const thumbs = gallery.querySelector('.thumbs');
+      const thumbImgs = thumbs ? Array.from(thumbs.querySelectorAll('img')) : [];
+      const prevBtn = gallery.querySelector('.nav-btn.left');
+      const nextBtn = gallery.querySelector('.nav-btn.right');
+
+      // Load thumbnail images (support data-src lazy pattern)
+      thumbImgs.forEach((t, idx) =>{
+        if(t.dataset && t.dataset.src){
+          t.src = t.dataset.src;
         }
-        // Add more businesses here; ensure the data-biz attributes on cards match the keys
-      };
+        applyImageFallback(t);
+        t.addEventListener('click', ()=>{
+          setMainImage(main, t.src);
+          setActiveThumb(thumbImgs, idx);
+        });
+      });
 
-      // Helper: render star string (e.g. ★★★★☆)
-      function renderStars(n) {
-        n = Math.max(0, Math.min(5, parseInt(n) || 0));
-        return '★'.repeat(n) + '☆'.repeat(5 - n);
+      // If no thumbnails or only one, hide the thumbs container but ensure main image uses src
+      if(!thumbImgs.length || thumbImgs.length <= 1){
+        if(thumbs) thumbs.classList.add('hidden');
       }
 
-      // Populate listing fields using data attributes linking to business keys
-      document.querySelectorAll('[data-desc-for]').forEach(el => {
-        const key = el.getAttribute('data-desc-for');
-        if (businesses[key]) el.textContent = businesses[key].desc;
-      });
-      document.querySelectorAll('[data-price-for]').forEach(el => {
-        const key = el.getAttribute('data-price-for');
-        if (businesses[key]) el.textContent = businesses[key].price;
-      });
-      document.querySelectorAll('[data-distance-for]').forEach(el => {
-        const key = el.getAttribute('data-distance-for');
-        if (businesses[key]) el.textContent = businesses[key].distance;
-      });
-      document.querySelectorAll('[data-stars-for]').forEach(el => {
-        const key = el.getAttribute('data-stars-for');
-        if (businesses[key]) el.textContent = renderStars(businesses[key].stars);
+      // Ensure main has fallback handling
+      applyImageFallback(main);
+
+      // Support previous/next
+      let currentIndex = 0;
+      function setActiveThumb(list, i){
+        list.forEach((t, idx)=>{
+          t.classList.toggle('active', idx===i);
+          t.setAttribute('aria-pressed', idx===i);
+        });
+        currentIndex = i;
+      }
+
+      function setMainImage(mainEl, src){
+        if(!src) return;
+        mainEl.src = src;
+      }
+
+      if(thumbImgs.length){
+        // default to first thumb if main equals placeholder or different
+        let initial = thumbImgs.findIndex(t=>t.src && t.src===main.src);
+        if(initial === -1) initial = 0;
+        setMainImage(main, thumbImgs[initial].src);
+        setActiveThumb(thumbImgs, initial);
+      }
+
+      function showNext(){
+        if(!thumbImgs.length) return;
+        const next = (currentIndex + 1) % thumbImgs.length;
+        setMainImage(main, thumbImgs[next].src);
+        setActiveThumb(thumbImgs, next);
+      }
+      function showPrev(){
+        if(!thumbImgs.length) return;
+        const prev = (currentIndex - 1 + thumbImgs.length) % thumbImgs.length;
+        setMainImage(main, thumbImgs[prev].src);
+        setActiveThumb(thumbImgs, prev);
+      }
+
+      if(nextBtn) nextBtn.addEventListener('click', showNext);
+      if(prevBtn) prevBtn.addEventListener('click', showPrev);
+
+      // Keyboard navigation when gallery focused
+      gallery.addEventListener('keydown', (ev)=>{
+        if(ev.key === 'ArrowRight') { showNext(); ev.preventDefault(); }
+        if(ev.key === 'ArrowLeft') { showPrev(); ev.preventDefault(); }
       });
 
-      // Category filter
-      document.querySelectorAll('.category').forEach(cat => {
-        cat.addEventListener('click', function () {
-          document.querySelectorAll('.category').forEach(c => c.classList.remove('active'));
-          this.classList.add('active');
-          const catName = this.getAttribute('data-category');
-          document.querySelectorAll('.listing-card').forEach(card => {
-            if (catName === 'All' || card.getAttribute('data-category') === catName) {
-              card.style.display = '';
-            } else {
-              card.style.display = 'none';
-            }
-          });
+      // Swipe support using pointer events (works for touch and mouse)
+      let pointerDown = false, startX = 0, lastX = 0;
+      gallery.addEventListener('pointerdown', (ev)=>{
+        pointerDown = true; startX = ev.clientX; lastX = startX; gallery.setPointerCapture(ev.pointerId);
+      });
+      gallery.addEventListener('pointermove', (ev)=>{
+        if(!pointerDown) return; lastX = ev.clientX;
+      });
+      gallery.addEventListener('pointerup', (ev)=>{
+        if(!pointerDown) return; pointerDown = false; const diff = ev.clientX - startX;
+        const threshold = 40; // px
+        if(diff > threshold) showPrev();
+        else if(diff < -threshold) showNext();
+      });
+      gallery.addEventListener('pointercancel', ()=>{ pointerDown = false; });
+
+      // Ratings using localStorage
+      const stars = listing.querySelectorAll('.star');
+      const ratingValueEl = listing.querySelector('.rating-value');
+      const storageKey = 'listing_rating_' + id;
+      // Apply saved rating
+      let saved = localStorage.getItem(storageKey);
+      if(saved){
+        highlightStars(stars, parseInt(saved,10));
+        if(ratingValueEl) ratingValueEl.textContent = 'Rated ' + saved + ' out of 5';
+      } else {
+        if(ratingValueEl) ratingValueEl.textContent = 'Not rated';
+      }
+
+      stars.forEach((s, i)=>{
+        const val = parseInt(s.dataset.value,10);
+        s.addEventListener('click', ()=>{
+          localStorage.setItem(storageKey, val);
+          highlightStars(stars, val);
+          if(ratingValueEl) ratingValueEl.textContent = 'Rated ' + val + ' out of 5';
+        });
+        s.addEventListener('keydown', (ev)=>{
+          if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); s.click(); }
         });
       });
-      // default select 'All' if available
-      const allCategory = document.querySelector('.category[data-category="All"]');
-      if (allCategory) allCategory.classList.add('active');
 
-      // Search filter
-      document.getElementById('searchForm').addEventListener('submit', function () {
-        const val = (document.getElementById('searchInput').value || '').trim().toLowerCase();
-        document.querySelectorAll('.listing-card').forEach(card => {
-          const text = (card.innerText || '').toLowerCase();
-          card.style.display = val === '' || text.includes(val) ? '' : 'none';
+      function highlightStars(list, value){
+        list.forEach((el)=>{
+          const v = parseInt(el.dataset.value,10);
+          const sel = v <= value;
+          el.classList.toggle('selected', sel);
+          el.setAttribute('aria-checked', sel ? 'true' : 'false');
         });
-      });
+      }
 
-      // Keyboard accessibility: allow Enter on listing-card to go to detail
-      document.querySelectorAll('.listing-card[role="button"]').forEach(card => {
-        card.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            const biz = card.getAttribute('data-biz');
-            if (biz) goToDetails(biz);
-          }
-        });
-      });
+    }
 
-      // Image gallery logic
-      const galleryModal = document.getElementById('galleryModal');
-      const galleryMainImage = document.getElementById('galleryMainImage');
-      const galleryThumbs = document.getElementById('galleryThumbs');
-
-      window.openGallery = function (bizKey) {
-        const biz = businesses[bizKey];
-        if (!biz || !Array.isArray(biz.images) || biz.images.length === 0) return;
-        galleryMainImage.src = biz.images[0];
-        galleryMainImage.alt = biz.displayName + ' image';
-        galleryThumbs.innerHTML = '';
-        biz.images.forEach((src, i) => {
-          const t = document.createElement('img');
-          t.src = src;
-          t.alt = biz.displayName + ' thumb ' + (i + 1);
-          t.className = i === 0 ? 'selected' : '';
-          t.addEventListener('click', function () {
-            galleryMainImage.src = src;
-            galleryThumbs.querySelectorAll('img').forEach(x => x.classList.remove('selected'));
-            t.classList.add('selected');
-          });
-          // handle image load error gracefully
-          t.onerror = function () { t.style.opacity = '0.6'; t.alt = 'Image not found'; };
-          galleryThumbs.appendChild(t);
-        });
-        galleryModal.style.display = 'flex';
-        galleryModal.setAttribute('aria-hidden', 'false');
-      };
-
-      window.closeGallery = function () {
-        galleryModal.style.display = 'none';
-        galleryModal.setAttribute('aria-hidden', 'true');
-      };
-
-      // Close gallery when clicking outside modal content
-      galleryModal.addEventListener('click', function (e) {
-        if (e.target === galleryModal) closeGallery();
-      });
-
-      // Navigate to details
-      window.goToDetails = function (businessId) {
-        window.location.href = `Details.html?biz=${encodeURIComponent(businessId)}`;
-      };
-
-      // Contact via WhatsApp using biz key
-      window.contactBusiness = function (businessKey) {
-        const biz = businesses[businessKey];
-        const defaultNumber = "27711234567"; // fallback
-        const number = biz && biz.whatsapp ? biz.whatsapp : defaultNumber;
-        const message = encodeURIComponent(`Hi, I'm interested in your services from LocalServe (${biz ? biz.displayName : ''}).`);
-        // open in new tab
-        window.open(`https://wa.me/${number}?text=${message}`, '_blank');
-      };
-
-      // Rating stars modal logic (kept simple)
-      document.querySelectorAll('.stars-rate').forEach(star => {
-        star.addEventListener('mouseenter', function () {
-          const rate = parseInt(this.dataset.rate || '0', 10) || 0;
-          document.querySelectorAll('.stars-rate').forEach(s => {
-            s.classList.toggle('selected', (parseInt(s.dataset.rate, 10) || 0) <= rate);
-          });
-        });
-        star.addEventListener('mouseleave', function () {
-          document.querySelectorAll('.stars-rate').forEach(s => s.classList.remove('selected'));
-        });
-        star.addEventListener('click', function () {
-          const rate = parseInt(this.dataset.rate || '0', 10) || 0;
-          document.querySelectorAll('.stars-rate').forEach(s => s.classList.toggle('selected', (parseInt(s.dataset.rate, 10) || 0) <= rate));
-          document.getElementById('rateMsg').style.display = 'block';
-          // Save rating: You can add an API call here to persist ratings
-        });
-      });
-      document.getElementById('modalOverlay').addEventListener('click', function (e) {
-        if (e.target === this) closeModal();
-      });
-      window.closeModal = function () {
-        document.getElementById('modalOverlay').style.display = 'none';
-      };
-
-      // Improve images fallback (if some images missing)
-      document.querySelectorAll('.main-img').forEach(img => {
-        img.onerror = function () { this.src = 'https://placehold.co/110x110?text=No+Image'; };
-      });
-
-      // END DOMContentLoaded
-    });
   </script>
 </body>
 </html>
