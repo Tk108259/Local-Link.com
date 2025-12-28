@@ -1,175 +1,196 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Business Details  LocalServe</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Business Details — LocalLink</title>
   <style>
-    body {background: linear-gradient(120deg, #e0e7ff 0%, #f8fafc 100%);font-family:'Segoe UI','Roboto',Arial,sans-serif;margin:0;color:#1a2236}
-    .container{max-width:1000px;margin:36px auto;background:#fff;border-radius:20px;box-shadow:0 6px 32px rgba(34,60,98,0.13);padding:32px;display:flex;flex-direction:column}
-    .back-link{display:inline-block;margin-bottom:22px;color:#357edd;text-decoration:none;font-weight:500}
-    .gallery{display:flex;gap:24px;align-items:flex-start}
-    .gallery-main{width:350px;height:260px;border-radius:14px;object-fit:cover;box-shadow:0 2px 16px #e5eaf4;background:#f2f5fa;border:1px solid #e5eaf4}
-    .gallery-thumbs{display:flex;flex-direction:column;gap:10px;margin-left:8px}
-    .gallery-thumb{width:60px;height:48px;border-radius:7px;object-fit:cover;cursor:pointer;border:2.5px solid transparent;background:#f1f5fa}
-    .gallery-thumb.selected,.gallery-thumb:hover{border-color:#7c3aed;box-shadow:0 2px 8px #e0e7ff}
-    .info{flex:1;margin-left:40px;padding-top:3px;min-width:260px}
-    .info h1{margin-top:0;font-size:2.15rem;font-weight:700;color:#2a2f4f;margin-bottom:8px}
-    .stars{color:#fbbf24;font-size:1.3rem;margin-left:8px;vertical-align:middle}
-    .info .desc{margin:10px 0 9px;font-size:1.12rem;color:#3b4256}
-    .info .price{font-size:1.13rem;font-weight:600;color:#7c3aed;margin-bottom:5px}
-    .info .service-list{margin:14px 0 18px;padding-left:18px}
-    .action-btns{margin-top:12px;display:flex;flex-wrap:wrap;gap:10px}
-    .action-btns button{display:inline-flex;align-items:center;background:#7c3aed;color:white;border:none;border-radius:9px;padding:13px 26px;font-size:16px;font-weight:600;cursor:pointer;gap:10px}
-    .whatsapp-btn{background:#25D366;color:#1a2236;font-weight:700;box-shadow:0 2px 14px #c6f3de}
-    .whatsapp-btn:hover{background:#128C7E;color:#fff}
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(44,52,80,0.16);justify-content:center;align-items:center;z-index:1000}
-    .modal{background:#fff;border-radius:10px;box-shadow:0 4px 32px #7c3aed33;padding:26px 32px;text-align:center;min-width:240px}
-    .stars-rate{color:#cbd5e1;font-size:1.7rem;cursor:pointer;transition:color 0.12s}
-    .stars-rate.selected,.stars-rate:hover{color:#fbbf24}
-    @media (max-width:900px){.gallery{flex-direction:column;align-items:stretch}.gallery-main{width:100%;height:220px}.info{margin-left:0;margin-top:20px}.container{padding:12px}}
-    @media (max-width:550px){.container{padding:2vw}.info h1{font-size:1.15rem}}
+    :root{
+      --bg:#f8fafc;
+      --card:#fff;
+      --accent:#7c3aed;
+      --muted:#475569;
+      --radius:14px;
+      --shadow: 0 8px 34px rgba(34,60,98,0.08);
+    }
+    body{
+      margin:0;font-family:Inter, "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial; background:var(--bg); color:#0f172a;
+      -webkit-font-smoothing:antialiased; padding:18px;
+    }
+    .wrap{max-width:1000px;margin:0 auto}
+    .back{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .back a{color:var(--accent);text-decoration:none;font-weight:600}
+    .panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}
+    @media (max-width:900px){ .panel{grid-template-columns:1fr} }
+    .gallery{
+      position:relative;display:flex;flex-direction:column;gap:10px;
+    }
+    .main{
+      width:100%;height:360px;border-radius:12px;object-fit:cover;background:#eef2ff;border:1px solid #eef2ff;
+      transition:transform .26s ease; touch-action:pan-y;
+    }
+    @media (max-width:900px){ .main{height:240px} }
+    .thumbs{display:flex;gap:8px;overflow:auto}
+    .thumbs img{width:84px;height:58px;object-fit:cover;border-radius:8px;border:2px solid transparent;cursor:pointer}
+    .thumbs img.selected{border-color:var(--accent);box-shadow:0 10px 30px rgba(124,58,237,0.12)}
+    .info h1{margin:0 0 8px 0;font-size:1.6rem}
+    .meta-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    .price{color:var(--accent);font-weight:700}
+    .services ul{margin:8px 0 0 18px;color:var(--muted)}
+    .actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+    .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
+    .btn.ghost{background:#fff;color:var(--accent);border:1px solid #efe8ff}
+    .stars{color:#fbbf24;font-size:1.1rem}
+    .placeholder{display:flex;align-items:center;justify-content:center;background:#eef2ff;height:240px;border-radius:10px;color:#93c5fd}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   </style>
 </head>
 <body>
-  <div class="container">
-    <a href="Business listings.html" class="back-link">&larr; Back to Listings</a>
-    <div class="gallery">
-      <img src="" class="gallery-main" id="mainImage" alt="Business Image">
-      <div class="gallery-thumbs" id="thumbs"></div>
-      <div class="info">
-        <h1 id="bizName"></h1>
-        <div class="desc" id="bizDesc"></div>
-        <div class="price" id="bizPrice"></div>
-        <div class="service-list" id="bizServices"></div>
-        <div class="action-btns">
-          <button class="whatsapp-btn" id="contactBtn"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:22px;height:22px;vertical-align:middle;margin-right:8px">Contact on WhatsApp</button>
-          <button id="registerBtn">Register Your Business</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="wrap">
+    <div class="back"><a href="Business listings.html" id="backLink">← Back to listings</a></div>
 
-  <!-- Modal for rating -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <h3>Rate the Service</h3>
-      <div id="starRating">
-        <span class="stars-rate" data-rate="1">&#9733;</span>
-        <span class="stars-rate" data-rate="2">&#9733;</span>
-        <span class="stars-rate" data-rate="3">&#9733;</span>
-        <span class="stars-rate" data-rate="4">&#9733;</span>
-        <span class="stars-rate" data-rate="5">&#9733;</span>
+    <section class="panel" id="panel">
+      <div class="gallery" id="gallery">
+        <img id="mainImage" class="main" alt="Business image" src="" />
+        <div class="thumbs" id="thumbs" aria-label="Gallery thumbnails"></div>
       </div>
-      <div id="rateMsg" style="margin-top:10px;font-size:15px;color:#357edd;display:none;">Thank you for your feedback!</div>
-      <button onclick="closeModal()" style="margin-top:12px;background:#7c3aed;color:white;border:0;padding:8px 18px;border-radius:7px;">Close</button>
-    </div>
+
+      <aside class="info" id="info">
+        <h1 id="bizName">Business</h1>
+        <div class="meta-row">
+          <div class="stars" id="bizStars">★★★★★</div>
+          <div class="price" id="bizPrice"></div>
+        </div>
+        <div class="desc" id="bizDesc" style="color:var(--muted)"></div>
+        <div class="services" id="bizServices"></div>
+        <div class="actions">
+          <button id="contactBtn" class="btn">Contact on WhatsApp</button>
+          <button id="rateBtn" class="btn ghost">Rate</button>
+        </div>
+      </aside>
+    </section>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // Centralized businesses: keys MUST match data-biz used in listings
-      const businesses = {
-        BreadBaddie: {
-          key: 'BreadBaddie',
-          name: 'Bread Baddie',
-          images: ['images/Baking_Baddie.jpg','images/Scones.jpg','images/Bannana Bread.jpg'],
-          stars: 5,
-          desc: "We are a bespoke bakery specialising in artisan Banana bread, scones and crunchies.",
-          price: 'R150',
-          services: ['The Best Banana Bread yet','Scones','Cookies & crunchies'],
-          whatsapp: '27814343732'
-        },
-        SweetBakesSA: {
-          key: 'SweetBakesSA',
-          name: 'Baking With Hlogi',
-          images: ['images/Hlogi_sample1.jpg','images/Hlogi_Sample 3.jpg','images/Baking_Hlogi sample.jpg'],
-          stars: 4,
-          desc: 'Freshly baked treats and custom cakes by Hlogi. Perfect for any occasion!',
-          price: 'R300  R800',
-          services: ['Custom Cakes','Pastries','Event Catering'],
-          whatsapp: '27815265309'
-        }
-      };
-
-      function getQuery(name){ return new URLSearchParams(window.location.search).get(name); }
-
-      // Find matching key case-insensitive, ignoring spaces
-      function findBizKey(query){
-        if(!query) return null;
-        const q = query.toString().replace(/\s+/g,'').toLowerCase();
-        return Object.keys(businesses).find(k => k.replace(/\s+/g,'').toLowerCase() === q || (businesses[k].name||'').replace(/\s+/g,'').toLowerCase() === q);
+    // Keep same sample data as listings
+    const BUSINESSES = {
+      BreadBaddie: {
+        key: 'BreadBaddie',
+        name: 'Bread Baddie',
+        images: ['images/Baking_Baddie.jpg','images/Scones.jpg','images/Bannana Bread.jpg'],
+        stars: 5,
+        desc: "Bespoke bakery specialising in artisan banana bread, scones and crunchies.",
+        price: 'R150',
+        services: ['Banana bread','Scones','Cookies & crunchies'],
+        whatsapp: '27814343732'
+      },
+      SweetBakesSA: {
+        key: 'SweetBakesSA',
+        name: 'Baking With Hlogi',
+        images: ['images/Hlogi_sample1.jpg','images/Hlogi_Sample 3.jpg','images/Baking_Hlogi sample.jpg'],
+        stars: 4,
+        desc: 'Freshly baked treats and custom cakes by Hlogi. Perfect for any occasion!',
+        price: 'R300 — R800',
+        services: ['Custom Cakes','Pastries','Event Catering'],
+        whatsapp: '27815265309'
       }
+    };
 
-      const urlBiz = getQuery('biz') || 'BreadBaddie';
-      const bizKey = findBizKey(urlBiz) || 'BreadBaddie';
-      const bizData = businesses[bizKey];
+    const PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">' +
+      '<rect width="900" height="600" fill="#f3f4f6"/>' +
+      '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="28">Image unavailable</text>' +
+      '</svg>'
+    );
 
-      // Safety: if bizData missing, show placeholder message
-      if(!bizData){
-        document.getElementById('bizName').innerText = 'Business not found';
-        document.getElementById('bizDesc').innerText = '';
-        document.getElementById('bizPrice').innerText = '';
-        document.getElementById('bizServices').innerHTML = '';
-        document.getElementById('mainImage').src = 'https://placehold.co/350x260?text=No+Image';
-        return;
-      }
+    function q(name){ return new URLSearchParams(location.search).get(name); }
+    function findBizKey(query){
+      if(!query) return null;
+      const qn = query.toString().replace(/\s+/g,'').toLowerCase();
+      return Object.keys(BUSINESSES).find(k => k.replace(/\s+/g,'').toLowerCase() === qn || (BUSINESSES[k].name||'').replace(/\s+/g,'').toLowerCase() === qn);
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const param = q('biz') || '';
+      const key = findBizKey(param) || param || 'BreadBaddie';
+      const biz = BUSINESSES[key] || BUSINESSES['BreadBaddie'];
 
       const mainImage = document.getElementById('mainImage');
       const thumbs = document.getElementById('thumbs');
+      const bizName = document.getElementById('bizName');
+      const bizDesc = document.getElementById('bizDesc');
+      const bizPrice = document.getElementById('bizPrice');
+      const bizServices = document.getElementById('bizServices');
+      const bizStars = document.getElementById('bizStars');
 
-      // Set main image with fallback
-      mainImage.src = bizData.images && bizData.images.length ? bizData.images[0] : 'https://placehold.co/350x260?text=No+Image';
-      mainImage.onerror = function(){ this.src = 'https://placehold.co/350x260?text=No+Image'; };
+      // fill text
+      bizName.innerText = biz.name;
+      bizDesc.innerText = biz.desc || '';
+      bizPrice.innerText = biz.price || '';
+      bizStars.innerText = '★'.repeat(Math.max(0,Math.min(5,biz.stars))) + '☆'.repeat(5 - Math.max(0,Math.min(5,biz.stars)));
+      bizServices.innerHTML = '<strong>Services</strong><ul>' + (biz.services || []).map(s => `<li>${s}</li>`).join('') + '</ul>';
 
-      // Fill details
-      document.getElementById('bizName').innerHTML = bizData.name + ' <span class="stars">' + '★'.repeat(Math.max(0,Math.min(5,bizData.stars))) + '☆'.repeat(5-Math.max(0,Math.min(5,bizData.stars))) + '</span>';
-      document.getElementById('bizDesc').innerText = bizData.desc || '';
-      document.getElementById('bizPrice').innerText = bizData.price || '';
-      document.getElementById('bizServices').innerHTML = '<ul>' + (bizData.services||[]).map(s => `<li>${s}</li>`).join('') + '</ul>';
-
-      // Populate thumbs
-      thumbs.innerHTML = '';
-      (bizData.images||[]).forEach((src, idx) => {
-        const t = document.createElement('img');
-        t.src = src;
-        t.alt = bizData.name + ' thumb ' + (idx+1);
-        t.className = 'gallery-thumb' + (idx===0? ' selected':'');
-        t.onclick = function(){ mainImage.src = src; document.querySelectorAll('.gallery-thumb').forEach(x=>x.classList.remove('selected')); t.classList.add('selected'); };
-        t.onerror = function(){ t.style.opacity='0.6'; t.alt='Image not found'; };
-        thumbs.appendChild(t);
-      });
-
-      // Contact button
-      document.getElementById('contactBtn').addEventListener('click', function(){
-        const number = bizData.whatsapp || '27711234567';
-        const msg = encodeURIComponent(`Hi, I'm interested in your services! (${bizData.name})`);
-        window.open(`https://wa.me/${number}?text=${msg}`,'_blank');
-      });
-
-      // Register button
-      document.getElementById('registerBtn').addEventListener('click', function(){ window.location.href='Index.html'; });
-
-      // Rating modal logic
-      document.querySelectorAll('.stars-rate').forEach(star => {
-        star.addEventListener('mouseenter', function(){
-          const r = parseInt(this.dataset.rate||'0',10);
-          document.querySelectorAll('.stars-rate').forEach(s=>s.classList.toggle('selected', (parseInt(s.dataset.rate||'0',10) <= r)));
+      // images
+      function safeLoad(el, src){
+        el.src = src || PLACEHOLDER;
+        el.onerror = ()=> el.src = PLACEHOLDER;
+      }
+      const imgs = biz.images && biz.images.length ? biz.images.slice() : [];
+      if(!imgs.length){ safeLoad(mainImage, PLACEHOLDER); thumbs.innerHTML = ''; }
+      else {
+        safeLoad(mainImage, imgs[0]);
+        thumbs.innerHTML = '';
+        imgs.forEach((src, i)=>{
+          const t = document.createElement('img');
+          t.src = src;
+          t.alt = biz.name + ' thumb ' + (i+1);
+          t.className = i===0 ? 'selected' : '';
+          t.addEventListener('click', ()=> {
+            mainImage.classList.add('fade');
+            mainImage.src = src;
+            document.querySelectorAll('.thumbs img').forEach(x=>x.classList.remove('selected'));
+            t.classList.add('selected');
+          });
+          t.onerror = ()=> { t.src = PLACEHOLDER; t.alt = 'Image not found'; };
+          thumbs.appendChild(t);
         });
-        star.addEventListener('mouseleave', function(){ document.querySelectorAll('.stars-rate').forEach(s=>s.classList.remove('selected')); });
-        star.addEventListener('click', function(){
-          const r = parseInt(this.dataset.rate||'0',10);
-          document.querySelectorAll('.stars-rate').forEach(s=>s.classList.toggle('selected', (parseInt(s.dataset.rate||'0',10) <= r)));
-          document.getElementById('rateMsg').style.display = 'block';
-          // TODO: persist rating via API/localStorage
-        });
+      }
+
+      // swipe support for main image (pointer events)
+      let down = false, startX = 0, lastIndex = 0;
+      function currentIndex(){ const selected = thumbs.querySelector('img.selected'); if(!selected) return 0; return Array.from(thumbs.children).indexOf(selected); }
+      function showIndex(i){
+        const clamped = ((i % imgs.length) + imgs.length) % imgs.length;
+        mainImage.src = imgs[clamped] || PLACEHOLDER;
+        document.querySelectorAll('.thumbs img').forEach((x, idx)=> x.classList.toggle('selected', idx===clamped));
+      }
+      mainImage.addEventListener('pointerdown', (e)=>{ down=true; startX = e.clientX; mainImage.setPointerCapture(e.pointerId); });
+      mainImage.addEventListener('pointerup', (e)=>{ if(!down) return; down=false; const diff = e.clientX - startX; const thr = 40; if(diff > thr) showIndex(currentIndex()-1); else if(diff < -thr) showIndex(currentIndex()+1); });
+      mainImage.addEventListener('pointercancel', ()=> down=false);
+
+      // keyboard arrows for images
+      mainImage.tabIndex = 0;
+      mainImage.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight') showIndex(currentIndex()+1); if(e.key==='ArrowLeft') showIndex(currentIndex()-1); });
+
+      document.getElementById('contactBtn').addEventListener('click', ()=>{
+        const number = biz.whatsapp || '27711234567';
+        const msg = encodeURIComponent(`Hi, I'm interested in your services (${biz.name})`);
+        window.open(`https://wa.me/${number}?text=${msg}`, '_blank');
       });
 
-      // Close modal by clicking overlay
-      document.getElementById('modalOverlay').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
-      window.closeModal = function(){ document.getElementById('modalOverlay').style.display='none'; };
+      // Rate button opens small prompt (simple)
+      document.getElementById('rateBtn').addEventListener('click', ()=>{
+        const r = prompt('Rate this business 1–5', '');
+        const v = parseInt(r,10);
+        if(!isNaN(v) && v>=1 && v<=5){
+          localStorage.setItem('listing_rating_' + biz.key, v);
+          alert('Thanks — your rating is saved locally.');
+        } else if(r!==null){
+          alert('Please enter a number between 1 and 5.');
+        }
+      });
 
+      // If the page was opened via "View gallery" highlight behavior: nothing extra required because biz param used
     });
   </script>
 </body>
