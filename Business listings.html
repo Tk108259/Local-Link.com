@@ -1,215 +1,357 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Business Listings</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LocalLink — Business Listings</title>
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:16px}
-    .listing{border:1px solid #e1e1e1;padding:12px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start}
-    .gallery{width:320px;max-width:40vw;position:relative}
-    .gallery .main{width:100%;height:220px;object-fit:cover;border-radius:6px;background:#f6f6f6}
-    .thumbs{display:flex;gap:6px;margin-top:8px;overflow:auto}
-    .thumbs img{width:56px;height:42px;object-fit:cover;border-radius:4px;cursor:pointer;opacity:.85;border:2px solid transparent}
-    .thumbs img.active{outline:2px solid #3182ce;opacity:1}
-    .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.45);color:#fff;border:none;padding:8px;border-radius:4px;cursor:pointer}
-    .nav-btn.left{left:6px}
-    .nav-btn.right{right:6px}
-    .rating{display:flex;gap:4px;align-items:center}
-    .stars{display:inline-flex;gap:2px}
-    .star{font-size:20px;cursor:pointer;color:#d1d5db}
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#7c3aed;
+      --accent-600:#6b21a8;
+      --radius:12px;
+      --shadow: 0 6px 20px rgba(34,60,98,0.08);
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,var(--bg),#ffffff 40%);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:18px;
+    }
+    .wrap{max-width:1100px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px}
+    h1{font-size:1.25rem;margin:0;color:#111827}
+    .search{
+      flex:1;max-width:520px;display:flex;gap:8px;align-items:center;
+    }
+    .search input{
+      flex:1;padding:10px 12px;border-radius:10px;border:1px solid #e6e9ef;background:#fff;font-size:14px;
+      box-shadow:0 1px 0 rgba(16,24,40,0.02) inset;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+    @media (max-width:880px){ .grid{grid-template-columns:1fr} }
+    .card{
+      background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;gap:14px;padding:12px;
+      align-items:flex-start;
+    }
+    .gallery{
+      width:320px;max-width:42vw;min-width:140px;position:relative;border-radius:10px;flex-shrink:0;
+      display:flex;flex-direction:column;
+    }
+    @media (max-width:880px){ .gallery{width:100%;max-width:none;min-width:0} .card{flex-direction:column} }
+    .main{
+      width:100%;height:200px;border-radius:10px;object-fit:cover;background:#eef2ff;border:1px solid #eef2ff;
+      transition:transform .28s ease,box-shadow .28s ease;
+    }
+    .main:focus{outline:3px solid rgba(124,58,237,0.18)}
+    .thumbs{
+      margin-top:8px;display:flex;gap:8px;overflow:auto;padding-bottom:4px;
+    }
+    .thumbs img{width:72px;height:48px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;opacity:.9}
+    .thumbs img.active{border-color:var(--accent);opacity:1;box-shadow:0 6px 18px rgba(99,102,241,0.12)}
+    .nav-btn{
+      position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.45);color:#fff;border:none;padding:8px;border-radius:8px;cursor:pointer;
+      display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;
+    }
+    .nav-btn.left{left:8px}
+    .nav-btn.right{right:8px}
+    .meta{flex:1;min-width:0}
+    .meta h2{font-size:1rem;margin:0 0 6px 0}
+    .meta p{margin:0;color:var(--muted);font-size:14px}
+    .meta .meta-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:12px}
+    .rating{display:flex;align-items:center;gap:8px}
+    .stars{display:inline-flex;gap:6px}
+    .star{font-size:18px;color:#e6e7eb;cursor:pointer;user-select:none}
     .star.selected{color:#f59e0b}
-    .meta{flex:1}
+    .meta .actions{display:flex;gap:8px;align-items:center}
+    .btn{
+      background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;font-weight:600;cursor:pointer;
+      box-shadow:0 6px 20px rgba(124,58,237,0.12);
+    }
+    .btn.secondary{background:#fff;color:var(--accent);border:1px solid #efe8ff;box-shadow:none}
+    .biz-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#f8f5ff;color:var(--accent);font-weight:600}
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    .thumbs.hidden{display:none}
-    button:focus{outline:2px solid #3182ce}
+    footer{margin-top:22px;text-align:center;color:var(--muted);font-size:13px}
+    /* smooth transitions for image change */
+    .main.animate{transform:scale(.995);opacity:.98}
   </style>
 </head>
 <body>
-  <h1>Business Listings</h1>
-
-  <!-- Example listing structure. In your real page, repeat/list via server-side rendering. Each listing needs data-id and .gallery element with data-images (optional) -->
-  <article class="listing" data-id="listing-123">
-    <div class="gallery" tabindex="0" aria-label="Image gallery for Business A">
-      <button class="nav-btn left" aria-label="Previous image">◀</button>
-      <img class="main" src="images/business-a-1.jpg" alt="Business A main photo" loading="lazy">
-      <button class="nav-btn right" aria-label="Next image">▶</button>
-      <div class="thumbs" aria-hidden="false">
-        <img data-src="images/business-a-1.jpg" alt="Thumbnail 1" loading="lazy">
-        <img data-src="images/business-a-2.jpg" alt="Thumbnail 2" loading="lazy">
-        <img data-src="images/business-a-3.jpg" alt="Thumbnail 3" loading="lazy">
+  <div class="wrap">
+    <header>
+      <h1>LocalLink — Nearby Businesses</h1>
+      <div class="search" role="search" aria-label="Search businesses">
+        <input id="searchInput" placeholder="Search business name or service (e.g. bakery, plumber)" aria-label="Search businesses" />
       </div>
-    </div>
+    </header>
 
-    <div class="meta">
-      <h2>Business A</h2>
-      <p>Great local shop at your service.</p>
-      <div class="rating" aria-live="polite">
-        <span class="stars" role="radiogroup" aria-label="Rate this business">
-          <span class="star" data-value="1" role="radio" aria-checked="false">★</span>
-          <span class="star" data-value="2" role="radio" aria-checked="false">★</span>
-          <span class="star" data-value="3" role="radio" aria-checked="false">★</span>
-          <span class="star" data-value="4" role="radio" aria-checked="false">★</span>
-          <span class="star" data-value="5" role="radio" aria-checked="false">★</span>
-        </span>
-        <span class="rating-value sr-only">Not rated</span>
-      </div>
-    </div>
-  </article>
+    <main>
+      <section id="listings" class="grid" aria-live="polite">
+        <!-- Cards will be injected here -->
+      </section>
+    </main>
+
+    <footer>
+      Built with care — tap a gallery to view details. Ratings are saved locally.
+    </footer>
+  </div>
 
   <script>
-    // Utility: inline SVG fallback placeholder (data URL)
-    const PLACEHOLDER_SVG = 'data:image/svg+xml;utf8,' + encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">' +
-      '<rect width="600" height="400" fill="#eee"/>' +
-      '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#aaa" font-family="Arial, Helvetica, sans-serif" font-size="24">Image not available</text>' +
+    // Placeholder image data URL
+    const PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">' +
+      '<rect width="900" height="600" fill="#f3f4f6"/>' +
+      '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="28" font-family="Arial, Helvetica, sans-serif">Image unavailable</text>' +
       '</svg>'
     );
 
-    // Apply fallback when images error
-    function applyImageFallback(img){
-      if(!img) return;
-      img.addEventListener('error', function handler(){
-        img.removeEventListener('error', handler);
-        img.src = PLACEHOLDER_SVG;
-      });
-      // If data-src exists and src is empty, set it now
-      if(img.dataset && img.dataset.src && (!img.src || img.src.trim()==='')){
-        img.src = img.dataset.src;
+    // Sample businesses (keys must match Details.html)
+    const BUSINESSES = {
+      BreadBaddie: {
+        key: 'BreadBaddie',
+        name: 'Bread Baddie',
+        images: ['images/Baking_Baddie.jpg','images/Scones.jpg','images/Bannana Bread.jpg'],
+        stars: 5,
+        desc: "Bespoke bakery specialising in artisan banana bread, scones and crunchies.",
+        price: 'R150',
+        services: ['Banana bread','Scones','Cookies & crunchies'],
+        whatsapp: '27814343732'
+      },
+      SweetBakesSA: {
+        key: 'SweetBakesSA',
+        name: 'Baking With Hlogi',
+        images: ['images/Hlogi_sample1.jpg','images/Hlogi_Sample 3.jpg','images/Baking_Hlogi sample.jpg'],
+        stars: 4,
+        desc: 'Freshly baked treats and custom cakes by Hlogi. Perfect for any occasion!',
+        price: 'R300 — R800',
+        services: ['Custom Cakes','Pastries','Event Catering'],
+        whatsapp: '27815265309'
       }
+    };
+
+    // Utility: set src with fallback
+    function safeLoad(img, src){
+      img.src = src || PLACEHOLDER;
+      img.onerror = () => { img.src = PLACEHOLDER; };
     }
 
-    // Initialize all listings
-    document.addEventListener('DOMContentLoaded', () =>{
-      const listings = document.querySelectorAll('.listing');
-      listings.forEach(initListing);
-    });
+    // Create listing card DOM
+    function createCard(biz){
+      const article = document.createElement('article');
+      article.className = 'card';
+      article.dataset.biz = biz.key;
 
-    function initListing(listing){
-      const id = listing.dataset.id || ('listing-' + Math.random().toString(36).slice(2,9));
-      const gallery = listing.querySelector('.gallery');
-      const main = gallery.querySelector('.main');
-      const thumbs = gallery.querySelector('.thumbs');
-      const thumbImgs = thumbs ? Array.from(thumbs.querySelectorAll('img')) : [];
-      const prevBtn = gallery.querySelector('.nav-btn.left');
-      const nextBtn = gallery.querySelector('.nav-btn.right');
+      const gallery = document.createElement('div');
+      gallery.className = 'gallery';
+      gallery.tabIndex = 0;
+      gallery.setAttribute('aria-label', `Image gallery for ${biz.name}`);
 
-      // Load thumbnail images (support data-src lazy pattern)
-      thumbImgs.forEach((t, idx) =>{
-        if(t.dataset && t.dataset.src){
-          t.src = t.dataset.src;
-        }
-        applyImageFallback(t);
-        t.addEventListener('click', ()=>{
+      const prev = document.createElement('button');
+      prev.className = 'nav-btn left';
+      prev.type = 'button';
+      prev.ariaLabel = 'Previous image';
+      prev.innerText = '◀';
+
+      const next = document.createElement('button');
+      next.className = 'nav-btn right';
+      next.type = 'button';
+      next.ariaLabel = 'Next image';
+      next.innerText = '▶';
+
+      const main = document.createElement('img');
+      main.className = 'main';
+      main.alt = biz.name + ' photo';
+      safeLoad(main, biz.images && biz.images[0]);
+
+      const thumbs = document.createElement('div');
+      thumbs.className = 'thumbs';
+      thumbs.setAttribute('aria-hidden','false');
+
+      // thumbs
+      (biz.images || []).forEach((src, i) => {
+        const t = document.createElement('img');
+        t.dataset.index = i;
+        t.alt = `${biz.name} thumb ${i+1}`;
+        safeLoad(t, src);
+        if(i === 0) t.classList.add('active');
+        t.addEventListener('click', () => {
           setMainImage(main, t.src);
-          setActiveThumb(thumbImgs, idx);
+          setActiveThumb(thumbs, i);
         });
+        thumbs.appendChild(t);
       });
 
-      // If no thumbnails or only one, hide the thumbs container but ensure main image uses src
-      if(!thumbImgs.length || thumbImgs.length <= 1){
-        if(thumbs) thumbs.classList.add('hidden');
+      gallery.appendChild(prev);
+      gallery.appendChild(main);
+      gallery.appendChild(next);
+      gallery.appendChild(thumbs);
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      const h2 = document.createElement('h2');
+      h2.innerText = biz.name;
+      const p = document.createElement('p');
+      p.innerText = biz.desc;
+      const row = document.createElement('div');
+      row.className = 'meta-row';
+      const left = document.createElement('div');
+      left.className = 'rating';
+      // stars
+      const starsWrap = document.createElement('div');
+      starsWrap.className = 'stars';
+      for(let i=1;i<=5;i++){
+        const sp = document.createElement('span');
+        sp.className = 'star';
+        sp.dataset.value = i;
+        sp.role = 'radio';
+        sp.ariaChecked = 'false';
+        sp.innerText = '★';
+        starsWrap.appendChild(sp);
       }
+      left.appendChild(starsWrap);
+      const ratingText = document.createElement('div');
+      ratingText.className = 'biz-badge';
+      ratingText.innerText = `${biz.price || ''}`;
+      row.appendChild(left);
+      row.appendChild(ratingText);
 
-      // Ensure main has fallback handling
-      applyImageFallback(main);
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+      const viewBtn = document.createElement('button');
+      viewBtn.className = 'btn';
+      viewBtn.type = 'button';
+      viewBtn.innerText = 'View gallery';
+      viewBtn.addEventListener('click', ()=> {
+        // go to details page with biz key
+        window.location.href = `Details.html?biz=${encodeURIComponent(biz.key)}`;
+      });
 
-      // Support previous/next
+      const contact = document.createElement('button');
+      contact.className = 'btn secondary';
+      contact.type = 'button';
+      contact.innerText = 'Contact';
+      contact.addEventListener('click', ()=> {
+        const msg = encodeURIComponent(`Hi, I'm interested in your services (${biz.name}).`);
+        const num = biz.whatsapp || '27711234567';
+        window.open(`https://wa.me/${num}?text=${msg}`, '_blank');
+      });
+
+      actions.appendChild(viewBtn);
+      actions.appendChild(contact);
+
+      meta.appendChild(h2);
+      meta.appendChild(p);
+      meta.appendChild(row);
+      meta.appendChild(actions);
+
+      article.appendChild(gallery);
+      article.appendChild(meta);
+
+      // behavior: thumbs navigation
       let currentIndex = 0;
-      function setActiveThumb(list, i){
-        list.forEach((t, idx)=>{
-          t.classList.toggle('active', idx===i);
-          t.setAttribute('aria-pressed', idx===i);
-        });
+      function setActiveThumb(container, i){
+        const imgs = Array.from(container.querySelectorAll('img'));
+        imgs.forEach((im, idx) => im.classList.toggle('active', idx===i));
         currentIndex = i;
       }
-
-      function setMainImage(mainEl, src){
+      function setMainImage(imgEl, src){
         if(!src) return;
-        mainEl.src = src;
+        imgEl.classList.add('animate');
+        // small timeout to allow css transition
+        setTimeout(()=>{ imgEl.src = src; }, 40);
+        setTimeout(()=>{ imgEl.classList.remove('animate'); }, 260);
       }
 
-      if(thumbImgs.length){
-        // default to first thumb if main equals placeholder or different
-        let initial = thumbImgs.findIndex(t=>t.src && t.src===main.src);
-        if(initial === -1) initial = 0;
-        setMainImage(main, thumbImgs[initial].src);
-        setActiveThumb(thumbImgs, initial);
+      const tImgs = thumbs.querySelectorAll('img');
+      if(tImgs.length){
+        // prev/next use tImgs
+        function showNext(){ const nextIdx = (currentIndex + 1) % tImgs.length; tImgs[nextIdx].click(); }
+        function showPrev(){ const prevIdx = (currentIndex - 1 + tImgs.length) % tImgs.length; tImgs[prevIdx].click(); }
+        next.addEventListener('click', showNext);
+        prev.addEventListener('click', showPrev);
+
+        // initial currentIndex
+        currentIndex = 0;
+      } else {
+        // hide nav if no thumbs
+        prev.style.display = 'none';
+        next.style.display = 'none';
       }
 
-      function showNext(){
-        if(!thumbImgs.length) return;
-        const next = (currentIndex + 1) % thumbImgs.length;
-        setMainImage(main, thumbImgs[next].src);
-        setActiveThumb(thumbImgs, next);
-      }
-      function showPrev(){
-        if(!thumbImgs.length) return;
-        const prev = (currentIndex - 1 + thumbImgs.length) % thumbImgs.length;
-        setMainImage(main, thumbImgs[prev].src);
-        setActiveThumb(thumbImgs, prev);
-      }
-
-      if(nextBtn) nextBtn.addEventListener('click', showNext);
-      if(prevBtn) prevBtn.addEventListener('click', showPrev);
-
-      // Keyboard navigation when gallery focused
-      gallery.addEventListener('keydown', (ev)=>{
-        if(ev.key === 'ArrowRight') { showNext(); ev.preventDefault(); }
-        if(ev.key === 'ArrowLeft') { showPrev(); ev.preventDefault(); }
+      // keyboard left/right on gallery
+      gallery.addEventListener('keydown', (ev) => {
+        if(ev.key === 'ArrowRight'){ ev.preventDefault(); next.click(); }
+        if(ev.key === 'ArrowLeft'){ ev.preventDefault(); prev.click(); }
       });
 
-      // Swipe support using pointer events (works for touch and mouse)
-      let pointerDown = false, startX = 0, lastX = 0;
+      // pointer swipe for gallery
+      let pointerDown = false, startX = 0;
       gallery.addEventListener('pointerdown', (ev)=>{
-        pointerDown = true; startX = ev.clientX; lastX = startX; gallery.setPointerCapture(ev.pointerId);
-      });
-      gallery.addEventListener('pointermove', (ev)=>{
-        if(!pointerDown) return; lastX = ev.clientX;
+        pointerDown = true; startX = ev.clientX; gallery.setPointerCapture(ev.pointerId);
       });
       gallery.addEventListener('pointerup', (ev)=>{
-        if(!pointerDown) return; pointerDown = false; const diff = ev.clientX - startX;
-        const threshold = 40; // px
-        if(diff > threshold) showPrev();
-        else if(diff < -threshold) showNext();
+        if(!pointerDown) return; pointerDown = false; const diff = ev.clientX - startX; const thr = 40;
+        if(diff > thr) prev.click();
+        else if(diff < -thr) next.click();
       });
-      gallery.addEventListener('pointercancel', ()=>{ pointerDown = false; });
+      gallery.addEventListener('pointercancel', ()=>pointerDown=false);
 
-      // Ratings using localStorage
-      const stars = listing.querySelectorAll('.star');
-      const ratingValueEl = listing.querySelector('.rating-value');
-      const storageKey = 'listing_rating_' + id;
-      // Apply saved rating
-      let saved = localStorage.getItem(storageKey);
-      if(saved){
-        highlightStars(stars, parseInt(saved,10));
-        if(ratingValueEl) ratingValueEl.textContent = 'Rated ' + saved + ' out of 5';
-      } else {
-        if(ratingValueEl) ratingValueEl.textContent = 'Not rated';
+      // ratings persisted in localStorage per biz key
+      const starEls = meta.querySelectorAll('.star');
+      const storageKey = 'listing_rating_' + biz.key;
+      const saved = localStorage.getItem(storageKey);
+      function highlight(v){
+        starEls.forEach(el => {
+          const val = parseInt(el.dataset.value,10);
+          el.classList.toggle('selected', val <= v);
+          el.setAttribute('aria-checked', val <= v ? 'true' : 'false');
+        });
+        ratingText.innerText = biz.price + (v ? ` • Rated ${v}/5` : '');
       }
+      if(saved) highlight(parseInt(saved,10));
+      else highlight(0);
 
-      stars.forEach((s, i)=>{
-        const val = parseInt(s.dataset.value,10);
-        s.addEventListener('click', ()=>{
-          localStorage.setItem(storageKey, val);
-          highlightStars(stars, val);
-          if(ratingValueEl) ratingValueEl.textContent = 'Rated ' + val + ' out of 5';
-        });
-        s.addEventListener('keydown', (ev)=>{
-          if(ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); s.click(); }
-        });
+      starEls.forEach(el=>{
+        el.addEventListener('click', ()=>{ const v = parseInt(el.dataset.value,10); localStorage.setItem(storageKey, v); highlight(v); });
+        el.addEventListener('keydown', (ev)=>{ if(ev.key==='Enter' || ev.key===' '){ ev.preventDefault(); el.click(); } });
       });
 
-      function highlightStars(list, value){
-        list.forEach((el)=>{
-          const v = parseInt(el.dataset.value,10);
-          const sel = v <= value;
-          el.classList.toggle('selected', sel);
-          el.setAttribute('aria-checked', sel ? 'true' : 'false');
-        });
-      }
-
+      return article;
     }
+
+    // Render all listings
+    function renderListings(filter){
+      const container = document.getElementById('listings');
+      container.innerHTML = '';
+      const values = Object.values(BUSINESSES);
+      const show = values.filter(b=>{
+        if(!filter) return true;
+        const q = filter.toLowerCase();
+        return (b.name||'').toLowerCase().includes(q) || (b.desc||'').toLowerCase().includes(q) || (b.services||[]).join(' ').toLowerCase().includes(q);
+      });
+      show.forEach(b => container.appendChild(createCard(b)));
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      renderListings();
+
+      const input = document.getElementById('searchInput');
+      let timeout;
+      input.addEventListener('input', ()=>{
+        clearTimeout(timeout);
+        timeout = setTimeout(()=> renderListings(input.value.trim()), 160);
+      });
+    });
 
   </script>
 </body>
