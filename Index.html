@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -303,6 +302,12 @@
   </div>
   <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Replace the values below with your Cloudinary settings:
+    // - CLOUD_NAME: your Cloudinary cloud name (from the dashboard)
+    // - UPLOAD_PRESET: an unsigned upload preset you created in Cloudinary
+    const CLOUD_NAME = 'YOUR_CLOUD_NAME';
+    const UPLOAD_PRESET = 'YOUR_UNSIGNED_UPLOAD_PRESET'; // e.g. business_images_upload
+
     // CATEGORY CLICK FILL
     document.querySelectorAll('.category-card').forEach(card => {
       card.addEventListener('click', function() {
@@ -320,9 +325,11 @@
       const files = event.target.files;
       const preview = document.getElementById('imagePreview');
       preview.innerHTML = '';
+      if (!files) return;
       if (files.length > 5) {
         alert('You can only upload a maximum of 5 images.');
         imageInput.value = '';
+        lastValidFiles = null;
         return;
       }
       lastValidFiles = files;
@@ -337,11 +344,45 @@
       }
     });
 
+    // Helper to upload a single file to Cloudinary with better error reporting
+    async function uploadToCloudinary(file) {
+      const formDataImg = new FormData();
+      formDataImg.append("file", file);
+      formDataImg.append("upload_preset", UPLOAD_PRESET);
+
+      const url = `https://api.cloudinary.com/v1_1/${encodeURIComponent(CLOUD_NAME)}/image/upload`;
+      const resp = await fetch(url, {
+        method: "POST",
+        body: formDataImg
+      });
+
+      let data;
+      try {
+        data = await resp.json();
+      } catch (e) {
+        throw new Error('Invalid response from Cloudinary.');
+      }
+
+      if (!resp.ok) {
+        // If Cloudinary returns an error object, include that message
+        const errMsg = (data && data.error && data.error.message) ? data.error.message : `HTTP ${resp.status}`;
+        throw new Error('Cloudinary upload failed: ' + errMsg);
+      }
+
+      if (!data.secure_url) {
+        const errMsg = (data && data.error && data.error.message) ? data.error.message : 'No secure_url returned';
+        throw new Error('Cloudinary upload failed: ' + errMsg);
+      }
+
+      return data.secure_url;
+    }
+
     // FORM SUBMIT
     document.getElementById('businessForm').addEventListener('submit', async function(event) {
       event.preventDefault();
       const errorDiv = document.getElementById('formError');
       errorDiv.style.display = 'none';
+      errorDiv.textContent = '';
 
       // Gather form data
       const businessName = document.getElementById('businessName').value.trim();
@@ -350,7 +391,8 @@
       const phone = document.getElementById('phone').value.trim();
       const plan = document.querySelector('input[name="plan"]:checked').value;
       const location = document.getElementById('location').value.trim();
-      const imageFiles = imageInput.files;
+      // prefer the last validated selection (in case input was cleared after preview)
+      const imageFiles = lastValidFiles || imageInput.files;
 
       // Validate
       if (!businessName || !type || !desc || !phone || !location) {
@@ -358,7 +400,7 @@
         errorDiv.style.display = '';
         return;
       }
-      if (imageFiles.length === 0) {
+      if (!imageFiles || imageFiles.length === 0) {
         errorDiv.textContent = "Please upload at least one image.";
         errorDiv.style.display = '';
         return;
@@ -369,27 +411,29 @@
         return;
       }
 
+      // Make sure Cloudinary config is set
+      if (CLOUD_NAME === 'dhv6kt5ke' || UPLOAD_PRESET === 'Local Link Images') {
+        errorDiv.textContent = "Cloudinary is not configured. Replace CLOUD_NAME and UPLOAD_PRESET in the page with your values.";
+        errorDiv.style.display = '';
+        console.error('Cloudinary config missing. Set CLOUD_NAME and UPLOAD_PRESET.');
+        return;
+      }
+
       // Upload images to Cloudinary
       let imageUrls = [];
       try {
         for (let i = 0; i < imageFiles.length; i++) {
-          const formDataImg = new FormData();
-          formDataImg.append("file", imageFiles[i]);
-          formDataImg.append("upload_preset", "Business Images"); // CHANGE to your actual unsigned preset
-          // CHANGE "YOUR_CLOUD_NAME" to your actual cloud name below:
-          const response = await fetch("https://api.cloudinary.com/v1_1/dhv6kt5ke/image/upload", {
-            method: "POST",
-            body: formDataImg
-          });
-          const data = await response.json();
-          if (data.secure_url) {
-            imageUrls.push(data.secure_url);
-          } else {
-            throw new Error();
+          const file = imageFiles[i];
+          try {
+            const url = await uploadToCloudinary(file);
+            imageUrls.push(url);
+          } catch (err) {
+            console.error('Upload failed for file', file.name, err);
+            throw new Error(err.message || 'Image upload failed');
           }
         }
       } catch (err) {
-        errorDiv.textContent = "Failed to upload images. Please try again.";
+        errorDiv.textContent = "Failed to upload images: " + err.message;
         errorDiv.style.display = '';
         return;
       }
@@ -409,11 +453,13 @@
       try {
         await fetch("https://script.google.com/macros/s/AKfycbytS33CINXpwYZvXQCoZzd238vhdSbZDjdieRBjhYwlStm9S9Ay8JieRjIHUX-i2j-Djg/exec", {
           method: "POST",
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(businessData)
         });
         alert("Business submitted successfully!");
         window.location.href = "preview.html";
       } catch (err) {
+        console.error('Save to Google Sheets failed', err);
         errorDiv.textContent = "Failed to save business to Google Sheets.";
         errorDiv.style.display = '';
         return;
@@ -423,10 +469,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
