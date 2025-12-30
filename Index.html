@@ -305,8 +305,8 @@
     // Replace the values below with your Cloudinary settings:
     // - CLOUD_NAME: your Cloudinary cloud name (from the dashboard)
     // - UPLOAD_PRESET: an unsigned upload preset you created in Cloudinary
-    const CLOUD_NAME = 'YOUR_CLOUD_NAME';
-    const UPLOAD_PRESET = 'YOUR_UNSIGNED_UPLOAD_PRESET'; // e.g. business_images_upload
+    const CLOUD_NAME = 'dhv6kt5ke';
+    const UPLOAD_PRESET = 'business_images_Upload'; // e.g. business_images_upload
 
     // CATEGORY CLICK FILL
     document.querySelectorAll('.category-card').forEach(card => {
@@ -350,7 +350,7 @@
       formDataImg.append("file", file);
       formDataImg.append("upload_preset", UPLOAD_PRESET);
 
-      const url = `https://api.cloudinary.com/v1_1/${encodeURIComponent(CLOUD_NAME)}/image/upload`;
+      const url = `https://api.cloudinary.com/v1_1/${encodeURIComponent(dhv6kt5ke)}/image/upload`;
       const resp = await fetch(url, {
         method: "POST",
         body: formDataImg
@@ -469,4 +469,5 @@
   </script>
 </body>
 </html>
+
 
