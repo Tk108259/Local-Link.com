@@ -1,197 +1,322 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Business Details — LocalLink</title>
-  <style>
-    :root{
-      --bg:#f8fafc;
-      --card:#fff;
-      --accent:#7c3aed;
-      --muted:#475569;
-      --radius:14px;
-      --shadow: 0 8px 34px rgba(34,60,98,0.08);
-    }
-    body{
-      margin:0;font-family:Inter, "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial; background:var(--bg); color:#0f172a;
-      -webkit-font-smoothing:antialiased; padding:18px;
-    }
-    .wrap{max-width:1000px;margin:0 auto}
-    .back{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-    .back a{color:var(--accent);text-decoration:none;font-weight:600}
-    .panel{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;display:grid;grid-template-columns:360px 1fr;gap:18px;align-items:start}
-    @media (max-width:900px){ .panel{grid-template-columns:1fr} }
-    .gallery{
-      position:relative;display:flex;flex-direction:column;gap:10px;
-    }
-    .main{
-      width:100%;height:360px;border-radius:12px;object-fit:cover;background:#eef2ff;border:1px solid #eef2ff;
-      transition:transform .26s ease; touch-action:pan-y;
-    }
-    @media (max-width:900px){ .main{height:240px} }
-    .thumbs{display:flex;gap:8px;overflow:auto}
-    .thumbs img{width:84px;height:58px;object-fit:cover;border-radius:8px;border:2px solid transparent;cursor:pointer}
-    .thumbs img.selected{border-color:var(--accent);box-shadow:0 10px 30px rgba(124,58,237,0.12)}
-    .info h1{margin:0 0 8px 0;font-size:1.6rem}
-    .meta-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-    .price{color:var(--accent);font-weight:700}
-    .services ul{margin:8px 0 0 18px;color:var(--muted)}
-    .actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-    .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
-    .btn.ghost{background:#fff;color:var(--accent);border:1px solid #efe8ff}
-    .stars{color:#fbbf24;font-size:1.1rem}
-    .placeholder{display:flex;align-items:center;justify-content:center;background:#eef2ff;height:240px;border-radius:10px;color:#93c5fd}
-    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Business Details — LocalServe</title>
+
+<style>
+:root{
+  --bg:#f4f7fc;
+  --card:#fff;
+  --accent:#357edd;
+  --muted:#64748b;
+  --radius:16px;
+  --shadow:0 12px 40px rgba(0,0,0,.08);
+}
+
+body{
+  margin:0;
+  font-family:Segoe UI,Roboto,Arial;
+  background:var(--bg);
+  color:#111;
+  padding:20px;
+}
+
+.wrap{max-width:1000px;margin:auto}
+
+.back a{
+  text-decoration:none;
+  color:var(--accent);
+  font-weight:600;
+}
+
+/* PANEL */
+.panel{
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:24px;
+  display:grid;
+  grid-template-columns:420px 1fr;
+  gap:24px;
+}
+
+@media(max-width:900px){
+  .panel{grid-template-columns:1fr}
+}
+
+/* GALLERY */
+.main{
+  width:100%;
+  height:380px;
+  object-fit:cover;
+  border-radius:12px;
+  cursor:zoom-in;
+}
+
+.thumbs{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+
+.thumbs img{
+  width:80px;
+  height:60px;
+  border-radius:8px;
+  object-fit:cover;
+  cursor:pointer;
+  border:2px solid transparent;
+}
+
+.thumbs img.selected{
+  border-color:var(--accent);
+}
+
+/* INFO */
+h1{margin:0 0 6px}
+
+.badge{
+  display:inline-block;
+  background:#e7f0ff;
+  color:var(--accent);
+  padding:4px 10px;
+  border-radius:8px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+.stars{color:gold}
+
+.price{
+  color:var(--accent);
+  font-weight:700;
+  margin:6px 0;
+}
+
+.desc{
+  color:var(--muted);
+  line-height:1.6;
+  margin:12px 0;
+}
+
+/* SERVICES */
+.services ul{
+  margin-left:18px;
+  color:var(--muted);
+}
+
+/* BUTTONS */
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:12px 18px;
+  border-radius:10px;
+  border:0;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.primary{background:var(--accent);color:white}
+.ghost{background:white;border:1px solid #ddd}
+
+/* ZOOM VIEW */
+.zoom-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.8);
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+
+.zoom-overlay img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:12px;
+}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="back"><a href="Business listings.html" id="backLink">← Back to listings</a></div>
 
-    <section class="panel" id="panel">
-      <div class="gallery" id="gallery">
-        <img id="mainImage" class="main" alt="Business image" src="" />
-        <div class="thumbs" id="thumbs" aria-label="Gallery thumbnails"></div>
-      </div>
+<div class="wrap">
+<a href="Business listings.html" class="back">← Back to listings</a>
 
-      <aside class="info" id="info">
-        <h1 id="bizName">Business</h1>
-        <div class="meta-row">
-          <div class="stars" id="bizStars">★★★★★</div>
-          <div class="price" id="bizPrice"></div>
-        </div>
-        <div class="desc" id="bizDesc" style="color:var(--muted)"></div>
-        <div class="services" id="bizServices"></div>
-        <div class="actions">
-          <button id="contactBtn" class="btn">Contact on WhatsApp</button>
-          <button id="rateBtn" class="btn ghost">Rate</button>
-        </div>
-      </aside>
-    </section>
-  </div>
+<section class="panel">
 
-  <script>
-    // Keep same sample data as listings
-    const BUSINESSES = {
-      BreadBaddie: {
-        key: 'BreadBaddie',
-        name: 'Bread Baddie',
-        images: ['images/Baking_Baddie.jpg','images/Scones.jpg','images/Bannana Bread.jpg'],
-        stars: 5,
-        desc: "Bespoke bakery specialising in artisan banana bread, scones and crunchies.",
-        price: 'R150',
-        services: ['Banana bread','Scones','Cookies & crunchies'],
-        whatsapp: '27814343732'
-      },
-      MaposCakesandBakes: {
-        key: 'MaposCakesandBakes',
-        name: 'Mapos Cakes and Bakes',
-        images: ['images/BirthdayM.jpg','images/Cupcakes.jpg','images/Cake.jpg'],
-        stars: 4,
-        desc: 'Freshly baked treats and custom cakes by Mapo. Perfect for any occasion!',
-        price: 'R300 — R800',
-        services: ['Custom Cakes','Pastries','Event Catering'],
-        whatsapp: '2781319590'
-      }
-    };
+<!-- GALLERY -->
+<div>
+<img id="mainImage" class="main"/>
+<div id="thumbs" class="thumbs"></div>
+</div>
 
-    const PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
-      '<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">' +
-      '<rect width="900" height="600" fill="#f3f4f6"/>' +
-      '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#9ca3af" font-size="28">Image unavailable</text>' +
-      '</svg>'
-    );
+<!-- INFO -->
+<div>
+<span class="badge">Verified Business</span>
+<h1 id="name"></h1>
+<div id="stars" class="stars"></div>
+<div id="price" class="price"></div>
+<div id="desc" class="desc"></div>
 
-    function q(name){ return new URLSearchParams(location.search).get(name); }
-    function findBizKey(query){
-      if(!query) return null;
-      const qn = query.toString().replace(/\s+/g,'').toLowerCase();
-      return Object.keys(BUSINESSES).find(k => k.replace(/\s+/g,'').toLowerCase() === qn || (BUSINESSES[k].name||'').replace(/\s+/g,'').toLowerCase() === qn);
-    }
+<div id="services" class="services"></div>
 
-    document.addEventListener('DOMContentLoaded', ()=>{
-      const param = q('biz') || '';
-      const key = findBizKey(param) || param || 'BreadBaddie';
-      const biz = BUSINESSES[key] || BUSINESSES['BreadBaddie'];
+<div class="actions">
+<button id="whatsapp" class="btn primary">WhatsApp</button>
+<button id="call" class="btn ghost">Call</button>
+<button id="rate" class="btn ghost">Rate</button>
+<button id="share" class="btn ghost">Share</button>
+</div>
+</div>
 
-      const mainImage = document.getElementById('mainImage');
-      const thumbs = document.getElementById('thumbs');
-      const bizName = document.getElementById('bizName');
-      const bizDesc = document.getElementById('bizDesc');
-      const bizPrice = document.getElementById('bizPrice');
-      const bizServices = document.getElementById('bizServices');
-      const bizStars = document.getElementById('bizStars');
+</section>
+</div>
 
-      // fill text
-      bizName.innerText = biz.name;
-      bizDesc.innerText = biz.desc || '';
-      bizPrice.innerText = biz.price || '';
-      bizStars.innerText = '★'.repeat(Math.max(0,Math.min(5,biz.stars))) + '☆'.repeat(5 - Math.max(0,Math.min(5,biz.stars)));
-      bizServices.innerHTML = '<strong>Services</strong><ul>' + (biz.services || []).map(s => `<li>${s}</li>`).join('') + '</ul>';
+<div class="zoom-overlay" id="zoom">
+<img id="zoomImg">
+</div>
 
-      // images
-      function safeLoad(el, src){
-        el.src = src || PLACEHOLDER;
-        el.onerror = ()=> el.src = PLACEHOLDER;
-      }
-      const imgs = biz.images && biz.images.length ? biz.images.slice() : [];
-      if(!imgs.length){ safeLoad(mainImage, PLACEHOLDER); thumbs.innerHTML = ''; }
-      else {
-        safeLoad(mainImage, imgs[0]);
-        thumbs.innerHTML = '';
-        imgs.forEach((src, i)=>{
-          const t = document.createElement('img');
-          t.src = src;
-          t.alt = biz.name + ' thumb ' + (i+1);
-          t.className = i===0 ? 'selected' : '';
-          t.addEventListener('click', ()=> {
-            mainImage.classList.add('fade');
-            mainImage.src = src;
-            document.querySelectorAll('.thumbs img').forEach(x=>x.classList.remove('selected'));
-            t.classList.add('selected');
-          });
-          t.onerror = ()=> { t.src = PLACEHOLDER; t.alt = 'Image not found'; };
-          thumbs.appendChild(t);
-        });
-      }
+<script>
 
-      // swipe support for main image (pointer events)
-      let down = false, startX = 0, lastIndex = 0;
-      function currentIndex(){ const selected = thumbs.querySelector('img.selected'); if(!selected) return 0; return Array.from(thumbs.children).indexOf(selected); }
-      function showIndex(i){
-        const clamped = ((i % imgs.length) + imgs.length) % imgs.length;
-        mainImage.src = imgs[clamped] || PLACEHOLDER;
-        document.querySelectorAll('.thumbs img').forEach((x, idx)=> x.classList.toggle('selected', idx===clamped));
-      }
-      mainImage.addEventListener('pointerdown', (e)=>{ down=true; startX = e.clientX; mainImage.setPointerCapture(e.pointerId); });
-      mainImage.addEventListener('pointerup', (e)=>{ if(!down) return; down=false; const diff = e.clientX - startX; const thr = 40; if(diff > thr) showIndex(currentIndex()-1); else if(diff < -thr) showIndex(currentIndex()+1); });
-      mainImage.addEventListener('pointercancel', ()=> down=false);
+/* =========================
+   BUSINESS DATABASE
+   (Same data as listings page)
+========================= */
 
-      // keyboard arrows for images
-      mainImage.tabIndex = 0;
-      mainImage.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight') showIndex(currentIndex()+1); if(e.key==='ArrowLeft') showIndex(currentIndex()-1); });
+const BUSINESSES={
+BreadBaddie:{
+name:"Bread Baddie",
+images:["images/Bannana Bread.jpg","images/Scones.jpg","images/Baking_Baddie.jpg"],
+stars:5,
+desc:"We are a bespoke bakery specialising in artisan banana bread, scones and crunchies.",
+price:"R200 – R350",
+services:["Banana Bread","Scones","Crunchies"],
+phone:"27814343732"
+},
 
-      document.getElementById('contactBtn').addEventListener('click', ()=>{
-        const number = biz.whatsapp || '27711234567';
-        const msg = encodeURIComponent(`Hi, I'm interested in your services (${biz.name})`);
-        window.open(`https://wa.me/${number}?text=${msg}`, '_blank');
-      });
+MaposCakesandBakes:{
+name:"Mapos Cakes and Bakes",
+images:["images/Cupcakes.jpg","images/Birthday M.jpg","images/Mapos.jpg"],
+stars:4,
+desc:"For all your customized cakes, scones, muffins and cinnamon rolls.",
+price:"R300 – R800",
+services:["Custom Cakes","Muffins","Event Orders"],
+phone:"27781314590"
+}
+};
 
-      // Rate button opens small prompt (simple)
-      document.getElementById('rateBtn').addEventListener('click', ()=>{
-        const r = prompt('Rate this business 1–5', '');
-        const v = parseInt(r,10);
-        if(!isNaN(v) && v>=1 && v<=5){
-          localStorage.setItem('listing_rating_' + biz.key, v);
-          alert('Thanks — your rating is saved locally.');
-        } else if(r!==null){
-          alert('Please enter a number between 1 and 5.');
-        }
-      });
 
-      // If the page was opened via "View gallery" highlight behavior: nothing extra required because biz param used
-    });
-  </script>
+/* =========================
+   GET BUSINESS FROM URL
+========================= */
+
+const params=new URLSearchParams(location.search);
+const key=params.get("biz")||"BreadBaddie";
+const biz=BUSINESSES[key]||BUSINESSES.BreadBaddie;
+
+
+/* =========================
+   POPULATE INFO
+========================= */
+
+document.getElementById("name").textContent=biz.name;
+document.getElementById("price").textContent=biz.price;
+document.getElementById("desc").textContent=biz.desc;
+
+document.getElementById("stars").textContent=
+"★".repeat(biz.stars)+"☆".repeat(5-biz.stars);
+
+document.getElementById("services").innerHTML=
+"<strong>Services</strong><ul>"+
+biz.services.map(s=>"<li>"+s+"</li>").join("")+"</ul>";
+
+
+
+/* =========================
+   IMAGE GALLERY
+========================= */
+
+const main=document.getElementById("mainImage");
+const thumbs=document.getElementById("thumbs");
+
+main.src=biz.images[0];
+
+biz.images.forEach((img,i)=>{
+const t=document.createElement("img");
+t.src=img;
+if(i===0)t.classList.add("selected");
+
+t.onclick=()=>{
+main.src=img;
+document.querySelectorAll(".thumbs img")
+.forEach(x=>x.classList.remove("selected"));
+t.classList.add("selected");
+};
+
+thumbs.appendChild(t);
+});
+
+
+/* =========================
+   IMAGE ZOOM
+========================= */
+
+const zoom=document.getElementById("zoom");
+const zoomImg=document.getElementById("zoomImg");
+
+main.onclick=()=>{
+zoom.style.display="flex";
+zoomImg.src=main.src;
+};
+
+zoom.onclick=()=>zoom.style.display="none";
+
+
+/* =========================
+   CONTACT BUTTONS
+========================= */
+
+document.getElementById("whatsapp").onclick=()=>{
+const msg=encodeURIComponent("Hi I'm interested in "+biz.name);
+window.open(`https://wa.me/${biz.phone}?text=${msg}`);
+};
+
+document.getElementById("call").onclick=()=>{
+window.location.href="tel:"+biz.phone;
+};
+
+
+/* =========================
+   RATING SYSTEM
+========================= */
+
+document.getElementById("rate").onclick=()=>{
+const r=prompt("Rate 1-5");
+const v=parseInt(r);
+if(v>=1 && v<=5){
+localStorage.setItem("rating_"+key,v);
+alert("Rating saved");
+}
+};
+
+
+/* =========================
+   SHARE BUTTON
+========================= */
+
+document.getElementById("share").onclick=()=>{
+navigator.clipboard.writeText(location.href);
+alert("Link copied");
+};
+
+</script>
+
 </body>
 </html>
