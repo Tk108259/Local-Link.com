@@ -128,11 +128,11 @@
       </div>
     </div>
 
-    <div class="listing-card" data-category="Baking" data-biz="Mapos Cakes and Bakes" role="button" tabindex="0">
-      <div class="listing-left" onclick="goToDetails('SweetBakesSA')">
+    <div class="listing-card" data-category="Baking" data-biz="MaposCakesandBakes" role="button" tabindex="0">
+      <div class="listing-left" onclick="goToDetails('MaposCakesandBakes')">
         <img src="images/Birthday M.jpg" alt="Mapos Cakes" class="main-img" onclick="event.stopPropagation(); openGallery('MaposCakes')">
         <div class="listing-info">
-          <h3>Mapos Cakes and Bakes<span class="stars" data-stars-for="SweetBakesSA"></span></h3>
+          <h3>MaposCakesandBakes<span class="stars" data-stars-for="SweetBakesSA"></span></h3>
           <p class="desc" data-desc-for="MaposCakesandBakes"></p>
           <p class="price" data-price-for="MaposCakesandBakes"></p>
           <p class="distance" data-distance-for="MaposCakesandBakes"></p>
@@ -194,30 +194,29 @@
     // Run after DOM is ready
     document.addEventListener('DOMContentLoaded', function () {
 
-      // Centralized business data. Keys must match data-biz values in the listing cards.
-      const businesses = {
-        BreadBaddie: {
-          key: "BreadBaddie",
-          displayName: "Bread Baddie",
-          images: ["images/Bannana Bread.jpg", "images/Scones.jpg", "images/Baking_Baddie.jpg"],
-          stars: 5,
-          desc: "We are a bespoke bakery specialising in artisan Banana bread, scones and crunchies.",
-          price: "R200 – R350",
-          distance: "2.5 km away",
-          whatsapp: "27814343732"
-        },
-        MaposCakesandbakes: {
-          key: "MaposCakesandBakes ",
-          displayName: "Mapos Cakes and Bakes",
-          images: ["images/Cupcakes.jpg", "images/Birthday M.jpg", "images/Mapos.jpg"],
-          stars: 5,
-          desc: "For all your Customized Cakes,Scones,Muffins and cinnamon rolls.",
-          price: "R300 – R800" "'Pay Upfront",
-          distance: "WaterFall, Durban",
-          whatsapp: "27781314590"
-        }
-        // Add more businesses here; ensure the data-biz attributes on cards match the keys
-      };
+      // Centralized business data. Keys must match data-biz values in the listing cards.const businesses = {
+  BreadBaddie: {
+    key: "BreadBaddie",
+    displayName: "Bread Baddie",
+    images: ["images/Bannana Bread.jpg", "images/Scones.jpg", "images/Baking_Baddie.jpg"],
+    stars: 5,
+    desc: "We are a bespoke bakery specialising in artisan Banana bread, scones and crunchies.",
+    price: "R200 – R350",
+    distance: "2.5 km away",
+    whatsapp: "27814343732"
+  },
+
+  MaposCakesandBakes: {
+    key: "MaposCakesandBakes",
+    displayName: "Mapos Cakes and Bakes",
+    images: ["images/Cupcakes.jpg", "images/Birthday M.jpg", "images/Mapos.jpg"],
+    stars: 5,
+    desc: "For all your customized cakes, scones, muffins and cinnamon rolls.",
+    price: "R300 – R800 (Pay upfront)",
+    distance: "Waterfall, Durban",
+    whatsapp: "27781314590"
+  }
+};
 
       // Helper: render star string (e.g. ★★★★☆)
       function renderStars(n) {
