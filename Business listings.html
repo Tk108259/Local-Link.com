@@ -4,38 +4,50 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>LocalServe – Find Trusted Local Services</title>
+<title>Local Link – Find Trusted Local Services</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <style>
 
-/* GLOBAL */
+/* =====================
+   GLOBAL
+===================== */
 
 :root{
---primary:#357edd;
---premium:#f7b500;
---shadow:rgba(0,0,0,0.1);
+--primary:#6d28d9;
+--primary-light:#ede9fe;
+--accent:#f59e0b;
+--bg:#f5f7fb;
+--card:#ffffff;
+--text:#111827;
+--muted:#6b7280;
+--shadow:0 10px 30px rgba(0,0,0,.08);
+--radius:16px;
 }
+
+*{box-sizing:border-box}
 
 body{
 margin:0;
 font-family:Segoe UI,Roboto,Arial;
-background:#f4f7fc;
-color:#222;
+background:var(--bg);
+color:var(--text);
 }
 
-/* NAVBAR */
+/* =====================
+   NAVBAR
+===================== */
 
 .navbar{
 position:sticky;
 top:0;
 background:white;
+padding:14px 30px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:14px 40px;
-box-shadow:0 3px 8px var(--shadow);
+box-shadow:var(--shadow);
 z-index:1000;
 }
 
@@ -45,224 +57,242 @@ font-weight:700;
 color:var(--primary);
 }
 
-.location{
-font-size:14px;
-color:#555;
-}
-
-/* HEADER */
-
-header{
-background:url('images/file.jpg') center/cover;
-color:white;
-text-align:center;
-padding:90px 20px 60px;
-position:relative;
-}
-
-header::before{
-content:"";
-position:absolute;
-inset:0;
-background:rgba(0,0,0,0.45);
-}
-
-header h1,header p,.search{
-position:relative;
-z-index:2;
-}
-
-.search{
-display:flex;
-justify-content:center;
-gap:10px;
-max-width:600px;
-margin:auto;
-}
-
-.search input{
-flex:1;
-padding:14px;
-border-radius:8px;
-border:none;
-}
-
-.search button{
-padding:14px 20px;
-background:var(--primary);
-border:none;
-border-radius:8px;
-color:white;
-cursor:pointer;
-}
-
-/* CATEGORIES */
-
-.categories{
-display:flex;
-justify-content:center;
-gap:20px;
-padding:30px;
-flex-wrap:wrap;
-}
-
-.category{
-background:white;
-padding:12px 16px;
-border-radius:10px;
-cursor:pointer;
-box-shadow:0 2px 6px var(--shadow);
-transition:.2s;
-}
-
-.category:hover{
-transform:scale(1.05);
-background:#dde9fb;
-}
-
-/* LISTINGS */
-
-.listings{
-max-width:1000px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:white;
-padding:18px;
-border-radius:12px;
-margin-bottom:20px;
-box-shadow:0 3px 10px var(--shadow);
-transition:.25s;
-}
-
-.card:hover{
-transform:translateY(-6px);
-}
-
-.card-left{
+.nav-right{
 display:flex;
 gap:15px;
 align-items:center;
 }
 
-.card img{
-width:110px;
-height:110px;
-object-fit:cover;
-border-radius:8px;
+.signup-btn{
+background:var(--primary);
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:10px;
+cursor:pointer;
 }
 
-.card-info h3{
-margin:0;
+/* =====================
+   HERO
+===================== */
+
+.hero{
+padding:60px 20px;
+text-align:center;
+background:linear-gradient(135deg,#6d28d9,#4c1d95);
+color:white;
+}
+
+.hero h1{
+margin:0 0 10px;
+font-size:34px;
+}
+
+.search-box{
+max-width:700px;
+margin:20px auto 0;
+display:flex;
+background:white;
+border-radius:12px;
+overflow:hidden;
+}
+
+.search-box input{
+flex:1;
+border:none;
+padding:14px;
+outline:none;
+}
+
+.search-box button{
+background:var(--primary);
+border:none;
+color:white;
+padding:14px 20px;
+cursor:pointer;
+}
+
+/* =====================
+   CATEGORIES
+===================== */
+
+.categories{
+display:flex;
+gap:12px;
+overflow:auto;
+padding:20px;
+}
+
+.category{
+background:white;
+padding:10px 16px;
+border-radius:999px;
+cursor:pointer;
+white-space:nowrap;
+box-shadow:var(--shadow);
+}
+
+.category.active{
+background:var(--primary);
+color:white;
+}
+
+/* =====================
+   LISTINGS
+===================== */
+
+.listings{
+max-width:1100px;
+margin:auto;
+padding:10px 20px 40px;
+}
+
+.card{
+background:white;
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+display:flex;
+gap:18px;
+padding:16px;
+margin-bottom:16px;
+transition:.2s;
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+.card img{
+width:140px;
+height:120px;
+object-fit:cover;
+border-radius:12px;
+}
+
+.card-info{
+flex:1;
+}
+
+.card-title{
+font-size:18px;
+font-weight:600;
 display:flex;
 align-items:center;
 gap:8px;
 }
 
-.premium{
-background:var(--premium);
+.featured{
+background:var(--accent);
 color:white;
 font-size:11px;
 padding:3px 6px;
-border-radius:5px;
+border-radius:6px;
 }
 
-.card-buttons{
+.card-desc{
+color:var(--muted);
+margin:6px 0;
+}
+
+.card-bottom{
 display:flex;
-gap:10px;
-}
-
-.card-buttons button{
-padding:10px 16px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-
-.contact{
-background:#25D366;
-color:white;
-}
-
-.gallery{
-background:#e9eef7;
-}
-
-/* REVIEW SYSTEM */
-
-.review-box{
+justify-content:space-between;
+align-items:center;
 margin-top:10px;
 }
 
-.review-stars{
-color:gold;
-font-size:18px;
+.price{
+font-weight:600;
+color:var(--primary);
+}
+
+.actions{
+display:flex;
+gap:8px;
+}
+
+.btn{
+padding:8px 12px;
+border:none;
+border-radius:8px;
 cursor:pointer;
+font-size:13px;
 }
 
-/* GALLERY */
+.details{background:var(--primary);color:white}
+.whatsapp{background:#25D366;color:white}
+.favorite{background:#f3f4f6}
 
-.modal{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.6);
-justify-content:center;
-align-items:center;
+.stars{
+color:#fbbf24;
+font-size:14px;
 }
 
-.modal-content{
+/* =====================
+   SIGNUP SECTION
+===================== */
+
+.signup{
 background:white;
-padding:20px;
-border-radius:10px;
-max-width:500px;
+margin:40px auto;
+max-width:1100px;
+padding:30px;
+border-radius:20px;
+box-shadow:var(--shadow);
 text-align:center;
 }
 
-.modal img{
-width:100%;
-border-radius:8px;
+.plans{
+display:flex;
+gap:20px;
+margin-top:20px;
+flex-wrap:wrap;
 }
 
-/* MOBILE */
+.plan{
+flex:1;
+min-width:220px;
+background:#f9fafb;
+padding:20px;
+border-radius:16px;
+}
+
+.plan h3{
+margin:0;
+}
+
+.plan-price{
+font-size:26px;
+color:var(--primary);
+margin:10px 0;
+}
+
+.plan button{
+background:var(--primary);
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* =====================
+   MOBILE
+===================== */
 
 @media(max-width:700px){
 
-.navbar{
-padding:10px 20px;
-}
-
 .card{
 flex-direction:column;
-align-items:flex-start;
-}
-
-.card-left{
-flex-direction:column;
-align-items:flex-start;
 }
 
 .card img{
 width:100%;
-height:auto;
+height:200px;
 }
 
-.card-buttons{
-width:100%;
-margin-top:10px;
-}
-
-.card-buttons button{
-flex:1;
-}
-
-.search{
-flex-direction:column;
+.hero h1{
+font-size:24px;
 }
 
 }
@@ -275,230 +305,223 @@ flex-direction:column;
 <!-- NAVBAR -->
 
 <div class="navbar">
-<div class="logo">LocalServe</div>
-<div class="location" id="locationText">Detecting location...</div>
+<div class="logo">Local Link</div>
+<div class="nav-right">
+<button class="signup-btn" onclick="scrollToSignup()">List your business</button>
+</div>
 </div>
 
-<!-- HEADER -->
+<!-- HERO -->
 
-<header>
-
+<section class="hero">
 <h1>Find trusted local services near you</h1>
-<p>From bakers to plumbers — all in one place</p>
+<p>Like AutoTrader — but for local businesses</p>
 
-<div class="search">
-<input id="searchInput" placeholder="Search services">
-<button><i class="fas fa-search"></i></button>
+<div class="search-box">
+<input id="search" placeholder="Search services...">
+<button><i class="fa fa-search"></i></button>
 </div>
-
-</header>
+</section>
 
 <!-- CATEGORIES -->
 
 <div class="categories">
-
-<div class="category" data-category="All">All</div>
-<div class="category" data-category="Baking">Baking</div>
-<div class="category" data-category="Gardening">Gardening</div>
-<div class="category" data-category="Electrical">Electrical</div>
-<div class="category" data-category="Plumbing">Plumbing</div>
-
+<div class="category active" data-cat="All">All</div>
+<div class="category" data-cat="Baking">Baking</div>
+<div class="category" data-cat="Plumbing">Plumbing</div>
+<div class="category" data-cat="Electrical">Electrical</div>
 </div>
 
 <!-- LISTINGS -->
 
-<div class="listings">
+<div class="listings" id="listings"></div>
 
-<!-- PREMIUM BUSINESS -->
+<!-- SIGNUP -->
 
-<div class="card" data-category="Baking">
+<div class="signup" id="signup">
 
-<div class="card-left">
+<h2>List your business on Local Link</h2>
+<p>Reach customers near you instantly</p>
 
-<img src="images/Bannana Bread.jpg">
+<div class="plans">
 
-<div class="card-info">
+<div class="plan">
+<h3>Basic Plan</h3>
+<div class="plan-price">R150</div>
+<p>Standard listing</p>
+<button onclick="alert('Redirect to signup form')">Get Started</button>
+</div>
 
-<h3>Bread Baddie <span class="premium">FEATURED</span></h3>
-
-<p>Artisan banana bread, scones & crunchies</p>
-<p>R200 – R350</p>
-
-<div class="review-box">
-
-<span class="review-stars" onclick="rate(this,1)">★</span>
-<span class="review-stars" onclick="rate(this,2)">★</span>
-<span class="review-stars" onclick="rate(this,3)">★</span>
-<span class="review-stars" onclick="rate(this,4)">★</span>
-<span class="review-stars" onclick="rate(this,5)">★</span>
-
+<div class="plan">
+<h3>Premium Plan</h3>
+<div class="plan-price">R230</div>
+<p>Featured at top + highlighted</p>
+<button onclick="alert('Redirect to signup form')">Get Started</button>
 </div>
 
 </div>
-
-</div>
-
-<div class="card-buttons">
-
-<button class="contact" onclick="contact('27814343732')">
-<i class="fab fa-whatsapp"></i> Contact
-</button>
-
-<button class="gallery" onclick="openGallery('bread')">
-View Gallery
-</button>
-
-</div>
-
-</div>
-
-<!-- BUSINESS 2 -->
-
-<div class="card" data-category="Baking">
-
-<div class="card-left">
-
-<img src="images/Birthday M.jpg">
-
-<div class="card-info">
-
-<h3>Mapos Cakes & Bakes</h3>
-<p>Custom cakes & muffins</p>
-<p>R300 – R800</p>
-
-</div>
-
-</div>
-
-<div class="card-buttons">
-
-<button class="contact" onclick="contact('27781314590')">
-<i class="fab fa-whatsapp"></i> Contact
-</button>
-
-<button class="gallery" onclick="openGallery('mapos')">
-View Gallery
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- GALLERY -->
-
-<div class="modal" id="galleryModal">
-
-<div class="modal-content">
-
-<img id="galleryImage">
-
-<br><br>
-
-<button onclick="closeGallery()">Close</button>
-
-</div>
-
 </div>
 
 <script>
 
-/* LOCATION DETECTION */
+/* ======================
+   BUSINESS DATA
+====================== */
 
-if(navigator.geolocation){
+const businesses=[
 
-navigator.geolocation.getCurrentPosition(pos=>{
+{
+id:"BreadBaddie",
+name:"Bread Baddie",
+category:"Baking",
+price:"R150",
+rating:5,
+featured:true,
+img:"images/Bannana Bread.jpg",
+desc:"Artisan banana bread & scones",
+phone:"27814343732"
+},
 
-document.getElementById("locationText").innerText="Near you";
+{
+id:"Mapos",
+name:"Mapos Cakes & Bakes",
+category:"Baking",
+price:"R300 - R800",
+rating:4,
+featured:false,
+img:"images/Birthday M.jpg",
+desc:"Custom cakes & muffins",
+phone:"27781314590"
+}
+
+];
+
+
+/* ======================
+   RENDER
+====================== */
+
+const listings=document.getElementById("listings");
+
+function render(list){
+
+listings.innerHTML="";
+
+list.forEach(b=>{
+
+const card=document.createElement("div");
+card.className="card";
+card.dataset.cat=b.category;
+
+card.innerHTML=`
+
+<img src="${b.img}">
+
+<div class="card-info">
+
+<div class="card-title">
+${b.name}
+${b.featured?'<span class="featured">FEATURED</span>':''}
+</div>
+
+<div class="stars">${"★".repeat(b.rating)}</div>
+
+<div class="card-desc">${b.desc}</div>
+
+<div class="card-bottom">
+
+<div class="price">${b.price}</div>
+
+<div class="actions">
+
+<button class="btn details"
+onclick="openDetails('${b.id}')">
+Details
+</button>
+
+<button class="btn whatsapp"
+onclick="contact('${b.phone}')">
+<i class="fab fa-whatsapp"></i>
+</button>
+
+<button class="btn favorite"
+onclick="favorite(this)">
+♡
+</button>
+
+</div>
+
+</div>
+</div>
+`;
+
+listings.appendChild(card);
 
 });
 
 }
 
-/* WHATSAPP */
+render(businesses);
 
-function contact(number){
 
-const msg=encodeURIComponent("Hi I found your business on LocalServe");
+/* ======================
+   SEARCH
+====================== */
 
-window.open(`https://wa.me/${number}?text=${msg}`,'_blank');
+search.oninput=()=>{
 
-}
+const v=search.value.toLowerCase();
 
-/* GALLERY */
+render(businesses.filter(b=>
+b.name.toLowerCase().includes(v)||
+b.desc.toLowerCase().includes(v)
+));
 
-const galleries={
-bread:[
-"images/Bannana Bread.jpg",
-"images/Scones.jpg"
-],
-mapos:[
-"images/Birthday M.jpg",
-"images/Cupcakes.jpg"
-]
 };
 
-function openGallery(key){
 
-const modal=document.getElementById("galleryModal");
+/* ======================
+   CATEGORY FILTER
+====================== */
 
-document.getElementById("galleryImage").src=galleries[key][0];
+document.querySelectorAll(".category").forEach(c=>{
 
-modal.style.display="flex";
+c.onclick=()=>{
 
-}
+document.querySelectorAll(".category")
+.forEach(x=>x.classList.remove("active"));
 
-function closeGallery(){
+c.classList.add("active");
 
-document.getElementById("galleryModal").style.display="none";
+const cat=c.dataset.cat;
 
-}
-
-/* SEARCH */
-
-document.getElementById("searchInput").addEventListener("input",function(){
-
-const value=this.value.toLowerCase();
-
-document.querySelectorAll(".card").forEach(card=>{
-
-card.style.display=card.innerText.toLowerCase().includes(value)?"":"none";
-
-});
-
-});
-
-/* CATEGORY FILTER */
-
-document.querySelectorAll(".category").forEach(cat=>{
-
-cat.onclick=function(){
-
-const c=this.dataset.category;
-
-document.querySelectorAll(".card").forEach(card=>{
-
-card.style.display=(c==="All"||card.dataset.category===c)?"":"none";
-
-});
+if(cat==="All") render(businesses);
+else render(businesses.filter(b=>b.category===cat));
 
 };
 
 });
 
-/* REVIEW SYSTEM */
 
-function rate(el,num){
+/* ======================
+   ACTIONS
+====================== */
 
-const stars=el.parentElement.children;
-
-for(let i=0;i<stars.length;i++){
-
-stars[i].style.color=i<num?"gold":"#ccc";
-
+function contact(num){
+window.open(`https://wa.me/${num}`);
 }
 
+function openDetails(id){
+window.location.href=`details.html?biz=${id}`;
+}
+
+function favorite(btn){
+btn.textContent=btn.textContent==="♡"?"❤️":"♡";
+}
+
+function scrollToSignup(){
+document.getElementById("signup")
+.scrollIntoView({behavior:"smooth"});
 }
 
 </script>
