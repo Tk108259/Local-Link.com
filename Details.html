@@ -7,12 +7,13 @@
 
 <style>
 :root{
-  --bg:#f4f7fc;
-  --card:#fff;
-  --accent:#357edd;
-  --muted:#64748b;
-  --radius:16px;
-  --shadow:0 12px 40px rgba(0,0,0,.08);
+  --bg:#f5f7fb;
+  --card:#ffffff;
+  --accent:#7c3aed;
+  --accent2:#5b21b6;
+  --muted:#6b7280;
+  --radius:18px;
+  --shadow:0 10px 30px rgba(0,0,0,.08);
 }
 
 body{
@@ -25,7 +26,9 @@ body{
 
 .wrap{max-width:1000px;margin:auto}
 
-.back a{
+.back{
+  display:inline-block;
+  margin-bottom:12px;
   text-decoration:none;
   color:var(--accent);
   font-weight:600;
@@ -39,7 +42,7 @@ body{
   padding:24px;
   display:grid;
   grid-template-columns:420px 1fr;
-  gap:24px;
+  gap:28px;
 }
 
 @media(max-width:900px){
@@ -51,23 +54,24 @@ body{
   width:100%;
   height:380px;
   object-fit:cover;
-  border-radius:12px;
-  cursor:zoom-in;
+  border-radius:14px;
+  cursor:pointer;
+  transition:opacity .2s;
 }
 
 .thumbs{
   display:flex;
   gap:10px;
-  margin-top:10px;
+  margin-top:12px;
 }
 
 .thumbs img{
-  width:80px;
-  height:60px;
-  border-radius:8px;
+  width:90px;
+  height:70px;
+  border-radius:10px;
   object-fit:cover;
   cursor:pointer;
-  border:2px solid transparent;
+  border:3px solid transparent;
 }
 
 .thumbs img.selected{
@@ -75,33 +79,39 @@ body{
 }
 
 /* INFO */
-h1{margin:0 0 6px}
-
-.badge{
-  display:inline-block;
-  background:#e7f0ff;
-  color:var(--accent);
-  padding:4px 10px;
-  border-radius:8px;
-  font-size:13px;
-  margin-bottom:10px;
+h1{
+  margin:8px 0 6px;
+  font-size:32px;
 }
 
-.stars{color:gold}
+.rating-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.stars{
+  color:#fbbf24;
+  font-size:18px;
+}
 
 .price{
   color:var(--accent);
   font-weight:700;
-  margin:6px 0;
 }
 
 .desc{
   color:var(--muted);
   line-height:1.6;
-  margin:12px 0;
+  margin:14px 0;
 }
 
 /* SERVICES */
+.services strong{
+  display:block;
+  margin-bottom:6px;
+}
+
 .services ul{
   margin-left:18px;
   color:var(--muted);
@@ -111,30 +121,48 @@ h1{margin:0 0 6px}
 .actions{
   display:flex;
   gap:10px;
-  margin-top:20px;
+  margin-top:18px;
   flex-wrap:wrap;
 }
 
 .btn{
   padding:12px 18px;
-  border-radius:10px;
+  border-radius:12px;
   border:0;
   cursor:pointer;
   font-weight:600;
 }
 
-.primary{background:var(--accent);color:white}
-.ghost{background:white;border:1px solid #ddd}
+.primary{
+  background:linear-gradient(135deg,#7c3aed,#5b21b6);
+  color:white;
+}
 
-/* ZOOM VIEW */
+.ghost{
+  background:white;
+  border:1px solid #e5e7eb;
+}
+
+.favorite{
+  font-size:20px;
+}
+
+/* MAP */
+.map{
+  margin-top:20px;
+  border-radius:14px;
+  overflow:hidden;
+  height:260px;
+}
+
+/* ZOOM */
 .zoom-overlay{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.8);
+  background:rgba(0,0,0,.85);
   align-items:center;
   justify-content:center;
-  z-index:999;
 }
 
 .zoom-overlay img{
@@ -160,20 +188,29 @@ h1{margin:0 0 6px}
 
 <!-- INFO -->
 <div>
-<span class="badge">Verified Business</span>
+
 <h1 id="name"></h1>
+
+<div class="rating-row">
 <div id="stars" class="stars"></div>
 <div id="price" class="price"></div>
-<div id="desc" class="desc"></div>
+</div>
 
+<div id="desc" class="desc"></div>
 <div id="services" class="services"></div>
 
 <div class="actions">
-<button id="whatsapp" class="btn primary">WhatsApp</button>
-<button id="call" class="btn ghost">Call</button>
+<button id="whatsapp" class="btn primary">Contact on WhatsApp</button>
+<button id="order" class="btn primary">Order</button>
+<button id="favorite" class="btn ghost favorite">♡</button>
 <button id="rate" class="btn ghost">Rate</button>
 <button id="share" class="btn ghost">Share</button>
 </div>
+
+<div class="map">
+<iframe id="mapFrame" width="100%" height="100%" frameborder="0" style="border:0"></iframe>
+</div>
+
 </div>
 
 </section>
@@ -185,68 +222,38 @@ h1{margin:0 0 6px}
 
 <script>
 
-/* =========================
-   BUSINESS DATABASE
-   (Same data as listings page)
-========================= */
-
+/* DATABASE */
 const BUSINESSES={
 BreadBaddie:{
 name:"Bread Baddie",
 images:["images/Bannana Bread.jpg","images/Scones.jpg","images/Baking_Baddie.jpg"],
 stars:5,
-desc:"We are a bespoke bakery specialising in artisan banana bread, scones and crunchies.",
-price:"R200 – R350",
-services:["Banana Bread","Scones","Crunchies"],
-Whatsapp:"27814343732"
-},
-
-MaposCakesandBakes:{
-name:"Mapos Cakes and Bakes",
-images:["images/Cupcakes.jpg","images/Birthday M.jpg","images/Mapos.jpg"],
-stars:4,
-desc:"For all your customized cakes, scones, muffins and cinnamon rolls.",
-price:"R300 – R800",
-services:["Custom Cakes","Muffins","Event Orders"],
-Whatsapp:"27781314590"
+desc:"Bespoke bakery specialising in artisan banana bread, scones and crunchies.",
+price:"R150",
+services:["Banana bread","Scones","Cookies & crunchies"],
+Whatsapp:"27814343732",
+location:"Johannesburg South Africa"
 }
 };
 
 
-/* =========================
-   GET BUSINESS FROM URL
-========================= */
+/* GET BUSINESS */
+const key="BreadBaddie";
+const biz=BUSINESSES[key];
 
-const params=new URLSearchParams(location.search);
-const key=params.get("biz")||"BreadBaddie";
-const biz=BUSINESSES[key]||BUSINESSES.BreadBaddie;
+/* POPULATE */
+name.textContent=biz.name;
+price.textContent=biz.price;
+desc.textContent=biz.desc;
 
+stars.textContent="★".repeat(biz.stars)+"☆".repeat(5-biz.stars);
 
-/* =========================
-   POPULATE INFO
-========================= */
-
-document.getElementById("name").textContent=biz.name;
-document.getElementById("price").textContent=biz.price;
-document.getElementById("desc").textContent=biz.desc;
-
-document.getElementById("stars").textContent=
-"★".repeat(biz.stars)+"☆".repeat(5-biz.stars);
-
-document.getElementById("services").innerHTML=
-"<strong>Services</strong><ul>"+
+services.innerHTML="<strong>Services</strong><ul>"+
 biz.services.map(s=>"<li>"+s+"</li>").join("")+"</ul>";
 
 
-
-/* =========================
-   IMAGE GALLERY
-========================= */
-
-const main=document.getElementById("mainImage");
-const thumbs=document.getElementById("thumbs");
-
-main.src=biz.images[0];
+/* GALLERY */
+mainImage.src=biz.images[0];
 
 biz.images.forEach((img,i)=>{
 const t=document.createElement("img");
@@ -254,7 +261,12 @@ t.src=img;
 if(i===0)t.classList.add("selected");
 
 t.onclick=()=>{
-main.src=img;
+mainImage.style.opacity=0;
+setTimeout(()=>{
+mainImage.src=img;
+mainImage.style.opacity=1;
+},150);
+
 document.querySelectorAll(".thumbs img")
 .forEach(x=>x.classList.remove("selected"));
 t.classList.add("selected");
@@ -264,40 +276,50 @@ thumbs.appendChild(t);
 });
 
 
-/* =========================
-   IMAGE ZOOM
-========================= */
-
-const zoom=document.getElementById("zoom");
-const zoomImg=document.getElementById("zoomImg");
-
-main.onclick=()=>{
+/* ZOOM */
+mainImage.onclick=()=>{
 zoom.style.display="flex";
-zoomImg.src=main.src;
+zoomImg.src=mainImage.src;
 };
 
 zoom.onclick=()=>zoom.style.display="none";
 
 
-/* =========================
-   CONTACT BUTTONS
-========================= */
-
-document.getElementById("whatsapp").onclick=()=>{
+/* WHATSAPP */
+whatsapp.onclick=()=>{
 const msg=encodeURIComponent("Hi I'm interested in "+biz.name);
-window.open(`https://wa.me/${biz.phone}?text=${msg}`);
+window.open(`https://wa.me/${biz.Whatsapp}?text=${msg}`);
 };
 
-document.getElementById("call").onclick=()=>{
-window.location.href="tel:"+biz.phone;
+/* ORDER */
+order.onclick=()=>{
+const msg=encodeURIComponent("Hi I'd like to place an order for "+biz.name);
+window.open(`https://wa.me/${biz.Whatsapp}?text=${msg}`);
 };
 
 
-/* =========================
-   RATING SYSTEM
-========================= */
+/* FAVORITE */
+const favKey="fav_"+key;
 
-document.getElementById("rate").onclick=()=>{
+function updateFav(){
+favorite.textContent=
+localStorage.getItem(favKey)?"❤️":"♡";
+}
+
+favorite.onclick=()=>{
+if(localStorage.getItem(favKey)){
+localStorage.removeItem(favKey);
+}else{
+localStorage.setItem(favKey,"1");
+}
+updateFav();
+};
+
+updateFav();
+
+
+/* RATING */
+rate.onclick=()=>{
 const r=prompt("Rate 1-5");
 const v=parseInt(r);
 if(v>=1 && v<=5){
@@ -307,14 +329,16 @@ alert("Rating saved");
 };
 
 
-/* =========================
-   SHARE BUTTON
-========================= */
-
-document.getElementById("share").onclick=()=>{
+/* SHARE */
+share.onclick=()=>{
 navigator.clipboard.writeText(location.href);
 alert("Link copied");
 };
+
+
+/* MAP */
+mapFrame.src=
+`https://www.google.com/maps?q=${encodeURIComponent(biz.location)}&output=embed`;
 
 </script>
 
