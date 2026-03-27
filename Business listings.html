@@ -315,7 +315,7 @@ font-size:24px;
 
 <section class="hero">
 <h1>Find trusted local services near you</h1>
-<p>Like AutoTrader — but for local businesses</p>
+<p>From Plumbing to Baking -you'll find what youre craving</p>
 
 <div class="search-box">
 <input id="search" placeholder="Search services...">
@@ -330,6 +330,7 @@ font-size:24px;
 <div class="category" data-cat="Baking">Baking</div>
 <div class="category" data-cat="Plumbing">Plumbing</div>
 <div class="category" data-cat="Electrical">Electrical</div>
+<div> class="category" data-cat="Gardening">Gardening</div>
 </div>
 
 <!-- LISTINGS -->
@@ -362,11 +363,7 @@ font-size:24px;
 </div>
 </div>
 
-<script>
-
-/* ======================
-   BUSINESS DATA
-====================== */
+<script/>
 
 const businesses=[
 
@@ -394,11 +391,7 @@ desc:"Custom cakes & muffins",
 phone:"27781319590"
 }
 
-];
-
-
-/* ======================
-   RENDER
+   {
 ====================== */
 
 const listings=document.getElementById("listings");
@@ -463,10 +456,6 @@ listings.appendChild(card);
 
 render(businesses);
 
-
-/* ======================
-   SEARCH
-====================== */
 
 search.oninput=()=>{
 
