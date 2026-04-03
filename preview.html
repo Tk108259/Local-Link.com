@@ -1,1340 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Business Preview | Local Link</title>
-  <style>
-    :root {
-      --bg: #f6efe6;
-      --surface: rgba(255, 251, 246, 0.94);
-      --surface-strong: #fffaf2;
-      --surface-soft: #f5e7d8;
-      --text: #1d1a17;
-      --muted: #655b51;
-      --line: rgba(81, 60, 34, 0.14);
-      --brand: #c45a2c;
-      --brand-deep: #8a3415;
-      --success: #1f6a5f;
-      --warning: #946200;
-      --danger: #b9382f;
-      --danger-soft: #f9ddda;
-      --warning-soft: #f8ebc8;
-      --success-soft: rgba(31, 106, 95, 0.1);
-      --shadow: 0 24px 60px rgba(70, 39, 18, 0.16);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--text);
-      font-family: Georgia, "Times New Roman", serif;
-      background:
-        radial-gradient(circle at top left, rgba(196, 90, 44, 0.22), transparent 34%),
-        radial-gradient(circle at top right, rgba(31, 106, 95, 0.18), transparent 28%),
-        linear-gradient(180deg, #fcf7f0 0%, #f0e2d2 100%);
-    }
-
-    a,
-    button,
-    input,
-    textarea {
-      font: inherit;
-    }
-
-    .page-shell {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 24px 0 40px;
-    }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      min-height: 300px;
-      padding: 36px 28px 88px;
-      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
-      background:
-        linear-gradient(130deg, rgba(25, 24, 22, 0.58), rgba(25, 24, 22, 0.18)),
-        url("images/m.jpg") center center / cover no-repeat;
-      color: #fffaf2;
-      box-shadow: var(--shadow);
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      inset: auto 0 0;
-      height: 120px;
-      background: linear-gradient(180deg, rgba(246, 239, 230, 0), rgba(246, 239, 230, 1));
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 620px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(255, 250, 242, 0.14);
-      border: 1px solid rgba(255, 250, 242, 0.24);
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-size: 0.84rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .hero h1 {
-      margin: 18px 0 12px;
-      font-size: clamp(2.4rem, 5vw, 4.3rem);
-      line-height: 0.95;
-      letter-spacing: -0.03em;
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 52ch;
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-size: 1.02rem;
-      line-height: 1.7;
-      color: rgba(255, 250, 242, 0.88);
-    }
-
-    .review-card {
-      position: relative;
-      z-index: 2;
-      margin-top: -56px;
-      padding: 28px;
-      border: 1px solid rgba(255, 250, 242, 0.45);
-      border-radius: var(--radius-xl);
-      background: var(--surface);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
-    }
-
-    .top-summary,
-    .content-grid {
-      display: grid;
-      gap: 18px;
-    }
-
-    .top-summary {
-      grid-template-columns: 1.5fr 1fr;
-      margin-bottom: 18px;
-    }
-
-    .content-grid {
-      grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.95fr);
-    }
-
-    .summary-card,
-    .side-card,
-    .section-card {
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--line);
-      background: var(--surface-strong);
-      box-shadow: 0 10px 30px rgba(77, 46, 24, 0.08);
-    }
-
-    .summary-card,
-    .side-card,
-    .section-card {
-      padding: 24px;
-    }
-
-    .summary-topline,
-    .section-head,
-    .gallery-meta {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .summary-kicker,
-    .detail-label,
-    .section-tag,
-    .recommendation-heading {
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    .summary-kicker {
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-
-    .business-title {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      line-height: 1.02;
-    }
-
-    .business-subtitle,
-    .section-intro,
-    .status-text,
-    .helper-text,
-    .detail-copy,
-    .recommendation-item p,
-    .plan-benefits li,
-    .gate-copy,
-    .gallery-caption,
-    .contact-link,
-    .empty-state,
-    .status-banner {
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      line-height: 1.65;
-    }
-
-    .business-subtitle {
-      margin: 10px 0 0;
-      color: var(--muted);
-    }
-
-    .plan-pill,
-    .count-badge,
-    .contact-link,
-    .modal-btn,
-    .confirm-btn {
-      border-radius: 999px;
-    }
-
-    .plan-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 148px;
-      padding: 12px 18px;
-      background: linear-gradient(135deg, var(--brand), var(--brand-deep));
-      color: #fffaf2;
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      box-shadow: 0 12px 24px rgba(138, 52, 21, 0.24);
-    }
-
-    .plan-pill.is-missing {
-      background: #efe4d7;
-      color: var(--muted);
-      box-shadow: none;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .summary-metric,
-    .status-row,
-    .count-badge,
-    .empty-gallery {
-      background: #fbf4ea;
-      border: 1px solid rgba(81, 60, 34, 0.08);
-    }
-
-    .summary-metric {
-      padding: 14px 16px;
-      border-radius: var(--radius-md);
-    }
-
-    .summary-metric span {
-      display: block;
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-size: 0.82rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .summary-metric strong {
-      display: block;
-      margin-top: 6px;
-      font-size: 1.15rem;
-      line-height: 1.35;
-    }
-
-    .side-card {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .section-heading,
-    .side-card h2,
-    .cta-panel h2 {
-      margin: 0;
-      font-size: 1.35rem;
-      line-height: 1.1;
-    }
-
-    .status-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 16px;
-      border-radius: var(--radius-md);
-    }
-
-    .status-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--warning);
-      flex-shrink: 0;
-      box-shadow: 0 0 0 6px rgba(148, 98, 0, 0.12);
-    }
-
-    .status-dot.is-ready {
-      background: var(--success);
-      box-shadow: 0 0 0 6px rgba(31, 106, 95, 0.12);
-    }
-
-    .status-dot.is-blocked {
-      background: var(--danger);
-      box-shadow: 0 0 0 6px rgba(185, 56, 47, 0.14);
-    }
-
-    .stack {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .section-tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: var(--surface-soft);
-      color: var(--brand-deep);
-      font-size: 0.82rem;
-      font-weight: 700;
-    }
-
-    .details-grid {
-      display: grid;
-      gap: 14px;
-    }
-
-    .detail-row {
-      display: grid;
-      grid-template-columns: 150px minmax(0, 1fr);
-      gap: 14px;
-      align-items: start;
-      padding: 14px 0;
-      border-top: 1px solid rgba(81, 60, 34, 0.08);
-    }
-
-    .detail-row:first-child {
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .detail-label {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--muted);
-    }
-
-    .detail-value {
-      min-width: 0;
-      font-size: 1.04rem;
-      line-height: 1.55;
-      word-break: break-word;
-    }
-
-    .detail-value.is-missing,
-    .empty-state {
-      color: var(--muted);
-    }
-
-    .contact-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      background: #f8ecdf;
-      color: var(--brand-deep);
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .contact-link:hover,
-    .contact-link:focus-visible,
-    .modal-btn:hover,
-    .modal-btn:focus-visible,
-    .photo-card:hover,
-    .photo-card:focus-visible,
-    .confirm-btn:hover,
-    .confirm-btn:focus-visible {
-      outline: none;
-    }
-
-    .contact-link:hover,
-    .contact-link:focus-visible {
-      background: #f0dcc7;
-    }
-
-    .plan-benefits {
-      margin: 14px 0 0;
-      padding-left: 20px;
-      color: var(--text);
-    }
-
-    .plan-benefits li + li {
-      margin-top: 8px;
-    }
-
-    .gallery-meta {
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .count-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 7px 12px;
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--muted);
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 12px;
-    }
-
-    .photo-card {
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 1 / 1;
-      width: 100%;
-      border: 1px solid rgba(81, 60, 34, 0.12);
-      border-radius: var(--radius-md);
-      background: linear-gradient(135deg, #ead9c6, #f7efe5);
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .photo-card:hover,
-    .photo-card:focus-visible {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 30px rgba(73, 44, 21, 0.14);
-    }
-
-    .photo-card img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-    }
-
-    .photo-fallback {
-      width: 100%;
-      height: 100%;
-      display: grid;
-      place-items: center;
-      padding: 16px;
-      text-align: center;
-      color: var(--muted);
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-weight: 700;
-    }
-
-    .empty-gallery {
-      padding: 22px;
-      border-radius: var(--radius-md);
-      border-style: dashed;
-    }
-
-    .recommendations {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .recommendation-group {
-      padding: 16px;
-      border-radius: var(--radius-md);
-      border: 1px solid transparent;
-    }
-
-    .recommendation-group.required {
-      background: var(--danger-soft);
-      border-color: rgba(185, 56, 47, 0.16);
-    }
-
-    .recommendation-group.recommended {
-      background: var(--warning-soft);
-      border-color: rgba(148, 98, 0, 0.16);
-    }
-
-    .recommendation-group.success {
-      background: var(--success-soft);
-      border-color: rgba(31, 106, 95, 0.18);
-    }
-
-    .recommendation-heading {
-      margin: 0 0 12px;
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-size: 0.88rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-    }
-
-    .recommendation-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .recommendation-item {
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.5);
-    }
-
-    .recommendation-item h3 {
-      margin: 0 0 4px;
-      font-size: 1rem;
-    }
-
-    .recommendation-item p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .cta-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      padding: 20px;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(135deg, #201a14, #3d2b1d);
-      color: #fffaf2;
-    }
-
-    .gate-copy {
-      margin: 0;
-      color: rgba(255, 250, 242, 0.82);
-    }
-
-    .status-banner {
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: rgba(255, 250, 242, 0.08);
-      border: 1px solid rgba(255, 250, 242, 0.14);
-    }
-
-    .status-banner.blocked {
-      background: rgba(185, 56, 47, 0.18);
-      border-color: rgba(255, 195, 190, 0.28);
-    }
-
-    .status-banner.ready {
-      background: rgba(31, 106, 95, 0.18);
-      border-color: rgba(183, 240, 223, 0.2);
-    }
-
-    .confirm-btn {
-      width: 100%;
-      min-height: 56px;
-      padding: 14px 20px;
-      border: 0;
-      background: linear-gradient(135deg, #ef8f57, var(--brand));
-      color: #fffaf2;
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-size: 1rem;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 16px 30px rgba(196, 90, 44, 0.3);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-    }
-
-    .confirm-btn:hover,
-    .confirm-btn:focus-visible {
-      transform: translateY(-1px);
-      box-shadow: 0 20px 34px rgba(196, 90, 44, 0.34);
-    }
-
-    .confirm-btn:disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(18, 12, 8, 0.78);
-      z-index: 999;
-    }
-
-    .modal.open {
-      display: flex;
-    }
-
-    .modal-panel {
-      width: min(880px, 100%);
-      overflow: hidden;
-      border-radius: 24px;
-      background: #1f1711;
-      color: #fffaf2;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
-    }
-
-    .modal-image-wrap {
-      aspect-ratio: 16 / 10;
-      display: grid;
-      place-items: center;
-      background: #130d09;
-    }
-
-    .modal-image-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .modal-footer {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 16px 18px;
-      font-family: "Trebuchet MS", Arial, sans-serif;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .modal-btn {
-      padding: 10px 14px;
-      border: 1px solid rgba(255, 250, 242, 0.18);
-      background: rgba(255, 250, 242, 0.08);
-      color: #fffaf2;
-      cursor: pointer;
-    }
-
-    .modal-btn:hover,
-    .modal-btn:focus-visible {
-      background: rgba(255, 250, 242, 0.14);
-    }
-
-    @media (max-width: 900px) {
-      .top-summary,
-      .content-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 720px) {
-      .page-shell {
-        width: min(100% - 18px, 1120px);
-        padding-top: 12px;
-      }
-
-      .hero {
-        min-height: 250px;
-        padding: 26px 18px 76px;
-      }
-
-      .review-card,
-      .summary-card,
-      .side-card,
-      .section-card {
-        padding-left: 18px;
-        padding-right: 18px;
-      }
-
-      .review-card {
-        margin-top: -42px;
-        padding-top: 20px;
-        padding-bottom: 20px;
-      }
-
-      .detail-row {
-        grid-template-columns: 1fr;
-        gap: 6px;
-      }
-
-      .summary-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview Listing</title>
+
+<style>
+body{
+font-family: system-ui, -apple-system, sans-serif;
+margin:0;
+background:#f5f6f8;
+color:#111;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.header{
+margin-bottom:20px;
+}
+
+.header h1{
+margin:0;
+font-size:28px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:16px;
+box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+
+.label{
+font-size:12px;
+color:#666;
+margin-bottom:4px;
+}
+
+.value{
+font-size:16px;
+font-weight:500;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.photos{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+gap:10px;
+}
+
+.photos img{
+width:100%;
+height:120px;
+object-fit:cover;
+border-radius:8px;
+}
+
+.plan{
+background:#f1f5ff;
+padding:12px;
+border-radius:8px;
+font-weight:600;
+}
+
+button{
+width:100%;
+padding:16px;
+border:none;
+background:#2563eb;
+color:white;
+font-size:16px;
+font-weight:600;
+border-radius:10px;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+</style>
 </head>
+
 <body>
-  <div class="page-shell">
-    <header class="hero">
-      <div class="hero-content">
-        <div class="eyebrow">Final listing check</div>
-        <h1>Review your business before payment.</h1>
-        <p>
-          This is the last quality check before your listing goes live. Confirm your details,
-          look through your photos, and use the recommendations below to improve how customers
-          discover and trust your business.
-        </p>
-      </div>
-    </header>
 
-    <main class="review-card" aria-labelledby="pageTitle">
-      <div class="top-summary">
-        <section class="summary-card" aria-labelledby="pageTitle">
-          <div class="summary-topline">
-            <div>
-              <div class="summary-kicker">Listing preview</div>
-              <h2 id="pageTitle" class="business-title">Business Preview</h2>
-              <p id="businessSubtitle" class="business-subtitle">
-                We will show your business exactly as customers are likely to discover it.
-              </p>
-            </div>
-            <div id="planPill" class="plan-pill is-missing">Plan not selected</div>
-          </div>
+<div class="container">
 
-          <div class="summary-grid">
-            <div class="summary-metric">
-              <span>Photos ready</span>
-              <strong id="photoMetric">0 uploaded</strong>
-            </div>
-            <div class="summary-metric">
-              <span>Listing status</span>
-              <strong id="readinessMetric">Needs review</strong>
-            </div>
-          </div>
-        </section>
+<div class="header">
+<h1>Review your listing</h1>
+<p>Check your details before payment</p>
+</div>
 
-        <aside class="side-card" aria-labelledby="statusTitle">
-          <h2 id="statusTitle">Ready to proceed?</h2>
-          <div class="status-row">
-            <span id="statusDot" class="status-dot" aria-hidden="true"></span>
-            <div id="statusText" class="status-text">Checking your listing details.</div>
-          </div>
-          <p id="statusHelp" class="helper-text">
-            We will highlight anything that should be fixed before payment and anything that could make your listing stronger.
-          </p>
-        </aside>
-      </div>
+<div class="card">
+<div class="grid">
 
-      <div class="content-grid">
-        <div class="stack">
-          <section class="section-card" aria-labelledby="detailsTitle">
-            <div class="section-head">
-              <div>
-                <div class="section-tag">Business details</div>
-                <h2 id="detailsTitle" class="section-heading">What customers will see</h2>
-              </div>
-              <p class="section-intro">These are the core details used to present your business.</p>
-            </div>
-            <div id="detailsGrid" class="details-grid"></div>
-          </section>
+<div>
+<div class="label">Business Name</div>
+<div id="name" class="value">-</div>
+</div>
 
-          <section class="section-card" aria-labelledby="galleryTitle">
-            <div class="section-head">
-              <div>
-                <div class="section-tag">Photo gallery</div>
-                <h2 id="galleryTitle" class="section-heading">Visual first impression</h2>
-              </div>
-              <p class="section-intro">Clear photos help people trust your listing faster.</p>
-            </div>
-            <div class="gallery-meta">
-              <div id="galleryCaption" class="gallery-caption">Photo review</div>
-              <div id="photoCountBadge" class="count-badge">0 photos</div>
-            </div>
-            <div id="galleryRoot"></div>
-          </section>
-        </div>
+<div>
+<div class="label">Service</div>
+<div id="type" class="value">-</div>
+</div>
 
-        <div class="stack">
-          <section class="section-card" aria-labelledby="planTitle">
-            <div class="section-head">
-              <div>
-                <div class="section-tag">Plan summary</div>
-                <h2 id="planTitle" class="section-heading">Your visibility package</h2>
-              </div>
-            </div>
-            <div id="planSummary" class="details-grid"></div>
-          </section>
+<div>
+<div class="label">Phone</div>
+<div id="phone" class="value">-</div>
+</div>
 
-          <section class="section-card" aria-labelledby="recommendationsTitle">
-            <div class="section-head">
-              <div>
-                <div class="section-tag">Recommendations</div>
-                <h2 id="recommendationsTitle" class="section-heading">Suggested improvements</h2>
-              </div>
-            </div>
-            <div id="recommendationsRoot" class="recommendations"></div>
-          </section>
+<div>
+<div class="label">Plan</div>
+<div id="plan" class="value">-</div>
+</div>
 
-          <section class="cta-panel" aria-labelledby="paymentTitle">
-            <h2 id="paymentTitle">Proceed to payment</h2>
-            <p class="gate-copy">
-              Payment is only available when the minimum listing details are complete.
-            </p>
-            <div id="gateStatus" class="status-banner" role="status" aria-live="polite" tabindex="-1">
-              Reviewing your listing data.
-            </div>
-            <button id="confirmBtn" class="confirm-btn" type="button">
-              Confirm details and go to payment
-            </button>
-          </section>
-        </div>
-      </div>
-    </main>
-  </div>
+</div>
 
-  <div id="photoModal" class="modal" aria-hidden="true">
-    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <div class="modal-image-wrap">
-        <img id="modalImage" alt="" />
-      </div>
-      <div class="modal-footer">
-        <div id="modalTitle">Photo preview</div>
-        <div class="modal-actions">
-          <button id="prevPhotoBtn" class="modal-btn" type="button">Previous</button>
-          <button id="nextPhotoBtn" class="modal-btn" type="button">Next</button>
-          <button id="closeModalBtn" class="modal-btn" type="button">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div style="margin-top:15px;">
+<div class="label">Description</div>
+<div id="desc" class="value"></div>
+</div>
+</div>
 
-  <script>
-    const PLAN_BENEFITS = {
-      Standard: [
-        "1 month listing",
-        "Basic support"
-      ],
-      Premium: [
-        "Featured placement",
-        "Priority support",
-        "First to appear for closely related searches"
-      ]
-    };
+<div class="card">
+<div class="label">Photos</div>
+<div id="photos" class="photos"></div>
+</div>
 
-    const REQUIRED_FIELDS = ["businessName", "type", "desc", "phone", "plan"];
-    const VAGUE_SERVICE_TYPES = ["service", "services", "business", "general", "other", "work"];
+<button id="confirmBtn">Confirm & Continue to Payment</button>
 
-    const state = {
-      images: [],
-      currentImageIndex: 0
-    };
+</div>
 
-    function normalizeString(value) {
-      return typeof value === "string" ? value.trim() : "";
-    }
+<script>
+const data = JSON.parse(localStorage.getItem("businessData") || "{}")
 
-    function digitsOnly(value) {
-      return value.replace(/\D/g, "");
-    }
+document.getElementById("name").textContent = data.businessName || "-"
+document.getElementById("type").textContent = data.type || "-"
+document.getElementById("phone").textContent = data.phone || "-"
+document.getElementById("plan").textContent = data.plan || "-"
+document.getElementById("desc").textContent = data.desc || "-"
 
-    function isPhoneValid(phone) {
-      return digitsOnly(phone).length >= 7;
-    }
+const photos = document.getElementById("photos")
 
-    function parseBusinessData() {
-      const raw = localStorage.getItem("businessData");
+if(data.images){
+data.images.forEach(img=>{
+const image = document.createElement("img")
+image.src = img
+photos.appendChild(image)
+})
+}
 
-      if (!raw) {
-        return { data: null, parseError: false };
-      }
+const required = data.businessName && data.type && data.phone && data.plan
 
-      try {
-        const parsed = JSON.parse(raw);
-        return {
-          data: parsed && typeof parsed === "object" ? parsed : null,
-          parseError: false
-        };
-      } catch (error) {
-        return { data: null, parseError: true };
-      }
-    }
+const btn = document.getElementById("confirmBtn")
 
-    function normalizeData(input) {
-      const safe = input && typeof input === "object" ? input : {};
+if(!required){
+btn.disabled = true
+btn.textContent = "Complete form before continuing"
+}
 
-      return {
-        businessName: normalizeString(safe.businessName),
-        type: normalizeString(safe.type),
-        desc: normalizeString(safe.desc),
-        phone: normalizeString(safe.phone),
-        plan: normalizeString(safe.plan),
-        images: Array.isArray(safe.images)
-          ? safe.images
-              .filter((item) => typeof item === "string")
-              .map((item) => item.trim())
-              .filter(Boolean)
-          : []
-      };
-    }
+btn.onclick = ()=>{
+localStorage.setItem("listingConfirmed","true")
+window.location.href="payment.html"
+}
+</script>
 
-    function createElement(tag, className, text) {
-      const element = document.createElement(tag);
-      if (className) element.className = className;
-      if (typeof text === "string") element.textContent = text;
-      return element;
-    }
-
-    function createValueNode(value, fallbackText) {
-      if (!value) {
-        return createElement("span", "detail-value is-missing", fallbackText);
-      }
-      return createElement("span", "", value);
-    }
-
-    function createDetailRow(label, valueNode) {
-      const row = createElement("div", "detail-row");
-      const labelNode = createElement("div", "detail-label", label);
-      const valueWrap = createElement("div", "detail-value");
-      valueWrap.appendChild(valueNode);
-      row.append(labelNode, valueWrap);
-      return row;
-    }
-
-    function getRecommendations(data, parseError) {
-      const required = [];
-      const recommended = [];
-
-      if (parseError) {
-        required.push({
-          title: "Stored listing data could not be read",
-          body: "Your saved business data looks damaged or incomplete. Return to the form and save your details again before continuing."
-        });
-        return { required, recommended };
-      }
-
-      if (!data.businessName) {
-        required.push({
-          title: "Add your business name",
-          body: "Customers need a clear business name to recognise and trust your listing."
-        });
-      }
-
-      if (!data.type) {
-        required.push({
-          title: "Choose a service type",
-          body: "Your service category helps people find your business in the right searches."
-        });
-      } else if (VAGUE_SERVICE_TYPES.includes(data.type.toLowerCase())) {
-        recommended.push({
-          title: "Make the service type more specific",
-          body: "A clearer service label like 'Plumbing', 'Hair Styling', or 'Appliance Repair' will improve search relevance."
-        });
-      }
-
-      if (!data.desc) {
-        required.push({
-          title: "Add a business description",
-          body: "A short description is required so customers understand what you offer before they contact you."
-        });
-      } else if (data.desc.length < 60) {
-        recommended.push({
-          title: "Strengthen the description",
-          body: "Add a little more detail about your services, experience, or coverage area so the listing feels more complete."
-        });
-      }
-
-      if (!data.phone) {
-        required.push({
-          title: "Add a phone number",
-          body: "Customers need a working number to contact your business directly."
-        });
-      } else if (!isPhoneValid(data.phone)) {
-        required.push({
-          title: "Use a valid phone number",
-          body: "The phone number looks too short. Double-check the digits so customers can reach you."
-        });
-      }
-
-      if (!data.plan) {
-        required.push({
-          title: "Select a listing plan",
-          body: "Choose a plan before payment so we know how to publish and position your listing."
-        });
-      } else if (!PLAN_BENEFITS[data.plan]) {
-        recommended.push({
-          title: "Confirm your selected plan",
-          body: "This plan is not one of the standard packages we recognise. Double-check it before payment."
-        });
-      }
-
-      if (data.images.length === 0) {
-        recommended.push({
-          title: "Add at least one photo",
-          body: "Listings with photos usually attract more interest because customers can see your work or setup."
-        });
-      } else if (data.images.length < 3) {
-        recommended.push({
-          title: "Upload a few more photos",
-          body: "Aim for at least three strong photos to build confidence and show the quality of your business."
-        });
-      }
-
-      return { required, recommended };
-    }
-
-    function renderDetails(root, data) {
-      root.innerHTML = "";
-
-      const phoneNode = data.phone
-        ? (() => {
-            const link = createElement("a", "contact-link", data.phone);
-            link.href = "tel:" + digitsOnly(data.phone);
-            link.setAttribute("aria-label", "Call " + data.phone);
-            return link;
-          })()
-        : createElement("span", "detail-value is-missing", "Not provided yet");
-
-      root.append(
-        createDetailRow("Business name", createValueNode(data.businessName, "Not provided yet")),
-        createDetailRow("Service type", createValueNode(data.type, "Not provided yet")),
-        createDetailRow("Description", createValueNode(data.desc, "Not provided yet")),
-        createDetailRow("Phone number", phoneNode)
-      );
-    }
-
-    function renderPlanSummary(root, data) {
-      root.innerHTML = "";
-
-      root.appendChild(
-        createDetailRow(
-          "Selected plan",
-          createValueNode(data.plan || "No plan selected", "No plan selected")
-        )
-      );
-
-      const benefitsRow = createElement("div", "detail-row");
-      const benefitsLabel = createElement("div", "detail-label", "Benefits");
-      const benefitsValue = createElement("div", "detail-value");
-
-      if (PLAN_BENEFITS[data.plan]) {
-        const list = createElement("ul", "plan-benefits");
-        PLAN_BENEFITS[data.plan].forEach((benefit) => {
-          list.appendChild(createElement("li", "", benefit));
-        });
-        benefitsValue.appendChild(list);
-      } else if (data.plan) {
-        benefitsValue.appendChild(
-          createElement(
-            "span",
-            "detail-copy",
-            "Custom or unrecognised plan. Please confirm it matches what you selected."
-          )
-        );
-      } else {
-        benefitsValue.appendChild(
-          createElement(
-            "span",
-            "detail-value is-missing",
-            "Plan details will appear here after selection."
-          )
-        );
-      }
-
-      benefitsRow.append(benefitsLabel, benefitsValue);
-      root.appendChild(benefitsRow);
-    }
-
-    function openModal(index) {
-      if (!state.images.length) return;
-
-      state.currentImageIndex = index;
-      const modal = document.getElementById("photoModal");
-      const modalImage = document.getElementById("modalImage");
-      const modalTitle = document.getElementById("modalTitle");
-
-      modalImage.src = state.images[index];
-      modalImage.alt = "Business photo " + (index + 1);
-      modalTitle.textContent = "Photo " + (index + 1) + " of " + state.images.length;
-
-      modal.classList.add("open");
-      modal.setAttribute("aria-hidden", "false");
-    }
-
-    function closeModal() {
-      const modal = document.getElementById("photoModal");
-      modal.classList.remove("open");
-      modal.setAttribute("aria-hidden", "true");
-    }
-
-    function stepModal(direction) {
-      if (!state.images.length) return;
-      state.currentImageIndex =
-        (state.currentImageIndex + direction + state.images.length) % state.images.length;
-      openModal(state.currentImageIndex);
-    }
-
-    function buildPhotoCard(src, index) {
-      const button = createElement("button", "photo-card");
-      button.type = "button";
-      button.setAttribute("aria-label", "Open photo " + (index + 1) + " in a larger preview");
-
-      const image = document.createElement("img");
-      image.src = src;
-      image.alt = "Business photo " + (index + 1);
-
-      image.addEventListener("error", function () {
-        button.innerHTML = "";
-        button.appendChild(createElement("div", "photo-fallback", "Photo unavailable"));
-      });
-
-      button.appendChild(image);
-      button.addEventListener("click", function () {
-        openModal(index);
-      });
-
-      return button;
-    }
-
-    function renderGallery(root, data) {
-      root.innerHTML = "";
-      state.images = data.images.slice();
-
-      document.getElementById("photoCountBadge").textContent =
-        data.images.length + (data.images.length === 1 ? " photo" : " photos");
-
-      if (!data.images.length) {
-        document.getElementById("galleryCaption").textContent = "No photos uploaded yet";
-        const empty = createElement("div", "empty-gallery");
-        empty.appendChild(
-          createElement(
-            "p",
-            "empty-state",
-            "No photos uploaded yet. Add photos to show your work, products, or storefront before payment."
-          )
-        );
-        root.appendChild(empty);
-        return;
-      }
-
-      document.getElementById("galleryCaption").textContent =
-        "Tap any image to preview it in a larger view.";
-
-      const grid = createElement("div", "gallery-grid");
-      data.images.forEach((src, index) => {
-        grid.appendChild(buildPhotoCard(src, index));
-      });
-      root.appendChild(grid);
-    }
-
-    function renderRecommendations(root, recommendations) {
-      root.innerHTML = "";
-
-      if (!recommendations.required.length && !recommendations.recommended.length) {
-        const success = createElement("div", "recommendation-group success");
-        success.appendChild(createElement("div", "recommendation-heading", "Looks strong"));
-
-        const list = createElement("div", "recommendation-list");
-        const item = createElement("div", "recommendation-item");
-        item.appendChild(createElement("h3", "", "Your listing is ready"));
-        item.appendChild(
-          createElement(
-            "p",
-            "",
-            "All core details are present, and there are no obvious improvements blocking payment."
-          )
-        );
-
-        list.appendChild(item);
-        success.appendChild(list);
-        root.appendChild(success);
-        return;
-      }
-
-      if (recommendations.required.length) {
-        const section = createElement("div", "recommendation-group required");
-        section.appendChild(createElement("div", "recommendation-heading", "Required before payment"));
-
-        const list = createElement("div", "recommendation-list");
-        recommendations.required.forEach((entry) => {
-          const item = createElement("div", "recommendation-item");
-          item.appendChild(createElement("h3", "", entry.title));
-          item.appendChild(createElement("p", "", entry.body));
-          list.appendChild(item);
-        });
-
-        section.appendChild(list);
-        root.appendChild(section);
-      }
-
-      if (recommendations.recommended.length) {
-        const section = createElement("div", "recommendation-group recommended");
-        section.appendChild(
-          createElement("div", "recommendation-heading", "Recommended for better results")
-        );
-
-        const list = createElement("div", "recommendation-list");
-        recommendations.recommended.forEach((entry) => {
-          const item = createElement("div", "recommendation-item");
-          item.appendChild(createElement("h3", "", entry.title));
-          item.appendChild(createElement("p", "", entry.body));
-          list.appendChild(item);
-        });
-
-        section.appendChild(list);
-        root.appendChild(section);
-      }
-    }
-
-    function updateSummary(data, recommendations, parseError) {
-      const planPill = document.getElementById("planPill");
-      const photoMetric = document.getElementById("photoMetric");
-      const readinessMetric = document.getElementById("readinessMetric");
-      const title = document.getElementById("pageTitle");
-      const subtitle = document.getElementById("businessSubtitle");
-
-      if (data.plan) {
-        planPill.textContent = data.plan + " plan";
-        planPill.classList.remove("is-missing");
-      } else {
-        planPill.textContent = "Plan not selected";
-        planPill.classList.add("is-missing");
-      }
-
-      photoMetric.textContent = data.images.length + " uploaded";
-
-      if (parseError) {
-        title.textContent = "Business Preview";
-        subtitle.textContent = "We could not safely read the saved listing data from your browser storage.";
-        readinessMetric.textContent = "Data needs to be saved again";
-        return;
-      }
-
-      title.textContent = data.businessName || "Business Preview";
-      subtitle.textContent = data.businessName
-        ? "Review the exact details that will represent your business before checkout."
-        : "Your listing still needs a few final details before payment can continue.";
-
-      if (recommendations.required.length) {
-        readinessMetric.textContent = "Action needed";
-      } else if (recommendations.recommended.length) {
-        readinessMetric.textContent = "Ready with suggestions";
-      } else {
-        readinessMetric.textContent = "Ready for payment";
-      }
-    }
-
-    function updateStatus(data, recommendations, parseError) {
-      const statusDot = document.getElementById("statusDot");
-      const statusText = document.getElementById("statusText");
-      const statusHelp = document.getElementById("statusHelp");
-      const gateStatus = document.getElementById("gateStatus");
-      const confirmBtn = document.getElementById("confirmBtn");
-
-      const hasRequiredValues = REQUIRED_FIELDS.every((field) => {
-        if (field === "phone") return data.phone && isPhoneValid(data.phone);
-        return Boolean(data[field]);
-      });
-
-      const canProceed = !parseError && hasRequiredValues && recommendations.required.length === 0;
-
-      statusDot.classList.remove("is-ready", "is-blocked");
-      gateStatus.classList.remove("ready", "blocked");
-
-      if (canProceed) {
-        statusDot.classList.add("is-ready");
-        statusText.textContent = "Your listing meets the minimum requirements for payment.";
-        statusHelp.textContent = recommendations.recommended.length
-          ? "You can continue now, or improve the recommended areas for a stronger listing."
-          : "Everything essential is in place and the listing looks ready to publish.";
-
-        gateStatus.classList.add("ready");
-        gateStatus.textContent = recommendations.recommended.length
-          ? "Payment is available. You still have a few optional improvements you may want to make first."
-          : "Payment is available. Your listing looks complete and ready to move forward.";
-      } else {
-        statusDot.classList.add("is-blocked");
-        statusText.textContent = parseError
-          ? "We could not verify the saved listing details."
-          : "Some listing details must be fixed before payment.";
-
-        statusHelp.textContent = parseError
-          ? "Go back to the form and save your listing again so we can review it properly."
-          : "Use the required recommendations below to complete your listing, then return to payment.";
-
-        gateStatus.classList.add("blocked");
-        gateStatus.textContent = parseError
-          ? "Payment is locked until the saved listing data is restored."
-          : "Payment is locked until all required listing details are complete.";
-      }
-
-      confirmBtn.disabled = !canProceed;
-      confirmBtn.setAttribute("aria-disabled", String(!canProceed));
-
-      confirmBtn.onclick = canProceed
-        ? function () {
-            window.location.href = "payment.html";
-          }
-        : function () {
-            gateStatus.focus();
-          };
-    }
-
-    function renderPage() {
-      const parsed = parseBusinessData();
-      const data = normalizeData(parsed.data);
-      const recommendations = getRecommendations(data, parsed.parseError);
-
-      renderDetails(document.getElementById("detailsGrid"), data);
-      renderPlanSummary(document.getElementById("planSummary"), data);
-      renderGallery(document.getElementById("galleryRoot"), data);
-      renderRecommendations(document.getElementById("recommendationsRoot"), recommendations);
-      updateSummary(data, recommendations, parsed.parseError);
-      updateStatus(data, recommendations, parsed.parseError);
-    }
-
-    document.getElementById("closeModalBtn").addEventListener("click", closeModal);
-    document.getElementById("prevPhotoBtn").addEventListener("click", function () {
-      stepModal(-1);
-    });
-    document.getElementById("nextPhotoBtn").addEventListener("click", function () {
-      stepModal(1);
-    });
-
-    document.getElementById("photoModal").addEventListener("click", function (event) {
-      if (event.target === this) closeModal();
-    });
-
-    document.addEventListener("keydown", function (event) {
-      const modal = document.getElementById("photoModal");
-      if (!modal.classList.contains("open")) return;
-
-      if (event.key === "Escape") closeModal();
-      if (event.key === "ArrowLeft") stepModal(-1);
-      if (event.key === "ArrowRight") stepModal(1);
-    });
-
-    renderPage();
-  </script>
 </body>
 </html>
