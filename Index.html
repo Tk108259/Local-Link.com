@@ -353,8 +353,9 @@ phone:phone.value,
 location:location.value,
 plan:document.querySelector('input[name="plan"]:checked').value,
 images:urls
-  localStorage.setItem("businessData", JSON.stringify(data));
 };
+
+localStorage.setItem("businessData", JSON.stringify(data));
 
 await fetch("https://script.google.com/macros/s/AKfycbytS33CINXpwYZvXQCoZzd238vhdSbZDjdieRBjhYwlStm9S9Ay8JieRjIHUX-i2j-Djg/exec",
 {
