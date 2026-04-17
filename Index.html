@@ -9,21 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f4f7fc;
-      --surface: rgba(255, 255, 255, 0.92);
+      --bg: #f3f5f8;
+      --surface: rgba(255, 255, 255, 0.9);
       --surface-strong: #ffffff;
-      --surface-soft: #edf3fb;
-      --text: #15243a;
-      --muted: #66758f;
-      --line: #e4ebf5;
-      --primary: #0f6bff;
-      --primary-deep: #0b4ec2;
+      --surface-soft: #f5f7fb;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #0071e3;
+      --primary-deep: #005bb5;
       --success: #15803d;
       --danger: #dc2626;
-      --shadow: 0 24px 60px rgba(18, 37, 63, 0.1);
-      --radius-xl: 30px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
+      --shadow: 0 20px 50px rgba(17, 24, 39, 0.08);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
       --radius-sm: 12px;
     }
 
@@ -35,9 +35,11 @@
       font-family: "Manrope", "Segoe UI", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(15, 107, 255, 0.14), transparent 26%),
-        radial-gradient(circle at top right, rgba(123, 156, 255, 0.1), transparent 20%),
-        linear-gradient(180deg, #fbfdff 0%, var(--bg) 100%);
+        radial-gradient(circle at top left, rgba(0, 113, 227, 0.1), transparent 24%),
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.75), transparent 20%),
+        linear-gradient(180deg, #fafbfc 0%, var(--bg) 100%);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
     button,
@@ -55,13 +57,13 @@
     .hero {
       position: relative;
       overflow: hidden;
-      min-height: 300px;
+      min-height: 320px;
       border-radius: 0 0 var(--radius-xl) var(--radius-xl);
       background:
-        linear-gradient(135deg, rgba(10, 29, 59, 0.84), rgba(15, 107, 255, 0.68)),
+        linear-gradient(135deg, rgba(17, 24, 39, 0.72), rgba(0, 113, 227, 0.52)),
         url("images/file.jpg") center/cover no-repeat;
       color: white;
-      padding: 34px 28px 90px;
+      padding: 40px 30px 94px;
       box-shadow: var(--shadow);
     }
 
@@ -70,7 +72,7 @@
       position: absolute;
       inset: auto 0 0;
       height: 120px;
-      background: linear-gradient(180deg, rgba(244, 247, 252, 0), rgba(244, 247, 252, 1));
+      background: linear-gradient(180deg, rgba(243, 245, 248, 0), rgba(243, 245, 248, 1));
     }
 
     .hero-content {
@@ -84,8 +86,8 @@
       align-items: center;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.22);
       font-size: 0.82rem;
       font-weight: 800;
       letter-spacing: 0.04em;
@@ -94,7 +96,7 @@
 
     .hero h1 {
       margin: 16px 0 10px;
-      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-size: clamp(2.3rem, 5vw, 4.1rem);
       line-height: 0.98;
       letter-spacing: -0.05em;
     }
@@ -112,10 +114,11 @@
       z-index: 2;
       margin-top: -54px;
       background: var(--surface);
-      border: 1px solid rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.8);
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(22px) saturate(140%);
+      -webkit-backdrop-filter: blur(22px) saturate(140%);
       padding: 24px;
     }
 
@@ -149,7 +152,7 @@
       align-items: center;
       padding: 10px 12px;
       border-radius: 999px;
-      background: var(--surface-soft);
+      background: rgba(245, 247, 251, 0.92);
       color: var(--muted);
       font-size: 0.88rem;
       font-weight: 700;
@@ -164,23 +167,24 @@
     .category-card {
       border: 1px solid var(--line);
       border-radius: var(--radius-lg);
-      background: var(--surface-strong);
+      background: rgba(255, 255, 255, 0.88);
       padding: 18px 12px;
       text-align: center;
       cursor: pointer;
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      min-height: 126px;
     }
 
     .category-card:hover {
       transform: translateY(-2px);
-      border-color: #c7d7ef;
-      box-shadow: 0 16px 30px rgba(18, 37, 63, 0.08);
+      border-color: #bfd8f6;
+      box-shadow: 0 14px 28px rgba(17, 24, 39, 0.08);
     }
 
     .category-card.active {
       border-color: var(--primary);
-      background: linear-gradient(180deg, #f5f9ff, #edf4ff);
-      box-shadow: 0 16px 30px rgba(15, 107, 255, 0.12);
+      background: linear-gradient(180deg, #f8fbff, #eef5ff);
+      box-shadow: 0 14px 28px rgba(0, 113, 227, 0.12);
     }
 
     .category-icon {
@@ -188,7 +192,7 @@
       height: 52px;
       margin: 0 auto 10px;
       border-radius: 16px;
-      background: var(--surface-soft);
+      background: linear-gradient(180deg, #f8fafc, #eef2f7);
       display: grid;
       place-items: center;
     }
@@ -234,19 +238,23 @@
     .form-group input,
     .form-group textarea {
       width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #fbfdff;
-      padding: 14px 15px;
+      border: 1px solid #dfe5ee;
+      border-radius: 16px;
+      background: rgba(248, 250, 252, 0.95);
+      padding: 15px 16px;
       color: var(--text);
       outline: none;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      min-height: 52px;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
     .form-group input:focus,
     .form-group textarea:focus {
-      border-color: #bfd4fb;
-      box-shadow: 0 0 0 4px rgba(15, 107, 255, 0.08);
+      border-color: #b9d7fb;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.08);
     }
 
     .form-group textarea {
@@ -272,7 +280,7 @@
       display: block;
       border: 1px solid var(--line);
       border-radius: 18px;
-      background: #fbfdff;
+      background: rgba(248, 250, 252, 0.95);
       padding: 16px;
       cursor: pointer;
     }
@@ -286,8 +294,8 @@
 
     .plan-option.selected {
       border-color: var(--primary);
-      background: linear-gradient(180deg, #f5f9ff, #edf4ff);
-      box-shadow: 0 14px 26px rgba(15, 107, 255, 0.1);
+      background: linear-gradient(180deg, #f8fbff, #eef5ff);
+      box-shadow: 0 14px 26px rgba(0, 113, 227, 0.1);
     }
 
     .plan-option strong {
@@ -304,9 +312,9 @@
     }
 
     .upload-box {
-      border: 1px dashed #c7d7ef;
+      border: 1px dashed #c9d4e5;
       border-radius: 18px;
-      background: #f8fbff;
+      background: linear-gradient(180deg, #fafcff, #f3f6fb);
       padding: 18px;
     }
 
@@ -360,7 +368,7 @@
       font-size: 1rem;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 18px 30px rgba(15, 107, 255, 0.22);
+      box-shadow: 0 18px 30px rgba(0, 113, 227, 0.2);
     }
 
     .submit-button:disabled {
@@ -384,13 +392,17 @@
       }
 
       .hero {
-        min-height: 250px;
-        padding: 24px 18px 76px;
+        min-height: 280px;
+        padding: 28px 18px 84px;
       }
 
       .panel,
       .form-card {
         padding: 18px;
+      }
+
+      .section-head {
+        align-items: start;
       }
 
       .category-grid,
@@ -399,9 +411,28 @@
         grid-template-columns: 1fr;
       }
 
+      .category-card {
+        display: grid;
+        grid-template-columns: 52px 1fr;
+        align-items: center;
+        gap: 14px;
+        text-align: left;
+        min-height: 84px;
+        padding: 14px;
+      }
+
+      .category-icon {
+        margin: 0;
+      }
+
       .submit-button {
         width: 100%;
         min-width: 0;
+        min-height: 56px;
+      }
+
+      .submit-wrap {
+        align-items: stretch;
       }
     }
   </style>
@@ -421,7 +452,7 @@
         <div class="section-head">
           <div>
             <h2>Choose a service category</h2>
-            <p>Select the one that matches your business and we’ll fill it into the form for you.</p>
+            <p>Select the one that matches your business and we'll fill it into the form for you.</p>
           </div>
           <div class="helper-badge">Tap a category to autofill</div>
         </div>
@@ -450,7 +481,7 @@
         <div class="section-head">
           <div>
             <h2>Create your listing</h2>
-            <p>Keep it clear and simple so customers can trust what they’re seeing.</p>
+            <p>Keep it clear and simple so customers can trust what they're seeing.</p>
           </div>
         </div>
 
@@ -493,7 +524,7 @@
                 <label class="plan-option">
                   <input type="radio" name="plan" value="Premium">
                   <strong>Premium</strong>
-                  <span>R300 for stronger visibility and a more prominent listing.</span>
+                  <span>R300 for stronger visibility and First listing.</span>
                 </label>
                 <label class="plan-option">
                   <input type="radio" name="plan" value="Yearly">
