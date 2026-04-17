@@ -1,373 +1,628 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LocalServe – Find Local Services</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Link | List Your Business</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f7fc;
+      --surface: rgba(255, 255, 255, 0.92);
+      --surface-strong: #ffffff;
+      --surface-soft: #edf3fb;
+      --text: #15243a;
+      --muted: #66758f;
+      --line: #e4ebf5;
+      --primary: #0f6bff;
+      --primary-deep: #0b4ec2;
+      --success: #15803d;
+      --danger: #dc2626;
+      --shadow: 0 24px 60px rgba(18, 37, 63, 0.1);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
 
-<link href="https://fonts.googleapis.com/css?family=Segoe+UI:400,600,700&display=swap" rel="stylesheet">
+    * { box-sizing: border-box; }
 
-<style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(15, 107, 255, 0.14), transparent 26%),
+        radial-gradient(circle at top right, rgba(123, 156, 255, 0.1), transparent 20%),
+        linear-gradient(180deg, #fbfdff 0%, var(--bg) 100%);
+    }
 
-/* GLOBAL */
-body{
-margin:0;
-font-family:'Segoe UI',sans-serif;
-background:linear-gradient(135deg,#f4f6fb,#d1e3f7);
-color:#222;
-}
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
 
-/* HERO */
-.main-header{
-background:url('images/file.jpg') center/cover no-repeat;
-min-height:260px;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-color:white;
-position:relative;
-padding:40px 20px;
-border-radius:0 0 36px 36px;
-overflow:hidden;
-}
+    .page {
+      width: min(1080px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 20px 0 40px;
+    }
 
-.main-header::before{
-content:"";
-position:absolute;
-inset:0;
-background:linear-gradient(rgba(24,40,72,.75),rgba(75,108,183,.65));
-}
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+      background:
+        linear-gradient(135deg, rgba(10, 29, 59, 0.84), rgba(15, 107, 255, 0.68)),
+        url("images/file.jpg") center/cover no-repeat;
+      color: white;
+      padding: 34px 28px 90px;
+      box-shadow: var(--shadow);
+    }
 
-.main-header h1,
-.main-header p{
-position:relative;
-z-index:1;
-}
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 120px;
+      background: linear-gradient(180deg, rgba(244, 247, 252, 0), rgba(244, 247, 252, 1));
+    }
 
-.main-header h1{
-font-size:2rem;
-margin:0;
-}
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+    }
 
-.main-header p{
-margin-top:10px;
-opacity:.95;
-}
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
 
-/* CATEGORIES */
-.categories{
-display:flex;
-justify-content:center;
-gap:18px;
-flex-wrap:wrap;
-padding:30px 15px;
-}
+    .hero h1 {
+      margin: 16px 0 10px;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
 
-.category-card{
-background:white;
-border-radius:16px;
-padding:18px 14px;
-text-align:center;
-box-shadow:0 6px 18px rgba(0,0,0,.06);
-min-width:110px;
-cursor:pointer;
-transition:.2s;
-border:2px solid transparent;
-}
+    .hero p {
+      margin: 0;
+      max-width: 56ch;
+      color: rgba(255, 255, 255, 0.84);
+      line-height: 1.7;
+      font-size: 1rem;
+    }
 
-.category-card:hover{
-transform:translateY(-4px);
-box-shadow:0 12px 24px rgba(0,0,0,.08);
-border-color:#4b6cb7;
-}
+    .panel {
+      position: relative;
+      z-index: 2;
+      margin-top: -54px;
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      padding: 24px;
+    }
 
-.category-card.active{
-border-color:#4b6cb7;
-}
+    .section + .section {
+      margin-top: 22px;
+    }
 
-.category-card img{
-width:34px;
-margin-bottom:8px;
-}
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: end;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
 
-/* FORM */
-.form-container{
-background:white;
-max-width:720px;
-margin:20px auto;
-padding:26px;
-border-radius:18px;
-box-shadow:0 10px 28px rgba(0,0,0,.08);
-}
+    .section-head h2 {
+      margin: 0;
+      font-size: 1.45rem;
+      letter-spacing: -0.03em;
+    }
 
-.form-container h2{
-text-align:center;
-margin-bottom:20px;
-}
+    .section-head p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
 
-.form-group{
-margin-bottom:14px;
-}
+    .helper-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
 
-.form-group label{
-display:block;
-font-weight:600;
-margin-bottom:6px;
-}
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
 
-.form-group input,
-.form-group textarea{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:1px solid #cfd9ea;
-font-size:15px;
-}
+    .category-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface-strong);
+      padding: 18px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
 
-.plan-options{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
+    .category-card:hover {
+      transform: translateY(-2px);
+      border-color: #c7d7ef;
+      box-shadow: 0 16px 30px rgba(18, 37, 63, 0.08);
+    }
 
-.plan-options label{
-flex:1;
-background:#f4f7ff;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-border:1px solid #e1e7f5;
-}
+    .category-card.active {
+      border-color: var(--primary);
+      background: linear-gradient(180deg, #f5f9ff, #edf4ff);
+      box-shadow: 0 16px 30px rgba(15, 107, 255, 0.12);
+    }
 
-.plan-options label:hover{
-border-color:#4b6cb7;
-}
+    .category-icon {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 10px;
+      border-radius: 16px;
+      background: var(--surface-soft);
+      display: grid;
+      place-items: center;
+    }
 
-/* BUTTON */
-.submit-button{
-width:100%;
-background:linear-gradient(90deg,#4b6cb7,#182848);
-color:white;
-padding:14px;
-border:none;
-border-radius:10px;
-font-weight:700;
-cursor:pointer;
-transition:.2s;
-}
+    .category-icon img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
 
-.submit-button:hover{
-transform:translateY(-2px);
-box-shadow:0 8px 20px rgba(0,0,0,.1);
-}
+    .category-card strong {
+      display: block;
+      font-size: 0.98rem;
+    }
 
-/* IMAGE PREVIEW */
-#imagePreview img{
-width:70px;
-height:70px;
-object-fit:cover;
-border-radius:10px;
-border:2px solid #e5ecf7;
-transition:.2s;
-}
+    .form-card {
+      background: var(--surface-strong);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+    }
 
-#imagePreview img:hover{
-transform:scale(1.08);
-}
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
 
-#uploadLoader{
-display:none;
-text-align:center;
-margin-top:10px;
-font-weight:600;
-}
+    .form-group {
+      display: grid;
+      gap: 7px;
+    }
 
-</style>
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfdff;
+      padding: 14px 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #bfd4fb;
+      box-shadow: 0 0 0 4px rgba(15, 107, 255, 0.08);
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .field-hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .plan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .plan-option {
+      position: relative;
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fbfdff;
+      padding: 16px;
+      cursor: pointer;
+    }
+
+    .plan-option input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .plan-option.selected {
+      border-color: var(--primary);
+      background: linear-gradient(180deg, #f5f9ff, #edf4ff);
+      box-shadow: 0 14px 26px rgba(15, 107, 255, 0.1);
+    }
+
+    .plan-option strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .plan-option span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .upload-box {
+      border: 1px dashed #c7d7ef;
+      border-radius: 18px;
+      background: #f8fbff;
+      padding: 18px;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .preview-grid img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .upload-loader {
+      display: none;
+      margin-top: 12px;
+      color: var(--primary-deep);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .submit-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .submit-note {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.92rem;
+      flex: 1 1 260px;
+    }
+
+    .submit-button {
+      min-width: 240px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-deep));
+      color: white;
+      padding: 16px 24px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 18px 30px rgba(15, 107, 255, 0.22);
+    }
+
+    .submit-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: none;
+    }
+
+    @media (max-width: 860px) {
+      .category-grid,
+      .form-grid,
+      .plan-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(1080px, calc(100% - 18px));
+        padding-top: 14px;
+      }
+
+      .hero {
+        min-height: 250px;
+        padding: 24px 18px 76px;
+      }
+
+      .panel,
+      .form-card {
+        padding: 18px;
+      }
+
+      .category-grid,
+      .form-grid,
+      .plan-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .submit-button {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="page">
+    <header class="hero">
+      <div class="hero-content">
+        <div class="eyebrow">List your business</div>
+        <h1>Bring your local service online beautifully.</h1>
+        <p>Create a clean business listing with your service type, contact details, plan, and photos before sending it to preview and payment.</p>
+      </div>
+    </header>
 
-<header class="main-header">
-<h1>Find trusted local services near you</h1>
-<p>From bakers to plumbers – all in one place</p>
-</header>
+    <main class="panel">
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>Choose a service category</h2>
+            <p>Select the one that matches your business and we’ll fill it into the form for you.</p>
+          </div>
+          <div class="helper-badge">Tap a category to autofill</div>
+        </div>
 
-<div class="categories">
-<div class="category-card" data-category="Gardening">
-<img src="images/gardening.png">
-<div>Gardening</div>
-</div>
+        <div class="category-grid">
+          <button class="category-card" type="button" data-category="Gardening">
+            <div class="category-icon"><img src="images/gardening.png" alt=""></div>
+            <strong>Gardening</strong>
+          </button>
+          <button class="category-card" type="button" data-category="Plumbing">
+            <div class="category-icon"><img src="images/plumbing.png" alt=""></div>
+            <strong>Plumbing</strong>
+          </button>
+          <button class="category-card" type="button" data-category="Electrical">
+            <div class="category-icon"><img src="images/electrical.png" alt=""></div>
+            <strong>Electrical</strong>
+          </button>
+          <button class="category-card" type="button" data-category="Baking">
+            <div class="category-icon"><img src="images/baking.png" alt=""></div>
+            <strong>Baking</strong>
+          </button>
+        </div>
+      </section>
 
-<div class="category-card" data-category="Plumbing">
-<img src="images/plumbing.png">
-<div>Plumbing</div>
-</div>
+      <section class="section form-card">
+        <div class="section-head">
+          <div>
+            <h2>Create your listing</h2>
+            <p>Keep it clear and simple so customers can trust what they’re seeing.</p>
+          </div>
+        </div>
 
-<div class="category-card" data-category="Electrical">
-<img src="images/electrical.png">
-<div>Electrical</div>
-</div>
+        <form id="businessForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="businessName">Business name</label>
+              <input type="text" id="businessName" required>
+            </div>
 
-<div class="category-card" data-category="Baking">
-<img src="images/baking.png">
-<div>Baking</div>
-</div>
-</div>
+            <div class="form-group">
+              <label for="type">Type of service</label>
+              <input type="text" id="type" required>
+            </div>
 
-<div class="form-container">
-<h2>List Your Business</h2>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" required>
+            </div>
 
-<form id="businessForm">
+            <div class="form-group">
+              <label for="location">Location</label>
+              <input type="text" id="location" required>
+            </div>
 
-<div class="form-group">
-<label>Business Name</label>
-<input type="text" id="businessName" required>
-</div>
+            <div class="form-group full">
+              <label for="desc">Description</label>
+              <textarea id="desc" required></textarea>
+              <p class="field-hint">A short, clear description helps customers understand what you offer.</p>
+            </div>
 
-<div class="form-group">
-<label>Type of Service</label>
-<input type="text" id="type" required>
-</div>
+            <div class="form-group full">
+              <label>Choose a plan</label>
+              <div class="plan-grid" id="planGrid">
+                <label class="plan-option selected">
+                  <input type="radio" name="plan" value="Standard" checked>
+                  <strong>Standard</strong>
+                  <span>R200 for a simple listing that gets you started.</span>
+                </label>
+                <label class="plan-option">
+                  <input type="radio" name="plan" value="Premium">
+                  <strong>Premium</strong>
+                  <span>R300 for stronger visibility and a more prominent listing.</span>
+                </label>
+                <label class="plan-option">
+                  <input type="radio" name="plan" value="Yearly">
+                  <strong>Yearly</strong>
+                  <span>R2500 for longer-term visibility without monthly worry.</span>
+                </label>
+              </div>
+            </div>
 
-<div class="form-group">
-<label>Description</label>
-<textarea id="desc" required></textarea>
-</div>
+            <div class="form-group full">
+              <label for="images">Upload images</label>
+              <div class="upload-box">
+                <input type="file" id="images" multiple accept="image/*" required>
+                <p class="field-hint">Upload up to 5 images. These will show in your preview before payment.</p>
+                <div id="imagePreview" class="preview-grid"></div>
+                <div id="uploadLoader" class="upload-loader">Preparing your listing...</div>
+              </div>
+            </div>
+          </div>
 
-<div class="form-group">
-<label>Phone</label>
-<input type="tel" id="phone" required>
-</div>
+          <div class="submit-wrap">
+            <p class="submit-note">When you submit, your listing details will be saved locally first and then sent to the preview page so you can review everything before payment.</p>
+            <button class="submit-button" type="submit">Continue to Preview</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
 
-<div class="form-group">
-<label>Location</label>
-<input type="text" id="location" required>
-</div>
+  <script>
+    const imageInput = document.getElementById("images");
+    const preview = document.getElementById("imagePreview");
+    const uploadLoader = document.getElementById("uploadLoader");
+    const submitBtn = document.querySelector(".submit-button");
+    const categoryCards = document.querySelectorAll(".category-card");
+    const planOptions = document.querySelectorAll(".plan-option");
 
-<div class="form-group">
-<label>Plan</label>
-<div class="plan-options">
-<label><input type="radio" name="plan" value="Standard" checked> Standard (R200)</label>
-<label><input type="radio" name="plan" value="Premium"> Premium (R300)</label>
-<label><input type="radio" name="plan" value="Yearly"> Yearly (R2500)</label>
-</div>
-</div>
+    let lastValidFiles = null;
 
-<div class="form-group">
-<label>Upload Images (max 5)</label>
-<input type="file" id="images" multiple accept="image/*" required>
-<div id="imagePreview"></div>
-</div>
+    categoryCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        categoryCards.forEach((item) => item.classList.remove("active"));
+        card.classList.add("active");
+        document.getElementById("type").value = card.dataset.category;
+        document.querySelector(".form-card").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
 
-<button class="submit-button">Submit Business</button>
+    planOptions.forEach((option) => {
+      const input = option.querySelector('input[type="radio"]');
+      input.addEventListener("change", () => {
+        planOptions.forEach((item) => item.classList.remove("selected"));
+        option.classList.add("selected");
+      });
+    });
 
-<div id="uploadLoader">Uploading images...</div>
+    imageInput.addEventListener("change", (event) => {
+      const files = event.target.files;
+      preview.innerHTML = "";
 
-</form>
-</div>
+      if (files.length > 5) {
+        window.alert("You can only upload a maximum of 5 images.");
+        if (lastValidFiles) {
+          renderPreview(lastValidFiles);
+        }
+        imageInput.value = "";
+        return;
+      }
 
-<script>
+      lastValidFiles = files;
+      renderPreview(files);
+    });
 
-const CLOUD_NAME="dhv6kt5ke";
-const UPLOAD_PRESET="business_images_Upload";
+    function renderPreview(files) {
+      preview.innerHTML = "";
+      [...files].forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.alt = "Listing preview image";
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
-document.querySelectorAll('.category-card').forEach(card=>{
-card.addEventListener('click',()=>{
-document.querySelectorAll('.category-card')
-.forEach(c=>c.classList.remove('active'));
+    function sendToGoogleSheet(data) {
+      return fetch("YOUR_WEB_APP_URL_HERE", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }).catch(() => {});
+    }
 
-card.classList.add('active');
-document.getElementById('type').value=card.dataset.category;
+    document.getElementById("businessForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-document.querySelector('.form-container')
-.scrollIntoView({behavior:'smooth'});
-});
-});
+      uploadLoader.style.display = "block";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Preparing preview...";
 
-/* IMAGE PREVIEW */
-const imageInput=document.getElementById("images");
-const preview=document.getElementById("imagePreview");
+      const businessData = {
+        businessName: document.getElementById("businessName").value,
+        type: document.getElementById("type").value,
+        desc: document.getElementById("desc").value,
+        phone: document.getElementById("phone").value,
+        location: document.getElementById("location").value,
+        plan: document.querySelector('input[name="plan"]:checked').value,
+        images: []
+      };
 
-imageInput.addEventListener("change",()=>{
-preview.innerHTML="";
+      const files = [...imageInput.files];
+      if (files.length > 0) {
+        const readers = files.map((file) => new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (e) => resolve(e.target.result);
+          reader.readAsDataURL(file);
+        }));
+        businessData.images = await Promise.all(readers);
+      }
 
-if(imageInput.files.length>5){
-alert("Max 5 images");
-imageInput.value="";
-return;
-}
-
-[...imageInput.files].forEach(file=>{
-const reader=new FileReader();
-reader.onload=e=>{
-const img=document.createElement("img");
-img.src=e.target.result;
-preview.appendChild(img);
-};
-reader.readAsDataURL(file);
-});
-});
-
-/* UPLOAD */
-async function uploadImage(file){
-const fd=new FormData();
-fd.append("file",file);
-fd.append("upload_preset",UPLOAD_PRESET);
-
-const res=await fetch(
-`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-{method:"POST",body:fd}
-);
-
-const data=await res.json();
-return data.secure_url;
-}
-
-/* SUBMIT */
-document.getElementById("businessForm")
-.addEventListener("submit",async e=>{
-
-e.preventDefault();
-
-document.getElementById("uploadLoader").style.display="block";
-
-const submitBtn=document.querySelector(".submit-button");
-submitBtn.disabled=true;
-submitBtn.textContent="Uploading...";
-
-const images=[...imageInput.files];
-
-let urls=[];
-for(let file of images){
-const url=await uploadImage(file);
-urls.push(url);
-}
-
-const data={
-businessName:businessName.value,
-type:type.value,
-desc:desc.value,
-phone:phone.value,
-location:location.value,
-plan:document.querySelector('input[name="plan"]:checked').value,
-images:urls
-};
-
-localStorage.setItem("businessData", JSON.stringify(data));
-
-await fetch("https://script.google.com/macros/s/AKfycbytS33CINXpwYZvXQCoZzd238vhdSbZDjdieRBjhYwlStm9S9Ay8JieRjIHUX-i2j-Djg/exec",
-{
-method:"POST",
-body:JSON.stringify(data)
-});
-
-window.location.href="preview.html";
-
-});
-
-</script>
-
+      localStorage.setItem("businessData", JSON.stringify(businessData));
+      sendToGoogleSheet(businessData);
+      window.location.href = "preview.html";
+    });
+  </script>
 </body>
 </html>
