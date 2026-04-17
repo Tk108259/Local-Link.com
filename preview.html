@@ -1,179 +1,1028 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Preview Listing</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Business Preview | Local Link</title>
+  <style>
+    :root {
+      --bg: #f6efe6;
+      --surface: rgba(255, 251, 246, 0.92);
+      --surface-strong: #fffaf2;
+      --surface-muted: #f2e5d6;
+      --text: #1d1a17;
+      --muted: #655b51;
+      --line: rgba(81, 60, 34, 0.16);
+      --brand: #c45a2c;
+      --brand-deep: #8a3415;
+      --brand-soft: #f4d5c2;
+      --accent: #1f6a5f;
+      --danger: #b9382f;
+      --danger-soft: #f9ddda;
+      --warning: #946200;
+      --warning-soft: #f8ebc8;
+      --success: #1f6a5f;
+      --shadow: 0 24px 60px rgba(70, 39, 18, 0.16);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+    }
 
-<style>
-body{
-font-family: system-ui, -apple-system, sans-serif;
-margin:0;
-background:#f5f6f8;
-color:#111;
-}
+    * { box-sizing: border-box; }
 
-.container{
-max-width:900px;
-margin:auto;
-padding:20px;
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(196, 90, 44, 0.22), transparent 34%),
+        radial-gradient(circle at top right, rgba(31, 106, 95, 0.18), transparent 28%),
+        linear-gradient(180deg, #fcf7f0 0%, #f0e2d2 100%);
+    }
 
-.header{
-margin-bottom:20px;
-}
+    a { color: inherit; }
+    button { font: inherit; }
 
-.header h1{
-margin:0;
-font-size:28px;
-}
+    .page-shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
 
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-margin-bottom:16px;
-box-shadow:0 4px 12px rgba(0,0,0,0.05);
-}
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      padding: 36px 28px 88px;
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+      background:
+        linear-gradient(130deg, rgba(25, 24, 22, 0.58), rgba(25, 24, 22, 0.18)),
+        url('images/m.jpg') center center / cover no-repeat;
+      color: #fffaf2;
+      box-shadow: var(--shadow);
+    }
 
-.label{
-font-size:12px;
-color:#666;
-margin-bottom:4px;
-}
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 120px;
+      background: linear-gradient(180deg, rgba(246, 239, 230, 0), rgba(246, 239, 230, 1));
+    }
 
-.value{
-font-size:16px;
-font-weight:500;
-}
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 620px;
+    }
 
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-}
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 250, 242, 0.14);
+      border: 1px solid rgba(255, 250, 242, 0.24);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 0.84rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
 
-.photos{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
-gap:10px;
-}
+    .hero h1 {
+      margin: 18px 0 12px;
+      font-size: clamp(2.4rem, 5vw, 4.3rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
 
-.photos img{
-width:100%;
-height:120px;
-object-fit:cover;
-border-radius:8px;
-}
+    .hero p {
+      margin: 0;
+      max-width: 52ch;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      color: rgba(255, 250, 242, 0.88);
+    }
 
-.plan{
-background:#f1f5ff;
-padding:12px;
-border-radius:8px;
-font-weight:600;
-}
+    .review-card {
+      position: relative;
+      z-index: 2;
+      margin-top: -56px;
+      padding: 28px;
+      border: 1px solid rgba(255, 250, 242, 0.45);
+      border-radius: var(--radius-xl);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
 
-button{
-width:100%;
-padding:16px;
-border:none;
-background:#2563eb;
-color:white;
-font-size:16px;
-font-weight:600;
-border-radius:10px;
-cursor:pointer;
-}
+    .top-summary,
+    .content-grid {
+      display: grid;
+      gap: 18px;
+    }
 
-button:disabled{
-opacity:.5;
-cursor:not-allowed;
-}
-</style>
+    .top-summary {
+      grid-template-columns: 1.45fr 1fr;
+      margin-bottom: 18px;
+    }
+
+    .content-grid {
+      grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.95fr);
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .summary-card,
+    .side-card,
+    .section-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: var(--surface-strong);
+      box-shadow: 0 10px 30px rgba(77, 46, 24, 0.08);
+    }
+
+    .summary-card,
+    .side-card,
+    .section-card {
+      padding: 24px;
+    }
+
+    .summary-topline,
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .summary-kicker,
+    .section-tag,
+    .detail-label,
+    .helper-text,
+    .recommendation-heading,
+    .status-text,
+    .count-badge,
+    .plan-pill {
+      font-family: "Trebuchet MS", Arial, sans-serif;
+    }
+
+    .summary-kicker,
+    .detail-label,
+    .section-tag,
+    .recommendation-heading {
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .section-tag {
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--surface-muted);
+      color: var(--brand-deep);
+    }
+
+    .business-title {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      line-height: 1.02;
+    }
+
+    .business-subtitle,
+    .helper-text,
+    .detail-copy,
+    .gallery-caption,
+    .recommendation-item p,
+    .status-copy,
+    .empty-state,
+    .plan-benefits li {
+      margin: 0;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .business-subtitle {
+      margin-top: 10px;
+    }
+
+    .plan-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 148px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-deep));
+      color: #fffaf2;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      box-shadow: 0 12px 24px rgba(138, 52, 21, 0.24);
+    }
+
+    .plan-pill.is-missing {
+      background: #efe4d7;
+      color: var(--muted);
+      box-shadow: none;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .summary-metric,
+    .status-row,
+    .recommendation-item {
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      background: #fbf4ea;
+      border: 1px solid rgba(81, 60, 34, 0.08);
+    }
+
+    .summary-metric span {
+      display: block;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .summary-metric strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 1.15rem;
+      line-height: 1.35;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--warning);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 6px rgba(148, 98, 0, 0.12);
+    }
+
+    .status-dot.is-ready {
+      background: var(--success);
+      box-shadow: 0 0 0 6px rgba(31, 106, 95, 0.12);
+    }
+
+    .status-dot.is-blocked {
+      background: var(--danger);
+      box-shadow: 0 0 0 6px rgba(185, 56, 47, 0.14);
+    }
+
+    .details-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .detail-row {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      padding: 14px 0;
+      border-top: 1px solid rgba(81, 60, 34, 0.08);
+    }
+
+    .detail-row:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .detail-value {
+      min-width: 0;
+      font-size: 1.04rem;
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .detail-value.is-missing,
+    .empty-state {
+      color: var(--muted);
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #f8ecdf;
+      color: var(--brand-deep);
+      text-decoration: none;
+      font-weight: 700;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+    }
+
+    .gallery-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #fbf4ea;
+      border: 1px solid rgba(81, 60, 34, 0.08);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .photo-card {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(81, 60, 34, 0.12);
+      background: linear-gradient(135deg, #ead9c6, #f7efe5);
+      cursor: pointer;
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-fallback,
+    .empty-gallery {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-weight: 700;
+    }
+
+    .photo-fallback { padding: 16px; height: 100%; }
+
+    .empty-gallery {
+      padding: 22px;
+      border-radius: var(--radius-md);
+      background: #fbf4ea;
+      border: 1px dashed rgba(81, 60, 34, 0.22);
+    }
+
+    .recommendations {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .recommendation-group {
+      padding: 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+    }
+
+    .recommendation-group.required {
+      background: var(--danger-soft);
+      border-color: rgba(185, 56, 47, 0.16);
+    }
+
+    .recommendation-group.recommended {
+      background: var(--warning-soft);
+      border-color: rgba(148, 98, 0, 0.16);
+    }
+
+    .recommendation-group.success {
+      background: rgba(31, 106, 95, 0.1);
+      border-color: rgba(31, 106, 95, 0.18);
+    }
+
+    .recommendation-heading {
+      margin: 0 0 12px;
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    .recommendation-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .recommendation-item h3 {
+      margin: 0 0 4px;
+      font-size: 1rem;
+    }
+
+    .plan-benefits {
+      margin: 14px 0 0;
+      padding-left: 20px;
+      color: var(--text);
+    }
+
+    .plan-benefits li + li {
+      margin-top: 8px;
+    }
+
+    .cta-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, #201a14, #3d2b1d);
+      color: #fffaf2;
+    }
+
+    .cta-panel h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .status-banner {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255, 250, 242, 0.08);
+      border: 1px solid rgba(255, 250, 242, 0.14);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    .status-banner.blocked {
+      background: rgba(185, 56, 47, 0.18);
+      border-color: rgba(255, 195, 190, 0.28);
+    }
+
+    .status-banner.ready {
+      background: rgba(31, 106, 95, 0.18);
+      border-color: rgba(183, 240, 223, 0.2);
+    }
+
+    .confirm-btn {
+      width: 100%;
+      min-height: 56px;
+      padding: 14px 20px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ef8f57, var(--brand));
+      color: #fffaf2;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 16px 30px rgba(196, 90, 44, 0.3);
+    }
+
+    .confirm-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      box-shadow: none;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(18, 12, 8, 0.78);
+      z-index: 999;
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-panel {
+      width: min(880px, 100%);
+      overflow: hidden;
+      border-radius: 24px;
+      background: #1f1711;
+      color: #fffaf2;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    .modal-image-wrap {
+      background: #130d09;
+      aspect-ratio: 16 / 10;
+      display: grid;
+      place-items: center;
+    }
+
+    .modal-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .modal-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-btn {
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 250, 242, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 250, 242, 0.08);
+      color: #fffaf2;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .top-summary,
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page-shell {
+        width: min(100% - 18px, 1120px);
+        padding-top: 12px;
+      }
+
+      .hero {
+        min-height: 250px;
+        padding: 26px 18px 76px;
+      }
+
+      .review-card,
+      .summary-card,
+      .side-card,
+      .section-card {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .review-card {
+        margin-top: -42px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+
+      .detail-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-content">
+        <div class="eyebrow">Listing preview</div>
+        <h1>Review your business before checkout.</h1>
+        <p>Check that your business profile feels complete, clear, and attractive before you continue to payment.</p>
+      </div>
+    </header>
 
-<div class="container">
+    <main class="review-card">
+      <section class="top-summary">
+        <article class="summary-card">
+          <div class="summary-topline">
+            <div>
+              <div class="summary-kicker">Business summary</div>
+              <h2 class="business-title" id="businessName">Untitled listing</h2>
+              <p class="business-subtitle" id="businessSummary">Add a clear description so customers quickly understand what you offer.</p>
+            </div>
+            <div class="plan-pill is-missing" id="planPill">No plan selected</div>
+          </div>
 
-<div class="header">
-<h1>Review your listing</h1>
-<p>Check your details before payment</p>
-</div>
+          <div class="summary-grid">
+            <div class="summary-metric">
+              <span>Service</span>
+              <strong id="summaryType">-</strong>
+            </div>
+            <div class="summary-metric">
+              <span>Contact</span>
+              <strong id="summaryPhone">-</strong>
+            </div>
+            <div class="summary-metric">
+              <span>Photos</span>
+              <strong id="summaryPhotos">0 uploaded</strong>
+            </div>
+            <div class="summary-metric">
+              <span>Readiness</span>
+              <strong id="summaryReady">Needs attention</strong>
+            </div>
+          </div>
+        </article>
 
-<div class="card">
-<div class="grid">
+        <aside class="side-card">
+          <h2>Submission status</h2>
+          <p class="helper-text">This quick check helps you spot missing info before customers see your profile.</p>
+          <div class="status-row">
+            <div class="status-dot" id="statusDot"></div>
+            <div>
+              <div class="status-text" id="statusTitle">Almost ready</div>
+              <p class="status-copy" id="statusCopy">We still recommend a few improvements before payment.</p>
+            </div>
+          </div>
+          <div id="quickContactWrap"></div>
+        </aside>
+      </section>
 
-<div>
-<div class="label">Business Name</div>
-<div id="name" class="value">-</div>
-</div>
+      <section class="content-grid">
+        <div class="stack">
+          <article class="section-card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-heading">Listing details</h2>
+                <p class="section-intro helper-text">This is the information that will be attached to your business profile.</p>
+              </div>
+              <div class="section-tag">Core details</div>
+            </div>
 
-<div>
-<div class="label">Service</div>
-<div id="type" class="value">-</div>
-</div>
+            <div class="details-grid">
+              <div class="detail-row">
+                <div class="detail-label">Business name</div>
+                <div class="detail-value" id="detailName">-</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Service type</div>
+                <div class="detail-value" id="detailType">-</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Phone number</div>
+                <div class="detail-value" id="detailPhone">-</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Plan</div>
+                <div class="detail-value" id="detailPlan">-</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Description</div>
+                <div class="detail-value detail-copy" id="detailDesc">-</div>
+              </div>
+            </div>
+          </article>
 
-<div>
-<div class="label">Phone</div>
-<div id="phone" class="value">-</div>
-</div>
+          <article class="section-card">
+            <div class="gallery-meta">
+              <div>
+                <h2 class="section-heading">Photo preview</h2>
+                <p class="gallery-caption">Customers are more likely to trust a listing with clear, high-quality photos.</p>
+              </div>
+              <div class="count-badge" id="photoCount">0 photos</div>
+            </div>
+            <div class="gallery-grid" id="galleryGrid"></div>
+          </article>
+        </div>
 
-<div>
-<div class="label">Plan</div>
-<div id="plan" class="value">-</div>
-</div>
+        <div class="stack">
+          <article class="section-card">
+            <div class="section-head">
+              <div>
+                <h2 class="section-heading">Suggestions</h2>
+                <p class="section-intro helper-text">Helpful prompts to strengthen this listing before payment.</p>
+              </div>
+              <div class="section-tag">Recommendations</div>
+            </div>
 
-</div>
+            <div class="recommendations" id="recommendations"></div>
+          </article>
 
-<div style="margin-top:15px;">
-<div class="label">Description</div>
-<div id="desc" class="value"></div>
-</div>
-</div>
+          <article class="cta-panel">
+            <h2>Ready to continue?</h2>
+            <p class="gate-copy">Once confirmed, we’ll mark the listing as approved and send you to payment.</p>
+            <div class="status-banner" id="gateStatus">Checking your listing details...</div>
+            <button id="confirmBtn" class="confirm-btn" type="button">Confirm & Continue to Payment</button>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
 
-<div class="card">
-<div class="label">Photos</div>
-<div id="photos" class="photos"></div>
-</div>
+  <div class="modal" id="imageModal">
+    <div class="modal-panel">
+      <div class="modal-image-wrap">
+        <img id="modalImage" alt="Preview image">
+      </div>
+      <div class="modal-footer">
+        <div id="modalCaption">Listing photo preview</div>
+        <div class="modal-actions">
+          <button class="modal-btn" id="prevPhotoBtn" type="button">Previous</button>
+          <button class="modal-btn" id="nextPhotoBtn" type="button">Next</button>
+          <button class="modal-btn" id="closeModalBtn" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<button id="confirmBtn">Confirm & Continue to Payment</button>
+  <script>
+    const data = JSON.parse(localStorage.getItem("businessData") || "{}");
+    const images = Array.isArray(data.images) ? data.images.filter(Boolean) : [];
+    let modalIndex = 0;
 
-</div>
+    const requiredFields = [
+      { key: "businessName", label: "business name" },
+      { key: "type", label: "service type" },
+      { key: "phone", label: "phone number" },
+      { key: "plan", label: "plan selection" }
+    ];
 
-<script>
-const data = JSON.parse(localStorage.getItem("businessData") || "{}")
+    const planBenefits = {
+      Basic: [
+        "Appears in the directory under your service category",
+        "Includes a contact number and description",
+        "Good for businesses just getting started"
+      ],
+      Premium: [
+        "Priority placement in listings",
+        "Stronger visibility for customers browsing quickly",
+        "Best option if you want to attract more enquiries"
+      ]
+    };
 
-document.getElementById("name").textContent = data.businessName || "-"
-document.getElementById("type").textContent = data.type || "-"
-document.getElementById("phone").textContent = data.phone || "-"
-document.getElementById("plan").textContent = data.plan || "-"
-document.getElementById("desc").textContent = data.desc || "-"
+    const missingRequired = requiredFields.filter((field) => !String(data[field.key] || "").trim());
+    const suggestionRequired = [];
+    const suggestionRecommended = [];
+    const suggestionSuccess = [];
 
-const photos = document.getElementById("photos")
+    if (!String(data.desc || "").trim()) {
+      suggestionRecommended.push({
+        title: "Add a fuller description",
+        text: "A short sentence about what you do, who you serve, and what makes you reliable can improve trust."
+      });
+    } else if (String(data.desc).trim().length < 80) {
+      suggestionRecommended.push({
+        title: "Make the description more specific",
+        text: "Consider adding services, delivery areas, or what customers can expect when they contact you."
+      });
+    }
 
-if(data.images){
-data.images.forEach(img=>{
-const image = document.createElement("img")
-image.src = img
-photos.appendChild(image)
-})
-}
+    if (images.length === 0) {
+      suggestionRecommended.push({
+        title: "Upload at least 2 photos",
+        text: "Listings with real photos usually feel more trustworthy and get better engagement."
+      });
+    } else if (images.length < 3) {
+      suggestionRecommended.push({
+        title: "Add more variety in your photos",
+        text: "Try including your work, your setup, or different product angles so the listing looks richer."
+      });
+    } else {
+      suggestionSuccess.push({
+        title: "Photo set looks strong",
+        text: "You already have enough images to make the listing feel more complete."
+      });
+    }
 
-const required = data.businessName && data.type && data.phone && data.plan
+    if (String(data.phone || "").trim() && !String(data.phone).includes("+27") && !String(data.phone).startsWith("0")) {
+      suggestionRecommended.push({
+        title: "Check your phone formatting",
+        text: "A familiar local format helps customers trust that they can reach you easily."
+      });
+    }
 
-const btn = document.getElementById("confirmBtn")
+    if (String(data.plan || "").trim()) {
+      suggestionSuccess.push({
+        title: "Plan selected",
+        text: "Your listing package is chosen, so you're clear to continue once the details look right."
+      });
+    }
 
-if(!required){
-btn.disabled = true
-btn.textContent = "Complete form before continuing"
-}
+    missingRequired.forEach((field) => {
+      suggestionRequired.push({
+        title: "Add your " + field.label,
+        text: "This field is required before the listing can move on to payment."
+      });
+    });
 
-btn.onclick = ()=>{
-localStorage.setItem("listingConfirmed","true")
-window.location.href="payment.html"
-}
-</script>
+    const isReady = missingRequired.length === 0;
 
+    const businessName = String(data.businessName || "").trim() || "Untitled listing";
+    const type = String(data.type || "").trim() || "-";
+    const phone = String(data.phone || "").trim() || "-";
+    const plan = String(data.plan || "").trim() || "-";
+    const description = String(data.desc || "").trim() || "-";
+
+    document.getElementById("businessName").textContent = businessName;
+    document.getElementById("businessSummary").textContent = description === "-"
+      ? "Add a clear description so customers quickly understand what you offer."
+      : description;
+    document.getElementById("summaryType").textContent = type;
+    document.getElementById("summaryPhone").textContent = phone;
+    document.getElementById("summaryPhotos").textContent = images.length + (images.length === 1 ? " photo uploaded" : " photos uploaded");
+    document.getElementById("summaryReady").textContent = isReady ? "Ready for payment" : "Needs attention";
+
+    document.getElementById("detailName").textContent = businessName;
+    document.getElementById("detailType").textContent = type;
+    document.getElementById("detailPhone").textContent = phone;
+    document.getElementById("detailPlan").textContent = plan;
+    document.getElementById("detailDesc").textContent = description;
+
+    const planPill = document.getElementById("planPill");
+    if (plan !== "-") {
+      planPill.textContent = plan + " plan";
+      planPill.classList.remove("is-missing");
+    } else {
+      planPill.textContent = "No plan selected";
+      planPill.classList.add("is-missing");
+    }
+
+    const statusDot = document.getElementById("statusDot");
+    const statusTitle = document.getElementById("statusTitle");
+    const statusCopy = document.getElementById("statusCopy");
+    const gateStatus = document.getElementById("gateStatus");
+    const confirmBtn = document.getElementById("confirmBtn");
+
+    if (isReady) {
+      statusDot.classList.add("is-ready");
+      statusTitle.textContent = "Ready for payment";
+      statusCopy.textContent = "All required details are present. You can continue or improve the listing further first.";
+      gateStatus.textContent = "Your listing has the required fields and can continue to payment.";
+      gateStatus.classList.add("ready");
+    } else {
+      statusDot.classList.add("is-blocked");
+      statusTitle.textContent = "Missing required details";
+      statusCopy.textContent = "Complete the required fields before continuing to payment.";
+      gateStatus.textContent = "Please complete the required fields before continuing to payment.";
+      gateStatus.classList.add("blocked");
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = "Complete required fields first";
+    }
+
+    const quickContactWrap = document.getElementById("quickContactWrap");
+    if (phone !== "-") {
+      const contact = document.createElement("a");
+      contact.className = "contact-link";
+      contact.href = "tel:" + phone.replace(/\D/g, "");
+      contact.textContent = "Call " + phone;
+      quickContactWrap.appendChild(contact);
+    }
+
+    const galleryGrid = document.getElementById("galleryGrid");
+    const photoCount = document.getElementById("photoCount");
+    photoCount.textContent = images.length + (images.length === 1 ? " photo" : " photos");
+
+    if (!images.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty-gallery";
+      empty.textContent = "No photos uploaded yet. Add images to help customers trust the listing.";
+      galleryGrid.appendChild(empty);
+    } else {
+      images.forEach((src, index) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "photo-card";
+        card.setAttribute("aria-label", "Open photo " + (index + 1));
+        card.innerHTML = '<img src="' + src + '" alt="Listing photo ' + (index + 1) + '">';
+        card.onclick = () => openModal(index);
+        galleryGrid.appendChild(card);
+      });
+    }
+
+    const recommendationsEl = document.getElementById("recommendations");
+
+    function renderRecommendationGroup(title, groupClass, items) {
+      if (!items.length) return;
+      const group = document.createElement("section");
+      group.className = "recommendation-group " + groupClass;
+      const heading = document.createElement("h3");
+      heading.className = "recommendation-heading";
+      heading.textContent = title;
+      group.appendChild(heading);
+
+      const list = document.createElement("div");
+      list.className = "recommendation-list";
+
+      items.forEach((item) => {
+        const card = document.createElement("article");
+        card.className = "recommendation-item";
+        card.innerHTML = "<h3>" + item.title + "</h3><p>" + item.text + "</p>";
+        list.appendChild(card);
+      });
+
+      group.appendChild(list);
+      recommendationsEl.appendChild(group);
+    }
+
+    renderRecommendationGroup("Required before payment", "required", suggestionRequired);
+    renderRecommendationGroup("Recommended improvements", "recommended", suggestionRecommended);
+    renderRecommendationGroup("Already working well", "success", suggestionSuccess);
+
+    if (planBenefits[plan]) {
+      const section = document.createElement("section");
+      section.className = "recommendation-group success";
+      section.innerHTML = '<h3 class="recommendation-heading">What your plan includes</h3>';
+      const list = document.createElement("ul");
+      list.className = "plan-benefits";
+      planBenefits[plan].forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        list.appendChild(li);
+      });
+      section.appendChild(list);
+      recommendationsEl.appendChild(section);
+    }
+
+    if (!recommendationsEl.children.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.textContent = "No suggestions right now. Your listing looks solid.";
+      recommendationsEl.appendChild(empty);
+    }
+
+    confirmBtn.onclick = () => {
+      localStorage.setItem("listingConfirmed", "true");
+      window.location.href = "payment.html";
+    };
+
+    const imageModal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    const modalCaption = document.getElementById("modalCaption");
+    const prevPhotoBtn = document.getElementById("prevPhotoBtn");
+    const nextPhotoBtn = document.getElementById("nextPhotoBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+
+    function openModal(index) {
+      if (!images.length) return;
+      modalIndex = index;
+      updateModal();
+      imageModal.classList.add("open");
+    }
+
+    function updateModal() {
+      modalImage.src = images[modalIndex];
+      modalCaption.textContent = "Photo " + (modalIndex + 1) + " of " + images.length;
+    }
+
+    function closeModal() {
+      imageModal.classList.remove("open");
+    }
+
+    prevPhotoBtn.onclick = () => {
+      modalIndex = (modalIndex - 1 + images.length) % images.length;
+      updateModal();
+    };
+
+    nextPhotoBtn.onclick = () => {
+      modalIndex = (modalIndex + 1) % images.length;
+      updateModal();
+    };
+
+    closeModalBtn.onclick = closeModal;
+    imageModal.onclick = (event) => {
+      if (event.target === imageModal) closeModal();
+    };
+
+    document.addEventListener("keydown", (event) => {
+      if (!imageModal.classList.contains("open")) return;
+      if (event.key === "Escape") closeModal();
+      if (event.key === "ArrowLeft" && images.length) prevPhotoBtn.click();
+      if (event.key === "ArrowRight" && images.length) nextPhotoBtn.click();
+    });
+  </script>
 </body>
 </html>
