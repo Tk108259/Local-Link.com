@@ -4,10 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Business Details | Local Link</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
   <style>
     :root {
       --bg: #eff4fb;
@@ -25,10 +27,11 @@
       --shadow-md: 0 16px 36px rgba(15, 37, 74, 0.1);
       --radius-xl: 30px;
       --radius-lg: 24px;
-      --radius-md: 18px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -41,8 +44,15 @@
       min-height: 100vh;
     }
 
-    img { display: block; max-width: 100%; }
-    button, a { font: inherit; }
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
 
     .shell {
       width: min(1180px, calc(100% - 32px));
@@ -113,7 +123,7 @@
       margin: 12px 0;
       font-size: clamp(2.1rem, 5vw, 3.8rem);
       line-height: 0.98;
-      letter-spacing: -0.05em;
+      letter-spacing: 0;
     }
 
     .hero p {
@@ -153,7 +163,7 @@
     .contact-card h2 {
       margin: 0 0 8px;
       font-size: 1.2rem;
-      letter-spacing: -0.03em;
+      letter-spacing: 0;
     }
 
     .contact-card p {
@@ -207,7 +217,7 @@
       aspect-ratio: 16 / 11;
       object-fit: cover;
       border-radius: 22px;
-      background: linear-gradient(135deg, #dbeafe, #f8fbff);
+      background: #e8eef7;
       box-shadow: 0 14px 30px rgba(15, 37, 74, 0.12);
       cursor: zoom-in;
       transition: transform 0.25s ease, opacity 0.2s ease;
@@ -234,9 +244,17 @@
       z-index: 2;
     }
 
-    .slide-nav.prev { left: 14px; }
-    .slide-nav.next { right: 14px; }
-    .slide-nav:hover { background: rgba(16, 32, 58, 0.78); }
+    .slide-nav.prev {
+      left: 14px;
+    }
+
+    .slide-nav.next {
+      right: 14px;
+    }
+
+    .slide-nav:hover {
+      background: rgba(16, 32, 58, 0.78);
+    }
 
     .slide-status {
       position: absolute;
@@ -313,7 +331,7 @@
       font-size: 2rem;
       font-weight: 800;
       color: var(--primary-deep);
-      letter-spacing: -0.05em;
+      letter-spacing: 0;
     }
 
     .rating-box {
@@ -427,6 +445,15 @@
       font-size: 1.1rem;
     }
 
+    .slide-nav:focus-visible,
+    .thumb:focus-visible,
+    .btn:focus-visible,
+    .back-link:focus-visible,
+    .contact-row:focus-visible {
+      outline: 3px solid rgba(15, 107, 255, 0.35);
+      outline-offset: 3px;
+    }
+
     @media (max-width: 980px) {
       .hero-grid,
       .layout {
@@ -454,8 +481,17 @@
         font-size: 1.6rem;
       }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .main-image,
+      .thumb,
+      .btn {
+        transition: none;
+      }
+    }
   </style>
 </head>
+
 <body>
   <div class="shell">
     <div class="topbar">
@@ -463,6 +499,7 @@
         <i class="fa-solid fa-arrow-left"></i>
         Back to listings
       </a>
+
       <div class="meta-chip" id="planChip">
         <i class="fa-solid fa-shield-halved"></i>
         Business profile
@@ -476,17 +513,21 @@
             <i class="fa-solid fa-store"></i>
             Business profile
           </div>
+
           <h1 id="name">Business Name</h1>
           <p id="descTop">Explore services, pricing, and contact options for this local business.</p>
+
           <div class="hero-pills">
             <div class="hero-pill" id="ratingPill">
               <i class="fa-solid fa-star"></i>
               Trusted listing
             </div>
+
             <div class="hero-pill" id="pricePill">
               <i class="fa-solid fa-wallet"></i>
               Pricing available
             </div>
+
             <div class="hero-pill" id="locationPill">
               <i class="fa-solid fa-location-dot"></i>
               South Africa
@@ -497,11 +538,13 @@
         <div class="contact-card">
           <h2>Contact this business</h2>
           <p>Reach out directly, save the profile for later, or send an enquiry in one tap.</p>
+
           <div class="contact-stack">
             <a id="callLink" class="contact-row" href="#">
               <i class="fa-solid fa-phone"></i>
               <span id="phoneLabel">Phone</span>
             </a>
+
             <a id="waLink" class="contact-row" href="#" target="_blank" rel="noopener noreferrer">
               <i class="fa-brands fa-whatsapp"></i>
               Message on WhatsApp
@@ -518,15 +561,19 @@
             <button id="prevSlide" class="slide-nav prev" type="button" aria-label="Previous image">
               <i class="fa-solid fa-chevron-left"></i>
             </button>
+
             <img id="mainImage" class="main-image" alt="Business image">
+
             <button id="nextSlide" class="slide-nav next" type="button" aria-label="Next image">
               <i class="fa-solid fa-chevron-right"></i>
             </button>
+
             <div class="slide-status" id="slideStatus">
               <i class="fa-regular fa-image"></i>
               <span>1 / 1</span>
             </div>
           </div>
+
           <div id="thumbs" class="thumbs"></div>
         </div>
       </div>
@@ -535,8 +582,10 @@
         <div class="info-wrap">
           <div class="section">
             <p class="section-label">Pricing & rating</p>
+
             <div class="price-line">
               <div class="price" id="price">R0</div>
+
               <div class="rating-box">
                 <span class="stars" id="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
                 <span id="ratingValue">4.0</span>
@@ -556,19 +605,24 @@
 
           <div class="section">
             <p class="section-label">Actions</p>
+
             <div class="actions">
               <button id="whatsappBtn" class="btn primary" type="button">
                 <i class="fa-brands fa-whatsapp"></i> WhatsApp
               </button>
+
               <button id="orderBtn" class="btn success" type="button">
                 <i class="fa-solid fa-bag-shopping"></i> Order / Enquire
               </button>
+
               <button id="favoriteBtn" class="btn ghost favorite" type="button">
                 <i class="fa-regular fa-heart"></i> Save
               </button>
+
               <button id="rateBtn" class="btn ghost" type="button">
                 <i class="fa-regular fa-star"></i> Rate
               </button>
+
               <button id="shareBtn" class="btn ghost" type="button" style="grid-column:1 / -1;">
                 <i class="fa-solid fa-share-nodes"></i> Share this profile
               </button>
@@ -580,9 +634,10 @@
   </div>
 
   <div class="zoom-overlay" id="zoomOverlay">
-    <button class="zoom-close" type="button" id="zoomClose">
+    <button class="zoom-close" type="button" id="zoomClose" aria-label="Close image preview">
       <i class="fa-solid fa-xmark"></i>
     </button>
+
     <img id="zoomImg" alt="Zoomed business image">
   </div>
 
@@ -593,7 +648,7 @@
         service: "Baking",
         phone: "+27 81 434 3732",
         description: "Bespoke bakery specialising in artisan banana bread, scones, and crunchy sweet treats for gifting, events, and everyday cravings.",
-        images: ["images/Scones.jpg", "images/Scones.jpg", "images/Baking_Baddie.jpg"],
+        images: ["images/Scones.jpg", "images/Baking_Baddie.jpg", "images/Bread_Baddie.jpg"],
         plan: "Premium",
         price: "R150",
         rating: 5,
@@ -604,18 +659,27 @@
 
     const params = new URLSearchParams(window.location.search);
     const id = Number.parseInt(params.get("id"), 10);
+    const profileId = Number.isInteger(id) ? id : "default";
 
     let storedBusinesses = [];
+
     try {
       storedBusinesses = JSON.parse(localStorage.getItem("businesses")) || [];
     } catch {
       storedBusinesses = [];
     }
 
-    const business = storedBusinesses[id] || defaultBusinesses[0];
+    const business = Number.isInteger(id) && storedBusinesses[id]
+      ? storedBusinesses[id]
+      : defaultBusinesses[0];
+
     let currentImageIndex = 0;
     let slideshowTimer = null;
-    const favoriteKey = "favorite_profile_" + (Number.isInteger(id) ? id : 0);
+    let cachedImages = null;
+
+    const favoriteKey = "favorite_profile_" + profileId;
+    const ratingKey = "rating_profile_" + profileId;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const nameEl = document.getElementById("name");
     const descTopEl = document.getElementById("descTop");
@@ -646,11 +710,70 @@
       return String(phone || "").replace(/\D/g, "");
     }
 
+    function setIconText(element, iconClass, text) {
+      element.innerHTML = "";
+
+      const icon = document.createElement("i");
+      const label = document.createElement("span");
+
+      icon.className = iconClass;
+      label.textContent = text;
+
+      element.append(icon, label);
+    }
+
+    function addImagesFromValue(list, value) {
+      if (Array.isArray(value)) {
+        value.forEach((item) => addImagesFromValue(list, item));
+        return;
+      }
+
+      if (typeof value === "string") {
+        value
+          .split(",")
+          .map((src) => src.trim())
+          .filter(Boolean)
+          .forEach((src) => list.push(src));
+      }
+    }
+
     function getImages() {
-  if (Array.isArray(business.images) && business.images.length) return business.images.slice(0, 4);
-  if (business.images) return ["images/Scones.jpg"];
-  return ["images/Bread_Baddie.jpg"];
-}
+      if (cachedImages) return cachedImages;
+
+      const possibleImages = [];
+      const imageCollections = [
+        business.images,
+        business.gallery,
+        business.photos,
+        business.pictures,
+        business.imageUrls
+      ];
+
+      const imageFields = [
+        "image", "image1", "image2", "image3", "image4",
+        "photo", "photo1", "photo2", "photo3", "photo4",
+        "picture", "picture1", "picture2", "picture3", "picture4"
+      ];
+
+      imageCollections.forEach((value) => addImagesFromValue(possibleImages, value));
+      imageFields.forEach((key) => addImagesFromValue(possibleImages, business[key]));
+
+      cachedImages = possibleImages
+        .map((src) => String(src || "").trim())
+        .filter(Boolean)
+        .filter((src, index, list) => list.indexOf(src) === index);
+
+      if (!cachedImages.length) cachedImages = ["images/Bread_Baddie.jpg"];
+
+      return cachedImages;
+    }
+
+    function preloadImages() {
+      getImages().forEach((src) => {
+        const img = new Image();
+        img.src = src;
+      });
+    }
 
     function getServices() {
       if (Array.isArray(business.services) && business.services.length) return business.services;
@@ -659,9 +782,11 @@
     }
 
     function getRating() {
-      const saved = Number.parseInt(localStorage.getItem("rating_profile_" + (Number.isInteger(id) ? id : 0)), 10);
+      const saved = Number.parseInt(localStorage.getItem(ratingKey), 10);
+
       if (saved >= 1 && saved <= 5) return saved;
       if (business.rating >= 1 && business.rating <= 5) return business.rating;
+
       return 4;
     }
 
@@ -673,11 +798,48 @@
       return business.location || "South Africa";
     }
 
+    function renderGallery() {
+      const images = getImages();
+
+      currentImageIndex = (currentImageIndex + images.length) % images.length;
+
+      mainImageEl.src = images[currentImageIndex];
+      mainImageEl.alt = business.name || "Business image";
+
+      thumbsEl.innerHTML = "";
+      slideStatusEl.querySelector("span").textContent = (currentImageIndex + 1) + " / " + images.length;
+
+      const hasMultipleImages = images.length > 1;
+
+      prevSlideEl.style.display = hasMultipleImages ? "grid" : "none";
+      nextSlideEl.style.display = hasMultipleImages ? "grid" : "none";
+      slideStatusEl.style.display = hasMultipleImages ? "inline-flex" : "none";
+
+      images.forEach((src, index) => {
+        const thumb = document.createElement("img");
+
+        thumb.className = "thumb" + (index === currentImageIndex ? " selected" : "");
+        thumb.src = src;
+        thumb.loading = "lazy";
+        thumb.alt = (business.name || "Business") + " image " + (index + 1);
+
+        thumb.onclick = () => {
+          setCurrentImage(index);
+          startSlideshow();
+        };
+
+        thumbsEl.appendChild(thumb);
+      });
+    }
+
     function setCurrentImage(index) {
       const images = getImages();
+
       if (!images.length) return;
+
       currentImageIndex = (index + images.length) % images.length;
       mainImageEl.style.opacity = "0.35";
+
       window.setTimeout(() => {
         renderGallery();
         mainImageEl.style.opacity = "1";
@@ -694,10 +856,12 @@
 
     function startSlideshow() {
       stopSlideshow();
+
+      if (reducedMotion) return;
       if (getImages().length <= 1) return;
-      slideshowTimer = window.setInterval(() => {
-        nextSlide();
-      }, 3500);
+      if (zoomOverlayEl.style.display === "flex") return;
+
+      slideshowTimer = window.setInterval(nextSlide, 3500);
     }
 
     function stopSlideshow() {
@@ -710,34 +874,12 @@
     function updateRatingUi(value) {
       starsEl.innerHTML = "&#9733;".repeat(value) + "&#9734;".repeat(5 - value);
       ratingValueEl.textContent = value.toFixed(1);
-      ratingPillEl.innerHTML = '<i class="fa-solid fa-star"></i> ' + value.toFixed(1) + "/5 rating";
-    }
-
-    function renderGallery() {
-      const images = getImages();
-      mainImageEl.src = images[currentImageIndex];
-      mainImageEl.alt = business.name || "Business image";
-      thumbsEl.innerHTML = "";
-      slideStatusEl.querySelector("span").textContent = (currentImageIndex + 1) + " / " + images.length;
-      prevSlideEl.style.display = images.length > 1 ? "grid" : "none";
-      nextSlideEl.style.display = images.length > 1 ? "grid" : "none";
-      slideStatusEl.style.display = images.length > 1 ? "inline-flex" : "none";
-
-      images.forEach((src, index) => {
-        const thumb = document.createElement("img");
-        thumb.className = "thumb" + (index === currentImageIndex ? " selected" : "");
-        thumb.src = src;
-        thumb.alt = (business.name || "Business") + " image " + (index + 1);
-        thumb.onclick = () => {
-          setCurrentImage(index);
-          startSlideshow();
-        };
-        thumbsEl.appendChild(thumb);
-      });
+      setIconText(ratingPillEl, "fa-solid fa-star", value.toFixed(1) + "/5 rating");
     }
 
     function updateFavoriteUi() {
       const active = localStorage.getItem(favoriteKey) === "1";
+
       favoriteBtnEl.classList.toggle("active", active);
       favoriteBtnEl.innerHTML = active
         ? '<i class="fa-solid fa-heart"></i> Saved'
@@ -753,10 +895,12 @@
       descTopEl.textContent = business.description || "Explore services, pricing, and contact options for this local business.";
       descEl.textContent = business.description || "No description available yet.";
       priceEl.textContent = getPrice();
-      serviceEyebrowEl.innerHTML = '<i class="fa-solid fa-store"></i> ' + (business.service || "Business profile");
-      pricePillEl.innerHTML = '<i class="fa-solid fa-wallet"></i> ' + getPrice();
-      locationPillEl.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + getLocation();
-      planChipEl.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ' + (business.plan || "Listed business");
+
+      setIconText(serviceEyebrowEl, "fa-solid fa-store", business.service || "Business profile");
+      setIconText(pricePillEl, "fa-solid fa-wallet", getPrice());
+      setIconText(locationPillEl, "fa-solid fa-location-dot", getLocation());
+      setIconText(planChipEl, "fa-solid fa-shield-halved", business.plan || "Listed business");
+
       phoneLabelEl.textContent = phoneDisplay;
       callLinkEl.href = phoneDigits ? "tel:" + phoneDigits : "#";
 
@@ -764,16 +908,25 @@
       waLinkEl.href = phoneDigits ? "https://wa.me/" + phoneDigits + "?text=" + waMessage : "#";
 
       servicesListEl.innerHTML = "";
+
       getServices().forEach((service) => {
         const item = document.createElement("li");
-        item.innerHTML = '<i class="fa-solid fa-check"></i> ' + service;
+        const icon = document.createElement("i");
+        const label = document.createElement("span");
+
+        icon.className = "fa-solid fa-check";
+        label.textContent = service;
+
+        item.append(icon, label);
         servicesListEl.appendChild(item);
       });
 
       updateRatingUi(rating);
       renderGallery();
+      preloadImages();
       startSlideshow();
       updateFavoriteUi();
+
       document.title = (business.name || "Business Details") + " | Local Link";
     }
 
@@ -784,7 +937,10 @@
     document.getElementById("orderBtn").onclick = () => {
       const phoneDigits = sanitizePhone(business.phone);
       const msg = encodeURIComponent("Hi, I'd like to place an order or get a quote from " + (business.name || "your business"));
-      if (phoneDigits) window.open("https://wa.me/" + phoneDigits + "?text=" + msg, "_blank", "noopener");
+
+      if (phoneDigits) {
+        window.open("https://wa.me/" + phoneDigits + "?text=" + msg, "_blank", "noopener");
+      }
     };
 
     favoriteBtnEl.onclick = () => {
@@ -793,14 +949,16 @@
       } else {
         localStorage.setItem(favoriteKey, "1");
       }
+
       updateFavoriteUi();
     };
 
     document.getElementById("rateBtn").onclick = () => {
       const input = window.prompt("Rate this business from 1 to 5");
       const value = Number.parseInt(input, 10);
+
       if (value >= 1 && value <= 5) {
-        localStorage.setItem("rating_profile_" + (Number.isInteger(id) ? id : 0), String(value));
+        localStorage.setItem(ratingKey, String(value));
         updateRatingUi(value);
         window.alert("Rating saved.");
       }
@@ -814,6 +972,7 @@
             text: "Check out this business on Local Link",
             url: window.location.href
           });
+
           return;
         }
       } catch {}
@@ -837,8 +996,14 @@
     };
 
     mainImageEl.onclick = () => {
+      stopSlideshow();
       zoomImgEl.src = mainImageEl.src;
       zoomOverlayEl.style.display = "flex";
+    };
+
+    mainImageEl.onerror = () => {
+      if (mainImageEl.src.includes("images/Bread_Baddie.jpg")) return;
+      mainImageEl.src = "images/Bread_Baddie.jpg";
     };
 
     mainImageEl.addEventListener("mouseenter", stopSlideshow);
@@ -846,9 +1011,18 @@
     thumbsEl.addEventListener("mouseenter", stopSlideshow);
     thumbsEl.addEventListener("mouseleave", startSlideshow);
 
+    function closeZoom() {
+      zoomOverlayEl.style.display = "none";
+      startSlideshow();
+    }
+
     zoomOverlayEl.onclick = (event) => {
-      if (event.target === zoomOverlayEl || event.target === zoomCloseEl || zoomCloseEl.contains(event.target)) {
-        zoomOverlayEl.style.display = "none";
+      if (
+        event.target === zoomOverlayEl ||
+        event.target === zoomCloseEl ||
+        zoomCloseEl.contains(event.target)
+      ) {
+        closeZoom();
       }
     };
 
@@ -857,12 +1031,22 @@
         prevSlide();
         startSlideshow();
       }
+
       if (event.key === "ArrowRight") {
         nextSlide();
         startSlideshow();
       }
+
       if (event.key === "Escape") {
-        zoomOverlayEl.style.display = "none";
+        closeZoom();
+      }
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        stopSlideshow();
+      } else {
+        startSlideshow();
       }
     });
 
