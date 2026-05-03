@@ -888,7 +888,10 @@ try {
     }
 
     function populate() {
-      const phoneDigits = sanitizePhone(business.phone);
+  console.log("Business data:", business);
+  console.log("Images:", business.images);
+
+  const phoneDigits = sanitizePhone(business.phone);
       const phoneDisplay = business.phone || "Phone unavailable";
       const rating = getRating();
 
