@@ -661,17 +661,18 @@
     const id = Number.parseInt(params.get("id"), 10);
     const profileId = Number.isInteger(id) ? id : "default";
 
-    let storedBusinesses = [];
+    let business;
 
-    try {
-      storedBusinesses = JSON.parse(localStorage.getItem("businesses")) || [];
-    } catch {
-      storedBusinesses = [];
-    }
-
-    const business = Number.isInteger(id) && storedBusinesses[id]
-      ? storedBusinesses[id]
-      : defaultBusinesses[0];
+try {
+  const saved = JSON.parse(localStorage.getItem("businessData"));
+  if (saved) {
+    business = saved;
+  } else {
+    business = defaultBusinesses[0];
+  }
+} catch {
+  business = defaultBusinesses[0];
+}
 
     let currentImageIndex = 0;
     let slideshowTimer = null;
