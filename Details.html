@@ -4,12 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Business Details | Local Link</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
   <style>
     :root {
       --bg: #eff4fb;
@@ -27,11 +25,10 @@
       --shadow-md: 0 16px 36px rgba(15, 37, 74, 0.1);
       --radius-xl: 30px;
       --radius-lg: 24px;
+      --radius-md: 18px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -44,15 +41,8 @@
       min-height: 100vh;
     }
 
-    img {
-      display: block;
-      max-width: 100%;
-    }
-
-    button,
-    a {
-      font: inherit;
-    }
+    img { display: block; max-width: 100%; }
+    button, a { font: inherit; }
 
     .shell {
       width: min(1180px, calc(100% - 32px));
@@ -123,7 +113,7 @@
       margin: 12px 0;
       font-size: clamp(2.1rem, 5vw, 3.8rem);
       line-height: 0.98;
-      letter-spacing: 0;
+      letter-spacing: -0.05em;
     }
 
     .hero p {
@@ -163,7 +153,7 @@
     .contact-card h2 {
       margin: 0 0 8px;
       font-size: 1.2rem;
-      letter-spacing: 0;
+      letter-spacing: -0.03em;
     }
 
     .contact-card p {
@@ -217,7 +207,7 @@
       aspect-ratio: 16 / 11;
       object-fit: cover;
       border-radius: 22px;
-      background: #e8eef7;
+      background: linear-gradient(135deg, #dbeafe, #f8fbff);
       box-shadow: 0 14px 30px rgba(15, 37, 74, 0.12);
       cursor: zoom-in;
       transition: transform 0.25s ease, opacity 0.2s ease;
@@ -244,17 +234,9 @@
       z-index: 2;
     }
 
-    .slide-nav.prev {
-      left: 14px;
-    }
-
-    .slide-nav.next {
-      right: 14px;
-    }
-
-    .slide-nav:hover {
-      background: rgba(16, 32, 58, 0.78);
-    }
+    .slide-nav.prev { left: 14px; }
+    .slide-nav.next { right: 14px; }
+    .slide-nav:hover { background: rgba(16, 32, 58, 0.78); }
 
     .slide-status {
       position: absolute;
@@ -331,7 +313,7 @@
       font-size: 2rem;
       font-weight: 800;
       color: var(--primary-deep);
-      letter-spacing: 0;
+      letter-spacing: -0.05em;
     }
 
     .rating-box {
@@ -413,646 +395,103 @@
       color: var(--danger);
     }
 
-    .zoom-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      background: rgba(4, 11, 24, 0.88);
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .zoom-overlay img {
-      max-width: min(1100px, 92vw);
-      max-height: 88vh;
-      border-radius: 20px;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
-    }
-
-    .zoom-close {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      border: 0;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.12);
-      color: white;
-      font-size: 1.1rem;
-    }
-
-    .slide-nav:focus-visible,
-    .thumb:focus-visible,
-    .btn:focus-visible,
-    .back-link:focus-visible,
-    .contact-row:focus-visible {
-      outline: 3px solid rgba(15, 107, 255, 0.35);
-      outline-offset: 3px;
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid,
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .shell {
-        width: min(1180px, calc(100% - 20px));
-        padding-top: 16px;
-      }
-
-      .hero-grid,
-      .gallery-wrap,
-      .info-wrap {
-        padding: 16px;
-      }
-
-      .actions {
-        grid-template-columns: 1fr;
-      }
-
-      .price {
-        font-size: 1.6rem;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .main-image,
-      .thumb,
-      .btn {
-        transition: none;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="shell">
-    <div class="topbar">
-      <a href="Business listings.html" class="back-link">
-        <i class="fa-solid fa-arrow-left"></i>
-        Back to listings
-      </a>
-
-      <div class="meta-chip" id="planChip">
-        <i class="fa-solid fa-shield-halved"></i>
-        Business profile
-      </div>
-    </div>
-
-    <section class="hero">
-      <div class="hero-grid">
-        <div>
-          <div class="eyebrow" id="serviceEyebrow">
-            <i class="fa-solid fa-store"></i>
-            Business profile
-          </div>
-
-          <h1 id="name">Business Name</h1>
-          <p id="descTop">Explore services, pricing, and contact options for this local business.</p>
-
-          <div class="hero-pills">
-            <div class="hero-pill" id="ratingPill">
-              <i class="fa-solid fa-star"></i>
-              Trusted listing
-            </div>
-
-            <div class="hero-pill" id="pricePill">
-              <i class="fa-solid fa-wallet"></i>
-              Pricing available
-            </div>
-
-            <div class="hero-pill" id="locationPill">
-              <i class="fa-solid fa-location-dot"></i>
-              South Africa
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-card">
-          <h2>Contact this business</h2>
-          <p>Reach out directly, save the profile for later, or send an enquiry in one tap.</p>
-
-          <div class="contact-stack">
-            <a id="callLink" class="contact-row" href="#">
-              <i class="fa-solid fa-phone"></i>
-              <span id="phoneLabel">Phone</span>
-            </a>
-
-            <a id="waLink" class="contact-row" href="#" target="_blank" rel="noopener noreferrer">
-              <i class="fa-brands fa-whatsapp"></i>
-              Message on WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="layout">
-      <div class="panel">
-        <div class="gallery-wrap">
-          <div class="gallery-stage">
-            <button id="prevSlide" class="slide-nav prev" type="button" aria-label="Previous image">
-              <i class="fa-solid fa-chevron-left"></i>
-            </button>
-
-            <img id="mainImage" class="main-image" alt="Business image">
-
-            <button id="nextSlide" class="slide-nav next" type="button" aria-label="Next image">
-              <i class="fa-solid fa-chevron-right"></i>
-            </button>
-
-            <div class="slide-status" id="slideStatus">
-              <i class="fa-regular fa-image"></i>
-              <span>1 / 1</span>
-            </div>
-          </div>
-
-          <div id="thumbs" class="thumbs"></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="info-wrap">
-          <div class="section">
-            <p class="section-label">Pricing & rating</p>
-
-            <div class="price-line">
-              <div class="price" id="price">R0</div>
-
-              <div class="rating-box">
-                <span class="stars" id="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
-                <span id="ratingValue">4.0</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="section">
-            <p class="section-label">About this business</p>
-            <p class="desc" id="desc">Business description goes here.</p>
-          </div>
-
-          <div class="section">
-            <p class="section-label">Services</p>
-            <ul class="services-list" id="servicesList"></ul>
-          </div>
-
-          <div class="section">
-            <p class="section-label">Actions</p>
-
-            <div class="actions">
-              <button id="whatsappBtn" class="btn primary" type="button">
-                <i class="fa-brands fa-whatsapp"></i> WhatsApp
-              </button>
-
-              <button id="orderBtn" class="btn success" type="button">
-                <i class="fa-solid fa-bag-shopping"></i> Order / Enquire
-              </button>
-
-              <button id="favoriteBtn" class="btn ghost favorite" type="button">
-                <i class="fa-regular fa-heart"></i> Save
-              </button>
-
-              <button id="rateBtn" class="btn ghost" type="button">
-                <i class="fa-regular fa-star"></i> Rate
-              </button>
-
-              <button id="shareBtn" class="btn ghost" type="button" style="grid-column:1 / -1;">
-                <i class="fa-solid fa-share-nodes"></i> Share this profile
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div class="zoom-overlay" id="zoomOverlay">
-    <button class="zoom-close" type="button" id="zoomClose" aria-label="Close image preview">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-
-    <img id="zoomImg" alt="Zoomed business image">
-  </div>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Business Details | Local Link</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-  <style>
-    :root {
-      --bg: #eff4fb;
-      --surface: rgba(255, 255, 255, 0.96);
-      --surface-soft: #edf3ff;
-      --text: #10203a;
-      --muted: #61708a;
-      --line: rgba(16, 32, 58, 0.08);
-      --primary: #0f6bff;
-      --primary-deep: #0b4ec2;
-      --accent: #ffb020;
-      --success: #16a34a;
-      --danger: #ef4444;
-      --shadow-lg: 0 24px 60px rgba(15, 37, 74, 0.14);
-      --shadow-md: 0 16px 36px rgba(15, 37, 74, 0.1);
-      --radius-xl: 30px;
-      --radius-lg: 24px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(15, 107, 255, 0.15), transparent 22%),
-        radial-gradient(circle at top right, rgba(255, 176, 32, 0.12), transparent 18%),
-        linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
-      min-height: 100vh;
-    }
-
-    img {
-      display: block;
-      max-width: 100%;
-    }
-
-    button,
-    a {
-      font: inherit;
-    }
-
-    .shell {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 22px 0 54px;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-    }
-
-    .back-link,
-    .meta-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      border-radius: 999px;
-      text-decoration: none;
-      background: rgba(255, 255, 255, 0.88);
-      box-shadow: 0 10px 24px rgba(15, 37, 74, 0.08);
-    }
-
-    .back-link {
-      color: var(--primary-deep);
-      font-weight: 800;
-    }
-
-    .meta-chip {
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    .hero {
-      overflow: hidden;
-      border-radius: var(--radius-xl);
-      background: linear-gradient(135deg, rgba(7, 24, 57, 0.98), rgba(17, 80, 182, 0.92));
-      color: white;
-      box-shadow: var(--shadow-lg);
-      margin-bottom: 20px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 24px;
-      padding: 30px;
-      align-items: end;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.12);
-      font-size: 0.9rem;
-      font-weight: 700;
-    }
-
-    h1 {
-      margin: 12px 0;
-      font-size: clamp(2.1rem, 5vw, 3.8rem);
-      line-height: 0.98;
-      letter-spacing: 0;
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 60ch;
-      color: rgba(255, 255, 255, 0.82);
-      line-height: 1.7;
-    }
-
-    .hero-pills {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .other-businesses {
       margin-top: 20px;
     }
 
-    .hero-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.12);
-      color: white;
-      font-size: 0.92rem;
-      font-weight: 700;
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
     }
 
-    .contact-card {
-      background: rgba(255, 255, 255, 0.98);
-      color: var(--text);
-      padding: 22px;
-      border-radius: 26px;
-      box-shadow: 0 18px 40px rgba(6, 20, 48, 0.18);
-    }
-
-    .contact-card h2 {
-      margin: 0 0 8px;
-      font-size: 1.2rem;
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.35rem;
       letter-spacing: 0;
     }
 
-    .contact-card p {
-      margin: 0 0 16px;
+    .section-heading p {
+      margin: 4px 0 0;
       color: var(--muted);
       line-height: 1.6;
     }
 
-    .contact-stack {
+    .other-grid {
       display: grid;
-      gap: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
     }
 
-    .contact-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 13px 14px;
-      border-radius: 16px;
-      background: var(--surface-soft);
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .layout {
+    .other-card {
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 20px;
-    }
-
-    .panel {
-      background: var(--surface);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-md);
-      border: 1px solid rgba(255, 255, 255, 0.74);
+      grid-template-rows: auto 1fr;
       overflow: hidden;
-    }
-
-    .gallery-wrap,
-    .info-wrap {
-      padding: 20px;
-    }
-
-    .gallery-stage {
-      position: relative;
-    }
-
-    .main-image {
-      width: 100%;
-      aspect-ratio: 16 / 11;
-      object-fit: cover;
-      border-radius: 22px;
-      background: #e8eef7;
-      box-shadow: 0 14px 30px rgba(15, 37, 74, 0.12);
-      cursor: zoom-in;
-      transition: transform 0.25s ease, opacity 0.2s ease;
-    }
-
-    .main-image:hover {
-      transform: scale(1.01);
-    }
-
-    .slide-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 46px;
-      height: 46px;
-      border: 0;
-      border-radius: 50%;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      background: rgba(16, 32, 58, 0.58);
-      color: white;
-      box-shadow: 0 12px 22px rgba(0, 0, 0, 0.18);
-      z-index: 2;
-    }
-
-    .slide-nav.prev {
-      left: 14px;
-    }
-
-    .slide-nav.next {
-      right: 14px;
-    }
-
-    .slide-nav:hover {
-      background: rgba(16, 32, 58, 0.78);
-    }
-
-    .slide-status {
-      position: absolute;
-      left: 14px;
-      bottom: 14px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 12px;
-      border-radius: 999px;
-      background: rgba(16, 32, 58, 0.68);
-      color: white;
-      font-size: 0.88rem;
-      font-weight: 700;
-      backdrop-filter: blur(10px);
-    }
-
-    .thumbs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .thumb {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      border-radius: 14px;
-      object-fit: cover;
-      border: 3px solid transparent;
-      cursor: pointer;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .thumb:hover,
-    .thumb.selected {
-      border-color: var(--primary);
-      transform: translateY(-1px);
-    }
-
-    .info-wrap {
-      display: grid;
-      gap: 18px;
-    }
-
-    .section {
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 18px;
-    }
-
-    .section:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .section-label {
-      margin: 0 0 10px;
-      font-size: 0.86rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 800;
-    }
-
-    .price-line {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .price {
-      font-size: 2rem;
-      font-weight: 800;
-      color: var(--primary-deep);
-      letter-spacing: 0;
-    }
-
-    .rating-box {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: var(--surface-soft);
-      font-weight: 700;
-    }
-
-    .stars {
-      color: var(--accent);
-      letter-spacing: 1px;
-    }
-
-    .desc {
-      margin: 0;
-      color: #43516a;
-      line-height: 1.75;
-    }
-
-    .services-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      gap: 10px;
-    }
-
-    .services-list li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: #43516a;
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: var(--surface-soft);
-    }
-
-    .actions {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 16px;
-      cursor: pointer;
-      padding: 14px 16px;
-      font-weight: 800;
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      box-shadow: var(--shadow-md);
+      text-decoration: none;
+      color: inherit;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .btn:hover {
-      transform: translateY(-1px);
+    .other-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 42px rgba(15, 37, 74, 0.14);
     }
 
-    .btn.primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-deep));
-      color: white;
-      box-shadow: 0 14px 24px rgba(15, 107, 255, 0.2);
+    .other-card img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      background: #e8eef7;
     }
 
-    .btn.success {
-      background: #e9fff1;
-      color: #0d8f3a;
+    .other-card-body {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
     }
 
-    .btn.ghost {
-      background: white;
-      color: var(--text);
-      border: 1px solid #e6ebf3;
+    .other-card-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 10px;
     }
 
-    .btn.favorite.active {
-      color: var(--danger);
+    .other-card h3 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0;
+    }
+
+    .other-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .other-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .other-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 9px;
+      border-radius: 999px;
+      background: var(--surface-soft);
+      color: #43516a;
+      font-size: 0.82rem;
+      font-weight: 800;
     }
 
     .zoom-overlay {
@@ -1087,19 +526,14 @@
       font-size: 1.1rem;
     }
 
-    .slide-nav:focus-visible,
-    .thumb:focus-visible,
-    .btn:focus-visible,
-    .back-link:focus-visible,
-    .contact-row:focus-visible {
-      outline: 3px solid rgba(15, 107, 255, 0.35);
-      outline-offset: 3px;
-    }
-
     @media (max-width: 980px) {
       .hero-grid,
       .layout {
         grid-template-columns: 1fr;
+      }
+
+      .other-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
@@ -1122,18 +556,17 @@
       .price {
         font-size: 1.6rem;
       }
-    }
 
-    @media (prefers-reduced-motion: reduce) {
-      .main-image,
-      .thumb,
-      .btn {
-        transition: none;
+      .section-heading {
+        display: block;
+      }
+
+      .other-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
-
 <body>
   <div class="shell">
     <div class="topbar">
@@ -1141,7 +574,6 @@
         <i class="fa-solid fa-arrow-left"></i>
         Back to listings
       </a>
-
       <div class="meta-chip" id="planChip">
         <i class="fa-solid fa-shield-halved"></i>
         Business profile
@@ -1155,21 +587,17 @@
             <i class="fa-solid fa-store"></i>
             Business profile
           </div>
-
           <h1 id="name">Business Name</h1>
           <p id="descTop">Explore services, pricing, and contact options for this local business.</p>
-
           <div class="hero-pills">
             <div class="hero-pill" id="ratingPill">
               <i class="fa-solid fa-star"></i>
               Trusted listing
             </div>
-
             <div class="hero-pill" id="pricePill">
               <i class="fa-solid fa-wallet"></i>
               Pricing available
             </div>
-
             <div class="hero-pill" id="locationPill">
               <i class="fa-solid fa-location-dot"></i>
               South Africa
@@ -1180,13 +608,11 @@
         <div class="contact-card">
           <h2>Contact this business</h2>
           <p>Reach out directly, save the profile for later, or send an enquiry in one tap.</p>
-
           <div class="contact-stack">
             <a id="callLink" class="contact-row" href="#">
               <i class="fa-solid fa-phone"></i>
               <span id="phoneLabel">Phone</span>
             </a>
-
             <a id="waLink" class="contact-row" href="#" target="_blank" rel="noopener noreferrer">
               <i class="fa-brands fa-whatsapp"></i>
               Message on WhatsApp
@@ -1203,19 +629,15 @@
             <button id="prevSlide" class="slide-nav prev" type="button" aria-label="Previous image">
               <i class="fa-solid fa-chevron-left"></i>
             </button>
-
             <img id="mainImage" class="main-image" alt="Business image">
-
             <button id="nextSlide" class="slide-nav next" type="button" aria-label="Next image">
               <i class="fa-solid fa-chevron-right"></i>
             </button>
-
             <div class="slide-status" id="slideStatus">
               <i class="fa-regular fa-image"></i>
               <span>1 / 1</span>
             </div>
           </div>
-
           <div id="thumbs" class="thumbs"></div>
         </div>
       </div>
@@ -1224,10 +646,8 @@
         <div class="info-wrap">
           <div class="section">
             <p class="section-label">Pricing & rating</p>
-
             <div class="price-line">
               <div class="price" id="price">R0</div>
-
               <div class="rating-box">
                 <span class="stars" id="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
                 <span id="ratingValue">4.0</span>
@@ -1247,24 +667,19 @@
 
           <div class="section">
             <p class="section-label">Actions</p>
-
             <div class="actions">
               <button id="whatsappBtn" class="btn primary" type="button">
                 <i class="fa-brands fa-whatsapp"></i> WhatsApp
               </button>
-
               <button id="orderBtn" class="btn success" type="button">
                 <i class="fa-solid fa-bag-shopping"></i> Order / Enquire
               </button>
-
               <button id="favoriteBtn" class="btn ghost favorite" type="button">
                 <i class="fa-regular fa-heart"></i> Save
               </button>
-
               <button id="rateBtn" class="btn ghost" type="button">
                 <i class="fa-regular fa-star"></i> Rate
               </button>
-
               <button id="shareBtn" class="btn ghost" type="button" style="grid-column:1 / -1;">
                 <i class="fa-solid fa-share-nodes"></i> Share this profile
               </button>
@@ -1273,13 +688,23 @@
         </div>
       </div>
     </section>
+
+    <section class="other-businesses" id="otherBusinessesSection">
+      <div class="section-heading">
+        <div>
+          <h2>Other businesses</h2>
+          <p>More local profiles customers can browse from this details page.</p>
+        </div>
+      </div>
+
+      <div class="other-grid" id="otherBusinessesGrid"></div>
+    </section>
   </div>
 
   <div class="zoom-overlay" id="zoomOverlay">
-    <button class="zoom-close" type="button" id="zoomClose" aria-label="Close image preview">
+    <button class="zoom-close" type="button" id="zoomClose">
       <i class="fa-solid fa-xmark"></i>
     </button>
-
     <img id="zoomImg" alt="Zoomed business image">
   </div>
 
@@ -1290,39 +715,122 @@
         service: "Baking",
         phone: "+27 81 434 3732",
         description: "Bespoke bakery specialising in artisan banana bread, scones, and crunchy sweet treats for gifting, events, and everyday cravings.",
-        images: ["images/Scones.jpg", "images/Baking_Baddie.jpg", "images/Bannana Bread.jpg"],
+        images: ["images/Bannana Bread.jpg", "images/Scones.jpg", "images/Baking_Baddie.jpg"],
         plan: "Premium",
         price: "R150",
         rating: 5,
         location: "Johannesburg South, South Africa",
         services: ["Banana bread", "Scones", "Cookies and crunchies"]
+      },
+      {
+        name: "Mapos Cakes & Bakes",
+        service: "Baking",
+        phone: "+27 78 131 9590",
+        description: "Custom birthday cakes, celebration boxes, muffins, and dessert tables made around your theme and budget.",
+        images: ["images/Birthday M.jpg", "images/Cupcakes.jpg", "images/Cake.jpg"],
+        plan: "Basic",
+        price: "R300 - R800",
+        rating: 4,
+        location: "Soweto, South Africa",
+        services: ["Birthday cakes", "Cupcakes", "Dessert boxes", "Muffins"]
+      },
+      {
+        name: "FlowWise Plumbing",
+        service: "Plumbing",
+        phone: "+27 72 456 7890",
+        description: "Reliable plumbing for leaks, blocked drains, bathroom fittings, and urgent repair callouts for homes and small businesses.",
+        images: ["images/plumbing.jpg", "images/plumbing.png"],
+        plan: "Premium",
+        price: "From R350",
+        rating: 5,
+        location: "Randburg, South Africa",
+        services: ["Leak repairs", "Drain cleaning", "Pipe fitting", "Emergency plumbing"]
+      },
+      {
+        name: "Spark Plug Electrical",
+        service: "Electrical",
+        phone: "+27 74 321 9988",
+        description: "Certified electrical installations, fault finding, prepaid meter support, and compliant maintenance for residential spaces.",
+        images: ["images/electrical.png"],
+        plan: "Basic",
+        price: "From R450",
+        rating: 4,
+        location: "Midrand, South Africa",
+        services: ["Fault finding", "Installations", "Lighting upgrades", "Meter support"]
+      },
+      {
+        name: "Sunny Gardens",
+        service: "Gardening",
+        phone: "+27 83 123 4567",
+        description: "Garden clean-ups, lawn maintenance, hedge shaping, and affordable outdoor upkeep to keep your property looking sharp.",
+        images: ["images/Vintage Homes.jpg", "images/gardening.jpg", "images/gardening.png"],
+        plan: "Basic",
+        price: "From R280",
+        rating: 5,
+        location: "Roodepoort, South Africa",
+        services: ["Lawn care", "Garden clean-up", "Hedge trimming", "Weekly maintenance"]
       }
+    ];
+
+    const fillInOtherBusinesses = [
+      /*
+      Add extra businesses here if you want them to show on this details page
+      even before they are added to Business listings.html.
+
+      {
+        name: "Business Name",
+        service: "Service Category",
+        phone: "27810000000",
+        description: "Short description of the business.",
+        image: "images/your-image.jpg",
+        images: ["images/your-image.jpg", "images/another-image.jpg"],
+        plan: "Basic",
+        price: "From R250",
+        rating: 4,
+        location: "City or area",
+        services: ["Service one", "Service two", "Service three"]
+      }
+      */
     ];
 
     const params = new URLSearchParams(window.location.search);
     const id = Number.parseInt(params.get("id"), 10);
-    const profileId = Number.isInteger(id) ? id : "default";
 
-    let business;
+    let storedBusinesses = [];
+    try {
+      storedBusinesses = JSON.parse(localStorage.getItem("businesses")) || [];
+    } catch {
+      storedBusinesses = [];
+    }
 
-try {
-  const saved = JSON.parse(localStorage.getItem("businessData"));
-  if (saved) {
-    business = saved;
-  } else {
-    business = defaultBusinesses[0];
-  }
-} catch {
-  business = defaultBusinesses[0];
-}
+    if (!storedBusinesses.length) {
+      try {
+        const savedBusiness = JSON.parse(localStorage.getItem("businessData"));
+        if (savedBusiness) {
+          storedBusinesses = [{
+            name: savedBusiness.businessName,
+            service: savedBusiness.type,
+            phone: savedBusiness.phone,
+            description: savedBusiness.desc,
+            images: savedBusiness.images,
+            plan: savedBusiness.plan,
+            price: savedBusiness.price || "Contact for quote",
+            rating: 4,
+            location: savedBusiness.location,
+            services: [savedBusiness.type]
+          }];
+        }
+      } catch {
+        storedBusinesses = [];
+      }
+    }
 
+    const allBusinesses = (storedBusinesses.length ? storedBusinesses : defaultBusinesses).concat(fillInOtherBusinesses);
+    const activeBusinessIndex = Number.isInteger(id) && allBusinesses[id] ? id : 0;
+    const business = allBusinesses[activeBusinessIndex] || defaultBusinesses[0];
     let currentImageIndex = 0;
     let slideshowTimer = null;
-    let cachedImages = null;
-
-    const favoriteKey = "favorite_profile_" + profileId;
-    const ratingKey = "rating_profile_" + profileId;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const favoriteKey = "favorite_profile_" + activeBusinessIndex;
 
     const nameEl = document.getElementById("name");
     const descTopEl = document.getElementById("descTop");
@@ -1348,21 +856,32 @@ try {
     const prevSlideEl = document.getElementById("prevSlide");
     const nextSlideEl = document.getElementById("nextSlide");
     const slideStatusEl = document.getElementById("slideStatus");
+    const otherBusinessesSectionEl = document.getElementById("otherBusinessesSection");
+    const otherBusinessesGridEl = document.getElementById("otherBusinessesGrid");
 
     function sanitizePhone(phone) {
       return String(phone || "").replace(/\D/g, "");
     }
 
-    function setIconText(element, iconClass, text) {
-      element.innerHTML = "";
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
 
-      const icon = document.createElement("i");
-      const label = document.createElement("span");
+    function normalizeImagePath(src) {
+      const imageFixes = {
+        "images/Bread_Baddie.jpg": "images/Bannana Bread.jpg",
+        "images/electrical1.jpg": "images/electrical.png",
+        "images/electrical2.jpg": "images/electrical.png",
+        "images/vintage Homes.jpg": "images/Vintage Homes.jpg",
+        "images/Birthday Cake.jpg": "images/Birthday M.jpg"
+      };
 
-      icon.className = iconClass;
-      label.textContent = text;
-
-      element.append(icon, label);
+      return imageFixes[src] || src;
     }
 
     function addImagesFromValue(list, value) {
@@ -1374,48 +893,34 @@ try {
       if (typeof value === "string") {
         value
           .split(",")
-          .map((src) => src.trim())
+          .map((src) => normalizeImagePath(src.trim()))
           .filter(Boolean)
           .forEach((src) => list.push(src));
       }
     }
 
-    function getImages() {
-      if (cachedImages) return cachedImages;
-
-      const possibleImages = [];
-      const imageCollections = [
-        business.images,
-        business.gallery,
-        business.photos,
-        business.pictures,
-        business.imageUrls
-      ];
-
-      const imageFields = [
+    function getItemImages(item) {
+      const images = [];
+      const collectionFields = ["images", "gallery", "photos", "pictures", "imageUrls"];
+      const singleFields = [
         "image", "image1", "image2", "image3", "image4",
         "photo", "photo1", "photo2", "photo3", "photo4",
         "picture", "picture1", "picture2", "picture3", "picture4"
       ];
 
-      imageCollections.forEach((value) => addImagesFromValue(possibleImages, value));
-      imageFields.forEach((key) => addImagesFromValue(possibleImages, business[key]));
+      collectionFields.forEach((key) => addImagesFromValue(images, item[key]));
+      singleFields.forEach((key) => addImagesFromValue(images, item[key]));
 
-      cachedImages = possibleImages
-        .map((src) => String(src || "").trim())
-        .filter(Boolean)
-        .filter((src, index, list) => list.indexOf(src) === index);
-
-      if (!cachedImages.length) cachedImages = ["images/Bread_Baddie.jpg"];
-
-      return cachedImages;
+      return images.filter((src, index, list) => list.indexOf(src) === index);
     }
 
-    function preloadImages() {
-      getImages().forEach((src) => {
-        const img = new Image();
-        img.src = src;
-      });
+    function getBusinessImage(item) {
+      return getItemImages(item)[0] || "images/Bannana Bread.jpg";
+    }
+
+    function getImages() {
+      const images = getItemImages(business).slice(0, 6);
+      return images.length ? images : ["images/Bannana Bread.jpg"];
     }
 
     function getServices() {
@@ -1425,11 +930,9 @@ try {
     }
 
     function getRating() {
-      const saved = Number.parseInt(localStorage.getItem(ratingKey), 10);
-
+      const saved = Number.parseInt(localStorage.getItem("rating_profile_" + activeBusinessIndex), 10);
       if (saved >= 1 && saved <= 5) return saved;
       if (business.rating >= 1 && business.rating <= 5) return business.rating;
-
       return 4;
     }
 
@@ -1441,48 +944,11 @@ try {
       return business.location || "South Africa";
     }
 
-    function renderGallery() {
-      const images = getImages();
-
-      currentImageIndex = (currentImageIndex + images.length) % images.length;
-
-      mainImageEl.src = images[currentImageIndex];
-      mainImageEl.alt = business.name || "Business image";
-
-      thumbsEl.innerHTML = "";
-      slideStatusEl.querySelector("span").textContent = (currentImageIndex + 1) + " / " + images.length;
-
-      const hasMultipleImages = images.length > 1;
-
-      prevSlideEl.style.display = hasMultipleImages ? "grid" : "none";
-      nextSlideEl.style.display = hasMultipleImages ? "grid" : "none";
-      slideStatusEl.style.display = hasMultipleImages ? "inline-flex" : "none";
-
-      images.forEach((src, index) => {
-        const thumb = document.createElement("img");
-
-        thumb.className = "thumb" + (index === currentImageIndex ? " selected" : "");
-        thumb.src = src;
-        thumb.loading = "lazy";
-        thumb.alt = (business.name || "Business") + " image " + (index + 1);
-
-        thumb.onclick = () => {
-          setCurrentImage(index);
-          startSlideshow();
-        };
-
-        thumbsEl.appendChild(thumb);
-      });
-    }
-
     function setCurrentImage(index) {
       const images = getImages();
-
       if (!images.length) return;
-
       currentImageIndex = (index + images.length) % images.length;
       mainImageEl.style.opacity = "0.35";
-
       window.setTimeout(() => {
         renderGallery();
         mainImageEl.style.opacity = "1";
@@ -1499,12 +965,10 @@ try {
 
     function startSlideshow() {
       stopSlideshow();
-
-      if (reducedMotion) return;
       if (getImages().length <= 1) return;
-      if (zoomOverlayEl.style.display === "flex") return;
-
-      slideshowTimer = window.setInterval(nextSlide, 3500);
+      slideshowTimer = window.setInterval(() => {
+        nextSlide();
+      }, 3500);
     }
 
     function stopSlideshow() {
@@ -1517,23 +981,98 @@ try {
     function updateRatingUi(value) {
       starsEl.innerHTML = "&#9733;".repeat(value) + "&#9734;".repeat(5 - value);
       ratingValueEl.textContent = value.toFixed(1);
-      setIconText(ratingPillEl, "fa-solid fa-star", value.toFixed(1) + "/5 rating");
+      ratingPillEl.innerHTML = '<i class="fa-solid fa-star"></i> ' + value.toFixed(1) + "/5 rating";
+    }
+
+    function renderGallery() {
+      const images = getImages();
+      mainImageEl.src = images[currentImageIndex];
+      mainImageEl.alt = business.name || "Business image";
+      mainImageEl.onerror = () => {
+        mainImageEl.onerror = null;
+        mainImageEl.src = "images/file.jpg";
+      };
+      thumbsEl.innerHTML = "";
+      slideStatusEl.querySelector("span").textContent = (currentImageIndex + 1) + " / " + images.length;
+      prevSlideEl.style.display = images.length > 1 ? "grid" : "none";
+      nextSlideEl.style.display = images.length > 1 ? "grid" : "none";
+      slideStatusEl.style.display = images.length > 1 ? "inline-flex" : "none";
+
+      images.forEach((src, index) => {
+        const thumb = document.createElement("img");
+        thumb.className = "thumb" + (index === currentImageIndex ? " selected" : "");
+        thumb.src = src;
+        thumb.alt = (business.name || "Business") + " image " + (index + 1);
+        thumb.onerror = () => {
+          thumb.onerror = null;
+          thumb.src = "images/file.jpg";
+        };
+        thumb.onclick = () => {
+          setCurrentImage(index);
+          startSlideshow();
+        };
+        thumbsEl.appendChild(thumb);
+      });
     }
 
     function updateFavoriteUi() {
       const active = localStorage.getItem(favoriteKey) === "1";
-
       favoriteBtnEl.classList.toggle("active", active);
       favoriteBtnEl.innerHTML = active
         ? '<i class="fa-solid fa-heart"></i> Saved'
         : '<i class="fa-regular fa-heart"></i> Save';
     }
 
-    function populate() {
-  console.log("Business data:", business);
-  console.log("Images:", business.images);
+    function renderOtherBusinesses() {
+      const otherBusinesses = allBusinesses
+        .map((item, index) => ({ item, index }))
+        .filter(({ item, index }) => index !== activeBusinessIndex && item && item.name)
+        .slice(0, 6);
 
-  const phoneDigits = sanitizePhone(business.phone);
+      otherBusinessesGridEl.innerHTML = "";
+
+      if (!otherBusinesses.length) {
+        otherBusinessesSectionEl.style.display = "none";
+        return;
+      }
+
+      otherBusinessesSectionEl.style.display = "block";
+
+      otherBusinesses.forEach(({ item, index }) => {
+        const card = document.createElement("a");
+        const service = item.service || "Business";
+        const price = item.price || "Contact for quote";
+        const location = item.location || "South Africa";
+        const summary = String(item.description || service);
+        const shortSummary = summary.length > 110 ? summary.slice(0, 110) + "..." : summary;
+        const rating = Number.parseInt(item.rating, 10) || 4;
+
+        card.className = "other-card";
+        card.href = "Details.html?id=" + index;
+        card.innerHTML = `
+          <img src="${escapeHtml(getBusinessImage(item))}" alt="${escapeHtml(item.name)}" onerror="this.onerror=null;this.src='images/file.jpg';">
+          <div class="other-card-body">
+            <div class="other-card-top">
+              <div>
+                <h3>${escapeHtml(item.name)}</h3>
+                <p>${escapeHtml(location)}</p>
+              </div>
+              <span class="other-tag"><i class="fa-solid fa-star"></i> ${rating}.0</span>
+            </div>
+            <p>${escapeHtml(shortSummary)}</p>
+            <div class="other-meta">
+              <span class="other-tag"><i class="fa-solid fa-store"></i> ${escapeHtml(service)}</span>
+              <span class="other-tag"><i class="fa-solid fa-wallet"></i> ${escapeHtml(price)}</span>
+            </div>
+          </div>
+        `;
+
+        otherBusinessesGridEl.appendChild(card);
+      });
+    }
+
+    function populate() {
+      const phoneDigits = sanitizePhone(business.phone);
       const phoneDisplay = business.phone || "Phone unavailable";
       const rating = getRating();
 
@@ -1541,12 +1080,10 @@ try {
       descTopEl.textContent = business.description || "Explore services, pricing, and contact options for this local business.";
       descEl.textContent = business.description || "No description available yet.";
       priceEl.textContent = getPrice();
-
-      setIconText(serviceEyebrowEl, "fa-solid fa-store", business.service || "Business profile");
-      setIconText(pricePillEl, "fa-solid fa-wallet", getPrice());
-      setIconText(locationPillEl, "fa-solid fa-location-dot", getLocation());
-      setIconText(planChipEl, "fa-solid fa-shield-halved", business.plan || "Listed business");
-
+      serviceEyebrowEl.innerHTML = '<i class="fa-solid fa-store"></i> ' + (business.service || "Business profile");
+      pricePillEl.innerHTML = '<i class="fa-solid fa-wallet"></i> ' + getPrice();
+      locationPillEl.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + getLocation();
+      planChipEl.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ' + (business.plan || "Listed business");
       phoneLabelEl.textContent = phoneDisplay;
       callLinkEl.href = phoneDigits ? "tel:" + phoneDigits : "#";
 
@@ -1554,25 +1091,17 @@ try {
       waLinkEl.href = phoneDigits ? "https://wa.me/" + phoneDigits + "?text=" + waMessage : "#";
 
       servicesListEl.innerHTML = "";
-
       getServices().forEach((service) => {
         const item = document.createElement("li");
-        const icon = document.createElement("i");
-        const label = document.createElement("span");
-
-        icon.className = "fa-solid fa-check";
-        label.textContent = service;
-
-        item.append(icon, label);
+        item.innerHTML = '<i class="fa-solid fa-check"></i> ' + service;
         servicesListEl.appendChild(item);
       });
 
       updateRatingUi(rating);
       renderGallery();
-      preloadImages();
       startSlideshow();
       updateFavoriteUi();
-
+      renderOtherBusinesses();
       document.title = (business.name || "Business Details") + " | Local Link";
     }
 
@@ -1583,10 +1112,7 @@ try {
     document.getElementById("orderBtn").onclick = () => {
       const phoneDigits = sanitizePhone(business.phone);
       const msg = encodeURIComponent("Hi, I'd like to place an order or get a quote from " + (business.name || "your business"));
-
-      if (phoneDigits) {
-        window.open("https://wa.me/" + phoneDigits + "?text=" + msg, "_blank", "noopener");
-      }
+      if (phoneDigits) window.open("https://wa.me/" + phoneDigits + "?text=" + msg, "_blank", "noopener");
     };
 
     favoriteBtnEl.onclick = () => {
@@ -1595,16 +1121,14 @@ try {
       } else {
         localStorage.setItem(favoriteKey, "1");
       }
-
       updateFavoriteUi();
     };
 
     document.getElementById("rateBtn").onclick = () => {
       const input = window.prompt("Rate this business from 1 to 5");
       const value = Number.parseInt(input, 10);
-
       if (value >= 1 && value <= 5) {
-        localStorage.setItem(ratingKey, String(value));
+        localStorage.setItem("rating_profile_" + activeBusinessIndex, String(value));
         updateRatingUi(value);
         window.alert("Rating saved.");
       }
@@ -1618,7 +1142,6 @@ try {
             text: "Check out this business on Local Link",
             url: window.location.href
           });
-
           return;
         }
       } catch {}
@@ -1642,14 +1165,8 @@ try {
     };
 
     mainImageEl.onclick = () => {
-      stopSlideshow();
       zoomImgEl.src = mainImageEl.src;
       zoomOverlayEl.style.display = "flex";
-    };
-
-    mainImageEl.onerror = () => {
-      if (mainImageEl.src.includes("images/Bread_Baddie.jpg")) return;
-      mainImageEl.src = "images/Bread_Baddie.jpg";
     };
 
     mainImageEl.addEventListener("mouseenter", stopSlideshow);
@@ -1657,18 +1174,9 @@ try {
     thumbsEl.addEventListener("mouseenter", stopSlideshow);
     thumbsEl.addEventListener("mouseleave", startSlideshow);
 
-    function closeZoom() {
-      zoomOverlayEl.style.display = "none";
-      startSlideshow();
-    }
-
     zoomOverlayEl.onclick = (event) => {
-      if (
-        event.target === zoomOverlayEl ||
-        event.target === zoomCloseEl ||
-        zoomCloseEl.contains(event.target)
-      ) {
-        closeZoom();
+      if (event.target === zoomOverlayEl || event.target === zoomCloseEl || zoomCloseEl.contains(event.target)) {
+        zoomOverlayEl.style.display = "none";
       }
     };
 
@@ -1677,22 +1185,12 @@ try {
         prevSlide();
         startSlideshow();
       }
-
       if (event.key === "ArrowRight") {
         nextSlide();
         startSlideshow();
       }
-
       if (event.key === "Escape") {
-        closeZoom();
-      }
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        stopSlideshow();
-      } else {
-        startSlideshow();
+        zoomOverlayEl.style.display = "none";
       }
     });
 
