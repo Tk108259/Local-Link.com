@@ -279,7 +279,8 @@
       flex-wrap: wrap;
     }
 
-    .quick-action {
+    .quick-action,
+    .sort-select {
       border: 0;
       background: white;
       color: var(--text);
@@ -288,6 +289,16 @@
       box-shadow: 0 8px 20px rgba(15, 37, 74, 0.08);
       cursor: pointer;
       transition: transform 0.2s ease;
+    }
+
+    .quick-action.active {
+      background: #10203a;
+      color: white;
+    }
+
+    .sort-select {
+      min-width: 190px;
+      outline: none;
     }
 
     .chips-row {
@@ -445,6 +456,24 @@
     .rating-stars { color: var(--accent); letter-spacing: 1px; }
     .listing-desc { margin: 0; color: #43516a; line-height: 1.65; }
 
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .service-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: #f6f8fc;
+      color: #43516a;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
     .listing-footer {
       margin-top: auto;
       display: flex;
@@ -596,7 +625,7 @@
         <button class="ghost-btn" type="button" onclick="scrollToListings()">
           <i class="fa-solid fa-magnifying-glass"></i> Browse listings
         </button>
-        <button class="primary-btn" type="button" onclick="window.location.href='Index.html'">
+        <button class="primary-btn" type="button" onclick="scrollToSignup()">
           <i class="fa-solid fa-store"></i> List your business
         </button>
       </div>
@@ -675,9 +704,18 @@
             </div>
 
             <div class="quick-actions">
-              <button class="quick-action" type="button" onclick="showFeaturedOnly()">
+              <button class="quick-action" id="featuredFilterBtn" type="button" onclick="showFeaturedOnly()">
                 <i class="fa-solid fa-star"></i> Featured only
               </button>
+              <button class="quick-action" id="favoritesFilterBtn" type="button" onclick="toggleFavoritesOnly()">
+                <i class="fa-solid fa-heart"></i> Saved <span id="favoritesCount">0</span>
+              </button>
+              <select class="sort-select" id="sortSelect" aria-label="Sort businesses">
+                <option value="recommended">Recommended</option>
+                <option value="rating">Highest rated</option>
+                <option value="price-low">Lowest starting price</option>
+                <option value="name">Business name</option>
+              </select>
               <button class="quick-action" type="button" onclick="resetFilters()">
                 <i class="fa-solid fa-rotate-left"></i> Reset filters
               </button>
@@ -720,11 +758,11 @@
               <h2>List your business on Local Link</h2>
               <p>Put your services in front of nearby customers, receive direct WhatsApp enquiries, and stand out with a strong profile.</p>
             </div>
-            
+            <button class="ghost-btn" type="button" onclick="startListing('Standard')">
               <i class="fa-solid fa-circle-plus"></i> Start your listing
             </button>
           </div>
-<button class="ghost-btn" type="button" onclick="window.location.href='Index.html'">
+
           <div class="plans">
             <div class="plan">
               <div class="plan-label">Starter visibility</div>
@@ -736,7 +774,7 @@
                 <li><i class="fa-solid fa-check"></i> Search and category visibility</li>
                 <li><i class="fa-solid fa-check"></i> Call and WhatsApp actions</li>
               </ul>
-              <button type="button" onclick="(window.location.href='index.html')">Choose Basic</button>
+              <button type="button" onclick="startListing('Standard')">Choose Basic</button>
             </div>
 
             <div class="plan featured-plan">
@@ -749,7 +787,7 @@
                 <li><i class="fa-solid fa-check"></i> Higher placement in results</li>
                 <li><i class="fa-solid fa-check"></i> Stronger visual highlight</li>
               </ul>
-              <button type="button" onclick="window.location.href='Index.html'">Choose Premium</button>
+              <button type="button" onclick="startListing('Premium')">Choose Premium</button>
             </div>
           </div>
         </div>
@@ -766,26 +804,32 @@
         price: "R150",
         rating: 5,
         featured: true,
-        image: "images/Scones.jpg",
+        image: "images/Bannana Bread.jpg",
+        images: ["images/Bannana Bread.jpg", "images/Scones.jpg", "images/Baking_Baddie.jpg"],
         description: "Artisan banana bread, buttery scones, and made-to-order baked treats for homes, brunch tables, and office mornings.",
         phone: "27814343732",
         location: "Johannesburg South",
         responseTime: "Replies in under 20 min",
-        plan: "Premium"
+        openNow: true,
+        plan: "Premium",
+        services: ["Banana bread", "Fresh scones", "Crunchies", "Tea-time catering"]
       },
       {
-        id: "Lesego's Baked Goods",
-        name: "Lesego's Baked Goods",
+        id: "mapos-cakes-bakes",
+        name: "Mapos Cakes & Bakes",
         category: "Baking",
-        price: "R120 - R600",
+        price: "R300 - R800",
         rating: 4,
         featured: false,
-        image: "images/Birthday Cake.jpg",
+        image: "images/Birthday M.jpg",
+        images: ["images/Birthday M.jpg", "images/Bannana Bread.jpg"],
         description: "Custom birthday cakes, celebration boxes, muffins, and dessert tables made around your theme and budget.",
-        phone: "27815552220",
-        location: "Pretoria",
+        phone: "27781319590",
+        location: "Soweto",
         responseTime: "Same-day quotes",
-        plan: "Basic"
+        openNow: true,
+        plan: "Basic",
+        services: ["Birthday cakes", "Cupcakes", "Dessert boxes", "Muffins"]
       },
       {
         id: "flowwise-plumbing",
@@ -795,11 +839,14 @@
         rating: 5,
         featured: true,
         image: "images/plumbing.jpg",
+        images: ["images/plumbing.jpg"],
         description: "Reliable plumbing for leaks, blocked drains, bathroom fittings, and urgent repair callouts for homes and small businesses.",
         phone: "27724567890",
         location: "Randburg",
         responseTime: "Emergency callouts available",
-        plan: "Premium"
+        openNow: true,
+        plan: "Premium",
+        services: ["Leak repairs", "Drain cleaning", "Pipe fitting", "Emergency plumbing"]
       },
       {
         id: "spark-plug-electrical",
@@ -809,11 +856,14 @@
         rating: 4,
         featured: false,
         image: "images/electrical1.jpg",
+        images: ["images/electrical1.jpg", "images/electrical2.jpg"],
         description: "Certified electrical installations, fault finding, prepaid meter support, and compliant maintenance for residential spaces.",
         phone: "27743219988",
         location: "Midrand",
         responseTime: "Weekend appointments available",
-        plan: "Basic"
+        openNow: false,
+        plan: "Basic",
+        services: ["Fault finding", "Installations", "Lighting upgrades", "Meter support"]
       },
       {
         id: "sunny-gardens",
@@ -823,11 +873,14 @@
         rating: 5,
         featured: false,
         image: "images/vintage Homes.jpg",
+        images: ["images/vintage Homes.jpg", "images/gardening.jpg"],
         description: "Garden clean-ups, lawn maintenance, hedge shaping, and affordable outdoor upkeep to keep your property looking sharp.",
         phone: "27831234567",
         location: "Roodepoort",
         responseTime: "Flexible weekly bookings",
-        plan: "Basic"
+        openNow: true,
+        plan: "Basic",
+        services: ["Lawn care", "Garden clean-up", "Hedge trimming", "Weekly maintenance"]
       }
     ];
 
@@ -838,10 +891,15 @@
     const resultsSummary = document.getElementById("resultsSummary");
     const statBusinesses = document.getElementById("statBusinesses");
     const emptyState = document.getElementById("emptyState");
+    const sortSelect = document.getElementById("sortSelect");
+    const favoritesCount = document.getElementById("favoritesCount");
+    const favoritesFilterBtn = document.getElementById("favoritesFilterBtn");
+    const featuredFilterBtn = document.getElementById("featuredFilterBtn");
     const chips = [...document.querySelectorAll(".category-chip")];
 
     let activeCategory = "All";
     let featuredOnly = false;
+    let favoritesOnly = false;
     const favorites = new Set(JSON.parse(localStorage.getItem("favoriteBusinesses") || "[]"));
 
     function formatPhoneDisplay(phone) {
@@ -857,8 +915,13 @@
       service: business.category,
       phone: formatPhoneDisplay(business.phone),
       description: business.description,
-      images: [business.image],
-      plan: business.plan
+      image: business.image,
+      images: (business.images || [business.image]).slice(0, 4),
+      plan: business.plan,
+      price: business.price,
+      rating: business.rating,
+      location: business.location,
+      services: business.services || [business.category]
     }));
 
     localStorage.setItem("businesses", JSON.stringify(detailsPayload));
@@ -866,6 +929,52 @@
 
     function getRatingStars(rating) {
       return "&#9733;".repeat(rating) + "&#9734;".repeat(5 - rating);
+    }
+
+    function getStartingPrice(price) {
+      const match = String(price).replace(/\s/g, "").match(/\d+/);
+      return match ? Number(match[0]) : Number.MAX_SAFE_INTEGER;
+    }
+
+    function getBusinessSearchText(business) {
+      return [
+        business.name,
+        business.category,
+        business.description,
+        business.location,
+        business.price,
+        ...(business.services || [])
+      ].join(" ").toLowerCase();
+    }
+
+    function getSortedBusinesses(items) {
+      const sorted = [...items];
+
+      if (sortSelect.value === "rating") {
+        return sorted.sort((a, b) => b.rating - a.rating || Number(b.featured) - Number(a.featured));
+      }
+
+      if (sortSelect.value === "price-low") {
+        return sorted.sort((a, b) => getStartingPrice(a.price) - getStartingPrice(b.price) || b.rating - a.rating);
+      }
+
+      if (sortSelect.value === "name") {
+        return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      }
+
+      return sorted.sort((a, b) => Number(b.featured) - Number(a.featured) || b.rating - a.rating);
+    }
+
+    function getAvailabilityLabel(business) {
+      return business.openNow ? "Open now" : "Booking required";
+    }
+
+    function updateFavoriteControls() {
+      favoritesCount.textContent = favorites.size;
+      favoritesFilterBtn.classList.toggle("active", favoritesOnly);
+      favoritesFilterBtn.setAttribute("aria-pressed", String(favoritesOnly));
+      featuredFilterBtn.classList.toggle("active", featuredOnly);
+      featuredFilterBtn.setAttribute("aria-pressed", String(featuredOnly));
     }
 
     function escapeHtml(value) {
@@ -880,21 +989,16 @@
     function getFilteredBusinesses() {
       const term = searchInput.value.trim().toLowerCase();
 
-      return businesses
+      const filtered = businesses
         .filter((business) => activeCategory === "All" || business.category === activeCategory)
         .filter((business) => !featuredOnly || business.featured)
+        .filter((business) => !favoritesOnly || favorites.has(business.id))
         .filter((business) => {
           if (!term) return true;
-          const haystack = [
-            business.name,
-            business.category,
-            business.description,
-            business.location,
-            business.price
-          ].join(" ").toLowerCase();
-          return haystack.includes(term);
-        })
-        .sort((a, b) => Number(b.featured) - Number(a.featured) || b.rating - a.rating);
+          return getBusinessSearchText(business).includes(term);
+        });
+
+      return getSortedBusinesses(filtered);
     }
 
     function renderListings() {
@@ -903,10 +1007,12 @@
 
       listingContainer.innerHTML = "";
       resultsCount.textContent = filtered.length;
+      updateFavoriteControls();
 
       const summaryParts = [];
       summaryParts.push(activeCategory === "All" ? "all categories" : activeCategory);
       if (featuredOnly) summaryParts.push("featured only");
+      if (favoritesOnly) summaryParts.push("saved businesses");
       if (term) summaryParts.push('matching "' + term + '"');
       resultsSummary.textContent = "Showing " + summaryParts.join(" | ");
 
@@ -920,12 +1026,13 @@
       filtered.forEach((business) => {
         const originalIndex = businesses.findIndex((item) => item.id === business.id);
         const favoriteActive = favorites.has(business.id);
+        const serviceTags = (business.services || [business.category]).slice(0, 4);
         const article = document.createElement("article");
         article.className = "listing-card";
 
         article.innerHTML = `
           <div class="listing-media">
-            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}">
+            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}" onerror="this.src='images/file.jpg'">
             <div class="badge-row">
               ${business.featured ? '<span class="badge featured"><i class="fa-solid fa-bolt"></i> Featured</span>' : ""}
               <span class="badge category">${escapeHtml(business.category)}</span>
@@ -964,9 +1071,16 @@
                 <i class="fa-solid fa-shield-halved"></i>
                 ${escapeHtml(business.plan)} Plan
               </div>
+              <div class="meta-pill">
+                <i class="fa-solid ${business.openNow ? "fa-circle-check" : "fa-calendar-check"}"></i>
+                ${escapeHtml(getAvailabilityLabel(business))}
+              </div>
             </div>
 
             <p class="listing-desc">${escapeHtml(business.description)}</p>
+            <div class="service-tags">
+              ${serviceTags.map((service) => `<span class="service-tag"><i class="fa-solid fa-check"></i> ${escapeHtml(service)}</span>`).join("")}
+            </div>
 
             <div class="listing-footer">
               <div class="contact-line">
@@ -1022,14 +1136,26 @@
 
     function resetFilters() {
       featuredOnly = false;
+      favoritesOnly = false;
       searchInput.value = "";
+      sortSelect.value = "recommended";
       setActiveCategory("All");
     }
 
     function showFeaturedOnly() {
-      featuredOnly = true;
+      featuredOnly = !featuredOnly;
       renderListings();
       scrollToListings();
+    }
+
+    function toggleFavoritesOnly() {
+      favoritesOnly = !favoritesOnly;
+      renderListings();
+      scrollToListings();
+    }
+
+    function startListing(plan) {
+      window.location.href = "Index.html?plan=" + encodeURIComponent(plan);
     }
 
     function scrollToSignup() {
@@ -1042,6 +1168,7 @@
 
     searchInput.addEventListener("input", renderListings);
     categorySelect.addEventListener("change", (event) => setActiveCategory(event.target.value));
+    sortSelect.addEventListener("change", renderListings);
     chips.forEach((chip) => {
       chip.addEventListener("click", () => setActiveCategory(chip.dataset.category));
     });
