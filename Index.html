@@ -595,13 +595,15 @@
     return result.secure_url;
   }
 
-  function sendToGoogleSheet(data) {
-    return fetch("https://script.google.com/macros/s/AKfycbyuM6Nj8mJ9d5kvjldneo7bzwx-bdnlCcV824dHcbisaM6_cBZUl2tWydqJeAHmJ0Pp9w/exec", {
-      method: "POST",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json"
-      },
+function sendToGoogleSheet(data) {
+  return fetch("https://script.google.com/macros/s/AKfycbyuM6Nj8mJ9d5kvjldneo7bzwx-bdnlCcV824dHcbisaM6_cBZUl2tWydqJeAHmJ0Pp9w/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+}
       body: JSON.stringify(data)
     }).catch(() => {});
   }
@@ -636,7 +638,8 @@
       }
 
       localStorage.setItem("businessData", JSON.stringify(businessData));
-      sendToGoogleSheet(businessData);
+      console.log(businessData);
+      await sendToGoogleSheet(businessData);
       window.location.href = "preview.html";
     } catch (error) {
       console.error(error);
