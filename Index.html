@@ -558,11 +558,10 @@
   
 <script>
 
-const SUPABASE_URL = "https://migqkytllphrmlmogmxh.supabase.co/rest/v1/
-";
-const SUPABASE_ANON_KEY = "sb_publishable_MPyTxdU3yX_RGMfCUy0hZg_3C_VNQY0
-";
-
+const SUPABASE_URL = "https://migqkytllphrmlmogmxh.supabase.co";
+  
+const SUPABASE_ANON_KEY = "sb_publishable_MPyTxdU3yX_RGMfCUy0hZg_3C_VNQY0";
+  
 const supabase = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
@@ -607,15 +606,6 @@ const supabase = window.supabase.createClient(
 
     const result = await response.json();
     return result.secure_url;
-  }
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    }
-  );
-}
 
   businessForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -671,8 +661,16 @@ if (error) {
 } else {
   window.location.href = "preview.html";
 }
-      
-  });
+   } catch(error) {
+    console.error(error);
+    alert(error.message);
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Continue to Preview";
+    uploadLoader.style.display = "none";
+}
+});
+    
 </script>
 </body>
 </html>
