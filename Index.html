@@ -554,7 +554,19 @@
     </main>
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
 <script>
+
+const SUPABASE_URL = "https://migqkytllphrmlmogmxh.supabase.co/rest/v1/
+";
+const SUPABASE_ANON_KEY = "sb_publishable_MPyTxdU3yX_RGMfCUy0hZg_3C_VNQY0
+";
+
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
   const CLOUD_NAME = "dafzrkltz";
   const UPLOAD_PRESET = "ml_default";
 
@@ -596,11 +608,6 @@
     const result = await response.json();
     return result.secure_url;
   }
-
-function sendToGoogleSheet(data) {
-  return fetch(
-    "https://script.google.com/macros/s/AKfycby5CZVxz422hAhN78F1XpnHoaScaRPWxQvPuqOPkA4ISwJfggcixX2hCIYRstuEQ0rNTQ/exec",
-    {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -641,21 +648,30 @@ function sendToGoogleSheet(data) {
 
       localStorage.setItem("businessData", JSON.stringify(businessData));
 console.log(businessData);
-
-try {
-  await sendToGoogleSheet(businessData);
-} catch (err) {
-  console.error("Google Sheets error:", err);
-}
-
-window.location.href = "preview.html";
-    } catch (error) {
-      console.error("Actual error:", error);
-alert(error.message);
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Continue to Preview";
-      uploadLoader.style.display = "none";
+const { error } = await supabase
+  .from("Businesses")
+  .insert([
+    {
+      business_name: businessData.businessName,
+      service_type: businessData.type,
+      description: businessData.desc,
+      phone: businessData.phone,
+      location: businessData.location,
+      plan: businessData.plan,
+      images: businessData.images
     }
+  ]);
+
+if (error) {
+  console.error(error);
+  alert("Failed to save data.");
+  submitBtn.disabled = false;
+  submitBtn.textContent = "Continue to Preview";
+  uploadLoader.style.display = "none";
+} else {
+  window.location.href = "preview.html";
+}
+      
   });
 </script>
 </body>
