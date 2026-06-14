@@ -605,9 +605,11 @@ const supabase = window.supabase.createClient(
 }
 
     const result = await response.json();
-    return result.secure_url;
+return result.secure_url;
+}
 
-  businessForm.addEventListener("submit", async (event) => {
+businessForm.addEventListener("submit", async (event) => {
+  console.log("Form submitted");
     event.preventDefault();
 
     uploadLoader.style.display = "block";
