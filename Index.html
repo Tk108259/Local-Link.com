@@ -637,6 +637,8 @@ const supabase = window.supabase.createClient(
   }
 
 businessForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    alert("Submit event is working!");
   event.preventDefault();
   console.log("Form submitted");
 
