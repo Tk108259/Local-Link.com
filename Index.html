@@ -554,7 +554,7 @@
     </main>
   </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">console.log(window.supabase);</script>
   
 <script>
 
@@ -610,6 +610,9 @@ return result.secure_url;
 
 businessForm.addEventListener("submit", async (event) => {
   console.log("Form submitted");
+event.preventDefault();
+console.log("preventDefault worked");
+  console.log("Form submitted");
     event.preventDefault();
 
     uploadLoader.style.display = "block";
@@ -628,6 +631,7 @@ businessForm.addEventListener("submit", async (event) => {
       };
 
       const files = [...imageInput.files];
+      console.log(files);
 
       if (files.length > 0) {
         const uploadedUrls = [];
@@ -656,7 +660,7 @@ const { error } = await supabase
 
 if (error) {
   console.error(error);
-  alert("Failed to save data.");
+  alert(error.message);
   submitBtn.disabled = false;
   submitBtn.textContent = "Continue to Preview";
   uploadLoader.style.display = "none";
