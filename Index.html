@@ -638,84 +638,82 @@ const supabase = window.supabase.createClient(
 
 businessForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    alert("Submit event is working!");
-  event.preventDefault();
-  console.log("Form submitted");
+    console.log("Form submitted");
 
-  uploadLoader.style.display = "block";
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Processing...";
+    uploadLoader.style.display = "block";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Processing...";
 
-  try {
-    const businessData = {
-      businessName: document.getElementById("businessName").value,
-      type: document.getElementById("type").value,
-      desc: document.getElementById("desc").value,
-      phone: document.getElementById("phone").value,
-      location: document.getElementById("location").value,
-      plan: document.querySelector('input[name="plan"]:checked').value,
-      images: []
-    };
+    try {
+      const businessData = {
+        businessName: document.getElementById("businessName").value,
+        type: document.getElementById("type").value,
+        desc: document.getElementById("desc").value,
+        phone: document.getElementById("phone").value,
+        location: document.getElementById("location").value,
+        plan: document.querySelector('input[name="plan"]:checked').value,
+        images: []
+      };
 
-    const files = [...imageInput.files];
+      const files = [...imageInput.files];
 
-    if (files.length > 0) {
-      submitBtn.textContent = "Uploading images...";
-      const uploadedUrls = [];
-      
-      for (const file of files) {
-        try {
-          const imageUrl = await uploadImageToCloudinary(file);
-          uploadedUrls.push(imageUrl);
-        } catch (err) {
-          console.error(`Failed to upload ${file.name}:`, err);
-          throw new Error(`Failed to upload image: ${file.name}`);
+      if (files.length > 0) {
+        submitBtn.textContent = "Uploading images...";
+        const uploadedUrls = [];
+        
+        for (const file of files) {
+          try {
+            const imageUrl = await uploadImageToCloudinary(file);
+            uploadedUrls.push(imageUrl);
+          } catch (err) {
+            console.error(`Failed to upload ${file.name}:`, err);
+            throw new Error(`Failed to upload image: ${file.name}`);
+          }
         }
+        
+        businessData.images = uploadedUrls;
+      } else {
+        throw new Error("Please upload at least one image");
       }
-      
-      businessData.images = uploadedUrls;
-    } else {
-      throw new Error("Please upload at least one image");
+
+      // Save to localStorage first
+      localStorage.setItem("businessData", JSON.stringify(businessData));
+      console.log("Data saved to localStorage:", businessData);
+
+      // Then save to Supabase
+      submitBtn.textContent = "Saving to database...";
+      const { error } = await supabase
+        .from("Businesses")
+        .insert([
+          {
+            business_name: businessData.businessName,
+            service_type: businessData.type,
+            description: businessData.desc,
+            phone: businessData.phone,
+            location: businessData.location,
+            plan: businessData.plan,
+            images: businessData.images
+          }
+        ]);
+
+      if (error) {
+        console.error("Supabase error:", error);
+        throw new Error(`Database error: ${error.message}`);
+      }
+
+      console.log("Data saved to Supabase successfully");
+      // Navigate after successful save
+      window.location.href = "preview.html";
+
+    } catch(error) {
+      console.error("Error:", error);
+      alert(`Error: ${error.message}`);
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Continue to Preview";
+      uploadLoader.style.display = "none";
     }
-
-    // Save to localStorage first
-    localStorage.setItem("businessData", JSON.stringify(businessData));
-    console.log("Data saved to localStorage:", businessData);
-
-    // Then save to Supabase
-    submitBtn.textContent = "Saving to database...";
-    const { error } = await supabase
-      .from("Businesses")
-      .insert([
-        {
-          business_name: businessData.businessName,
-          service_type: businessData.type,
-          description: businessData.desc,
-          phone: businessData.phone,
-          location: businessData.location,
-          plan: businessData.plan,
-          images: businessData.images
-        }
-      ]);
-
-    if (error) {
-      console.error("Supabase error:", error);
-      throw new Error(`Database error: ${error.message}`);
-    }
-
-    console.log("Data saved to Supabase successfully");
-    // Navigate after successful save
-    window.location.href = "preview.html";
-
-  } catch(error) {
-    console.error("Error:", error);
-    alert(`Error: ${error.message}`);
-
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Continue to Preview";
-    uploadLoader.style.display = "none";
-  }
-});
+  });
     
 </script>
 </body>
