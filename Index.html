@@ -555,10 +555,8 @@
   </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+  
 <script>
-console.log(window.supabase);
-</script>
 
 const SUPABASE_URL = "https://migqkytllphrmlmogmxh.supabase.co";
   
@@ -577,6 +575,18 @@ const supabase = window.supabase.createClient(
   const uploadLoader = document.getElementById("uploadLoader");
   const submitBtn = businessForm.querySelector(".submit-button");
 
+  // Handle category selection and autofill
+  document.querySelectorAll(".category-card").forEach(card => {
+    card.addEventListener("click", (e) => {
+      e.preventDefault();
+      document.querySelectorAll(".category-card").forEach(c => c.classList.remove("active"));
+      card.classList.add("active");
+      
+      const category = card.dataset.category;
+      document.getElementById("type").value = category;
+    });
+  });
+
   // Handle plan selection visual update
   document.querySelectorAll('input[name="plan"]').forEach(input => {
     input.addEventListener("change", (e) => {
@@ -587,13 +597,29 @@ const supabase = window.supabase.createClient(
     });
   });
 
+  // Handle image preview
+  imageInput.addEventListener("change", (e) => {
+    const preview = document.getElementById("imagePreview");
+    preview.innerHTML = "";
+    
+    Array.from(e.target.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = document.createElement("img");
+        img.src = event.target.result;
+        preview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
   async function uploadImageToCloudinary(file) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", UPLOAD_PRESET);
 
     const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${"dafzrkltz"}/image/upload`,
+      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
       {
         method: "POST",
         body: formData
@@ -601,82 +627,92 @@ const supabase = window.supabase.createClient(
     );
 
     if (!response.ok) {
-  const errorData = await response.json();
-  console.log(errorData);
-  throw new Error(errorData.error.message);
-}
+      const errorData = await response.json();
+      console.error("Cloudinary error:", errorData);
+      throw new Error(`Upload failed: ${errorData.error?.message || "Unknown error"}`);
+    }
 
     const result = await response.json();
-return result.secure_url;
-}
+    return result.secure_url;
+  }
 
 businessForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
   console.log("Form submitted");
-event.preventDefault();
-console.log("preventDefault worked");
-  console.log("Form submitted");
-    event.preventDefault();
 
-    uploadLoader.style.display = "block";
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Uploading images...";
+  uploadLoader.style.display = "block";
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Processing...";
 
-    try {
-      const businessData = {
-        businessName: document.getElementById("businessName").value,
-        type: document.getElementById("type").value,
-        desc: document.getElementById("desc").value,
-        phone: document.getElementById("phone").value,
-        location: document.getElementById("location").value,
-        plan: document.querySelector('input[name="plan"]:checked').value,
-        images: []
-      };
+  try {
+    const businessData = {
+      businessName: document.getElementById("businessName").value,
+      type: document.getElementById("type").value,
+      desc: document.getElementById("desc").value,
+      phone: document.getElementById("phone").value,
+      location: document.getElementById("location").value,
+      plan: document.querySelector('input[name="plan"]:checked').value,
+      images: []
+    };
 
-      const files = [...imageInput.files];
-      console.log(files);
+    const files = [...imageInput.files];
 
-      if (files.length > 0) {
-        const uploadedUrls = [];
-        for (const file of files) {
+    if (files.length > 0) {
+      submitBtn.textContent = "Uploading images...";
+      const uploadedUrls = [];
+      
+      for (const file of files) {
+        try {
           const imageUrl = await uploadImageToCloudinary(file);
           uploadedUrls.push(imageUrl);
+        } catch (err) {
+          console.error(`Failed to upload ${file.name}:`, err);
+          throw new Error(`Failed to upload image: ${file.name}`);
         }
-        businessData.images = uploadedUrls;
       }
-
-      localStorage.setItem("businessData", JSON.stringify(businessData));
-console.log(businessData);
-const { error } = await supabase
-  .from("Businesses")
-  .insert([
-    {
-      business_name: businessData.businessName,
-      service_type: businessData.type,
-      description: businessData.desc,
-      phone: businessData.phone,
-      location: businessData.location,
-      plan: businessData.plan,
-      images: businessData.images
+      
+      businessData.images = uploadedUrls;
+    } else {
+      throw new Error("Please upload at least one image");
     }
-  ]);
 
-if (error) {
-  console.error(error);
-  alert(error.message);
-  submitBtn.disabled = false;
-  submitBtn.textContent = "Continue to Preview";
-  uploadLoader.style.display = "none";
-} else {
-  window.location.href = "preview.html";
-}
-   } catch(error) {
-    console.error(error);
-    alert(error.message);
+    // Save to localStorage first
+    localStorage.setItem("businessData", JSON.stringify(businessData));
+    console.log("Data saved to localStorage:", businessData);
+
+    // Then save to Supabase
+    submitBtn.textContent = "Saving to database...";
+    const { error } = await supabase
+      .from("Businesses")
+      .insert([
+        {
+          business_name: businessData.businessName,
+          service_type: businessData.type,
+          description: businessData.desc,
+          phone: businessData.phone,
+          location: businessData.location,
+          plan: businessData.plan,
+          images: businessData.images
+        }
+      ]);
+
+    if (error) {
+      console.error("Supabase error:", error);
+      throw new Error(`Database error: ${error.message}`);
+    }
+
+    console.log("Data saved to Supabase successfully");
+    // Navigate after successful save
+    window.location.href = "preview.html";
+
+  } catch(error) {
+    console.error("Error:", error);
+    alert(`Error: ${error.message}`);
 
     submitBtn.disabled = false;
     submitBtn.textContent = "Continue to Preview";
     uploadLoader.style.display = "none";
-}
+  }
 });
     
 </script>
