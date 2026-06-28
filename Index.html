@@ -553,28 +553,7 @@
       </section>
     </main>
   </div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
-<script>
-
-const SUPABASE_URL = "https://migqkytllphrmlmogmxh.supabase.co";
-  
-const SUPABASE_ANON_KEY = "sb_publishable_MPyTxdU3yX_RGMfCUy0hZg_3C_VNQY0";
-  
-// Initialize supabase safely (guard against CDN load failures)
-let supabase = null;
-try {
-  if (window.supabase && typeof window.supabase.createClient === 'function') {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  } else {
-    console.warn('Supabase SDK is not available; database saves will be skipped.');
-  }
-} catch (err) {
-  console.warn('Error initializing Supabase client:', err);
-  supabase = null;
-}
-
   const CLOUD_NAME = "dafzrkltz";
   const UPLOAD_PRESET = "ml_default";
 
