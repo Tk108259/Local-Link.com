@@ -562,10 +562,19 @@ const SUPABASE_URL = "https://migqkytllphrmlmogmxh.supabase.co";
   
 const SUPABASE_ANON_KEY = "sb_publishable_MPyTxdU3yX_RGMfCUy0hZg_3C_VNQY0";
   
-const supabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+// Initialize supabase safely (guard against CDN load failures)
+let supabase = null;
+try {
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } else {
+    console.warn('Supabase SDK is not available; database saves will be skipped.');
+  }
+} catch (err) {
+  console.warn('Error initializing Supabase client:', err);
+  supabase = null;
+}
+
   const CLOUD_NAME = "dafzrkltz";
   const UPLOAD_PRESET = "ml_default";
 
@@ -627,15 +636,16 @@ const supabase = window.supabase.createClient(
     );
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json().catch(() => ({}));
       console.error("Cloudinary error:", errorData);
-      throw new Error(`Upload failed: ${errorData.error?.message || "Unknown error"}`);
+      throw new Error(`Upload failed: ${errorData.error?.message || response.statusText || 'Unknown error'}`);
     }
 
     const result = await response.json();
-    return result.secure_url;
+    return result.secure_url || result.url;
   }
 
+// Submit handler — always attached so page won't refresh unexpectedly if an earlier script fails
 businessForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     console.log("Form submitted");
@@ -673,6 +683,8 @@ businessForm.addEventListener("submit", async (event) => {
         
         businessData.images = uploadedUrls;
       } else {
+        // If the input is required, the browser will normally prevent submission and this code won't run.
+        // But if we reach here, handle it gracefully.
         throw new Error("Please upload at least one image");
       }
 
@@ -680,28 +692,34 @@ businessForm.addEventListener("submit", async (event) => {
       localStorage.setItem("businessData", JSON.stringify(businessData));
       console.log("Data saved to localStorage:", businessData);
 
-      // Then save to Supabase
-      submitBtn.textContent = "Saving to database...";
-      const { error } = await supabase
-        .from("Businesses")
-        .insert([
-          {
-            business_name: businessData.businessName,
-            service_type: businessData.type,
-            description: businessData.desc,
-            phone: businessData.phone,
-            location: businessData.location,
-            plan: businessData.plan,
-            images: businessData.images
-          }
-        ]);
+      // Then save to Supabase if the client initialized successfully
+      if (supabase) {
+        submitBtn.textContent = "Saving to database...";
+        const { data, error } = await supabase
+          .from("Businesses")
+          .insert([
+            {
+              business_name: businessData.businessName,
+              service_type: businessData.type,
+              description: businessData.desc,
+              phone: businessData.phone,
+              location: businessData.location,
+              plan: businessData.plan,
+              images: businessData.images
+            }
+          ]);
 
-      if (error) {
-        console.error("Supabase error:", error);
-        throw new Error(`Database error: ${error.message}`);
+        if (error) {
+          console.error("Supabase error:", error);
+          // don't fail silently: surface to user
+          throw new Error(`Database error: ${error.message}`);
+        }
+
+        console.log("Data saved to Supabase successfully", data);
+      } else {
+        console.warn('Skipping database save because Supabase client is not available.');
       }
 
-      console.log("Data saved to Supabase successfully");
       // Navigate after successful save
       window.location.href = "preview.html";
 
