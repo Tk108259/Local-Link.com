@@ -840,11 +840,7 @@
         featured: true,
         image: "images/1000282273_mdab8c.jpg",
         images: ["images/1000282273_mdab8c.jpg", "images/1000282274_d3w5c6.jpg", "images/1000282272_pjauxg.jpg"],
-        description: "Welcome to our bakery, where every bite is made with love! 🎂
-
-We specialize in beautifully crafted birthday cakes, delicious dessert cakes, and freshly baked homemade scones that are perfect for any occasion. Whether you're celebrating a birthday, hosting a special event, or simply craving something sweet, we take pride in creating treats that are as delicious as they are beautiful.
-
-Every order is prepared with quality ingredients, attention to detail, and a passion for baking, ensuring every customer enjoys a memorable experience. Let us make your special moments even sweeter with our freshly baked creations.",
+        description: "Welcome to our bakery, where every bite is made with love! 🎂\n\nWe specialize in beautifully crafted birthday cakes, delicious dessert cakes, and freshly baked homemade scones that are perfect for any occasion.",
         phone: "27 611 558 472",
         location: "Soshanguve",
         responseTime: "Open from 8-10",
@@ -1002,47 +998,33 @@ Every order is prepared with quality ingredients, attention to detail, and a pas
           return getBusinessSearchText(business).includes(term);
         });
 
-      return getSortedBusinesses(filtered);
+      return filtered;
     }
 
     function renderListings() {
-      const filtered = getFilteredBusinesses();
-      const term = searchInput.value.trim();
+      const filteredBusinesses = getFilteredBusinesses();
+      const sortedBusinesses = getSortedBusinesses(filteredBusinesses);
 
+      resultsCount.textContent = filteredBusinesses.length;
       listingContainer.innerHTML = "";
-      resultsCount.textContent = filtered.length;
+      emptyState.style.display = filteredBusinesses.length === 0 ? "block" : "none";
       updateFavoriteControls();
 
-      const summaryParts = [];
-      summaryParts.push(activeCategory === "All" ? "all categories" : activeCategory);
-      if (featuredOnly) summaryParts.push("featured only");
-      if (favoritesOnly) summaryParts.push("saved businesses");
-      if (term) summaryParts.push('matching "' + term + '"');
-      resultsSummary.textContent = "Showing " + summaryParts.join(" | ");
+      sortedBusinesses.forEach((business, index) => {
+        const originalIndex = businesses.findIndex((b) => b.id === business.id);
+        const serviceTags = (business.services || []).slice(0, 3);
 
-      if (!filtered.length) {
-        emptyState.style.display = "block";
-        return;
-      }
-
-      emptyState.style.display = "none";
-
-      filtered.forEach((business) => {
-        const originalIndex = businesses.findIndex((item) => item.id === business.id);
-        const favoriteActive = favorites.has(business.id);
-        const serviceTags = (business.services || [business.category]).slice(0, 4);
         const article = document.createElement("article");
         article.className = "listing-card";
-
         article.innerHTML = `
           <div class="listing-media">
-            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}" onerror="this.src='images/file.jpg'">
+            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}">
             <div class="badge-row">
-              ${business.featured ? '<span class="badge featured"><i class="fa-solid fa-bolt"></i> Featured</span>' : ""}
+              ${business.featured ? `<span class="badge featured"><i class="fa-solid fa-star"></i> Featured</span>` : ""}
               <span class="badge category">${escapeHtml(business.category)}</span>
             </div>
-            <button class="favorite-toggle ${favoriteActive ? "active" : ""}" type="button" data-id="${escapeHtml(business.id)}" aria-label="Save business">
-              <i class="${favoriteActive ? "fa-solid" : "fa-regular"} fa-heart"></i>
+            <button class="favorite-toggle ${favorites.has(business.id) ? "active" : ""}" data-id="${escapeHtml(business.id)}" type="button" aria-label="Save listing">
+              <i class="fa-${favorites.has(business.id) ? "solid" : "regular"} fa-heart"></i>
             </button>
           </div>
 
@@ -1051,29 +1033,23 @@ Every order is prepared with quality ingredients, attention to detail, and a pas
               <div>
                 <h3 class="listing-name">${escapeHtml(business.name)}</h3>
                 <p class="listing-location">
-                  <i class="fa-solid fa-location-dot"></i>
+                  <i class="fa-solid fa-map-pin"></i>
                   ${escapeHtml(business.location)}
                 </p>
               </div>
-
               <div class="price-tag">
                 <strong>${escapeHtml(business.price)}</strong>
-                <span>Typical starting price</span>
+                <span>${business.plan}</span>
               </div>
             </div>
 
             <div class="meta-row">
               <div class="meta-pill">
                 <span class="rating-stars">${getRatingStars(business.rating)}</span>
-                <strong>${business.rating}.0</strong>
               </div>
               <div class="meta-pill">
                 <i class="fa-solid fa-clock"></i>
                 ${escapeHtml(business.responseTime)}
-              </div>
-              <div class="meta-pill">
-                <i class="fa-solid fa-shield-halved"></i>
-                ${escapeHtml(business.plan)} Plan
               </div>
               <div class="meta-pill">
                 <i class="fa-solid ${business.openNow ? "fa-circle-check" : "fa-calendar-check"}"></i>
