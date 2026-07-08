@@ -738,13 +738,9 @@
         name: "Glitter Sprinkles Bakery",
         service: "Baking",
         phone: "+27 611 558 472",
-        description: "Welcome to our bakery, where every bite is made with love! 🎂
-
-We specialize in beautifully crafted birthday cakes, delicious dessert cakes, and freshly baked homemade scones that are perfect for any occasion. Whether you're celebrating a birthday, hosting a special event, or simply craving something sweet, we take pride in creating treats that are as delicious as they are beautiful.
-
-Every order is prepared with quality ingredients, attention to detail, and a passion for baking, ensuring every customer enjoys a memorable experience. Let us make your special moments even sweeter with our freshly baked creations.",
-        images: ["images/1000282273_mdab8c.jpg", "images/1000282274_d3w5c6.jpg" "images/1000282272_pjauxg.jpg'],
-        plan: "Basic"
+        description: "Welcome to our bakery, where every bite is made with love! 🎂\n\nWe specialize in beautifully crafted birthday cakes, delicious dessert cakes, and freshly baked homemade scones that are perfect for any occasion. Whether you're celebrating a birthday, hosting a special event, or simply craving something delicious, we have you covered.\n\nEvery order is prepared with quality ingredients, attention to detail, and a passion for baking, ensuring every customer enjoys a memorable experience. Let us make your special moments even sweeter with our delectable treats!",
+        images: ["images/1000282273_mdab8c.jpg", "images/1000282274_d3w5c6.jpg", "images/1000282272_pjauxg.jpg"],
+        plan: "Basic",
         price: "From R200",
         rating: 4.5,
         location: "Soshanguve, South Africa",
@@ -998,207 +994,121 @@ Every order is prepared with quality ingredients, attention to detail, and a pas
       };
       thumbsEl.innerHTML = "";
       slideStatusEl.querySelector("span").textContent = (currentImageIndex + 1) + " / " + images.length;
-      prevSlideEl.style.display = images.length > 1 ? "grid" : "none";
-      nextSlideEl.style.display = images.length > 1 ? "grid" : "none";
-      slideStatusEl.style.display = images.length > 1 ? "inline-flex" : "none";
 
       images.forEach((src, index) => {
         const thumb = document.createElement("img");
-        thumb.className = "thumb" + (index === currentImageIndex ? " selected" : "");
         thumb.src = src;
-        thumb.alt = (business.name || "Business") + " image " + (index + 1);
-        thumb.onerror = () => {
-          thumb.onerror = null;
-          thumb.src = "images/file.jpg";
-        };
-        thumb.onclick = () => {
-          setCurrentImage(index);
-          startSlideshow();
-        };
+        thumb.className = "thumb" + (index === currentImageIndex ? " selected" : "");
+        thumb.alt = "Thumbnail " + (index + 1);
+        thumb.addEventListener("click", () => setCurrentImage(index));
         thumbsEl.appendChild(thumb);
       });
     }
 
-    function updateFavoriteUi() {
-      const active = localStorage.getItem(favoriteKey) === "1";
-      favoriteBtnEl.classList.toggle("active", active);
-      favoriteBtnEl.innerHTML = active
-        ? '<i class="fa-solid fa-heart"></i> Saved'
-        : '<i class="fa-regular fa-heart"></i> Save';
-    }
-
     function renderOtherBusinesses() {
-      const otherBusinesses = allBusinesses
-        .map((item, index) => ({ item, index }))
-        .filter(({ item, index }) => index !== activeBusinessIndex && item && item.name)
-        .slice(0, 6);
+      const others = allBusinesses.filter((_, i) => i !== activeBusinessIndex).slice(0, 3);
 
-      otherBusinessesGridEl.innerHTML = "";
-
-      if (!otherBusinesses.length) {
+      if (!others.length) {
         otherBusinessesSectionEl.style.display = "none";
         return;
       }
 
-      otherBusinessesSectionEl.style.display = "block";
+      otherBusinessesGridEl.innerHTML = "";
 
-      otherBusinesses.forEach(({ item, index }) => {
+      others.forEach((b, i) => {
         const card = document.createElement("a");
-        const service = item.service || "Business";
-        const price = item.price || "Contact for quote";
-        const location = item.location || "South Africa";
-        const summary = String(item.description || service);
-        const shortSummary = summary.length > 110 ? summary.slice(0, 110) + "..." : summary;
-        const rating = Number.parseInt(item.rating, 10) || 4;
-
+        card.href = "Details.html?id=" + (allBusinesses.indexOf(b));
         card.className = "other-card";
-        card.href = "Details.html?id=" + index;
-        card.innerHTML = `
-          <img src="${escapeHtml(getBusinessImage(item))}" alt="${escapeHtml(item.name)}" onerror="this.onerror=null;this.src='images/file.jpg';">
-          <div class="other-card-body">
-            <div class="other-card-top">
-              <div>
-                <h3>${escapeHtml(item.name)}</h3>
-                <p>${escapeHtml(location)}</p>
-              </div>
-              <span class="other-tag"><i class="fa-solid fa-star"></i> ${rating}.0</span>
-            </div>
-            <p>${escapeHtml(shortSummary)}</p>
-            <div class="other-meta">
-              <span class="other-tag"><i class="fa-solid fa-store"></i> ${escapeHtml(service)}</span>
-              <span class="other-tag"><i class="fa-solid fa-wallet"></i> ${escapeHtml(price)}</span>
-            </div>
-          </div>
-        `;
-
+        card.innerHTML = '<img src="' + escapeHtml(getBusinessImage(b)) + '" alt="' + escapeHtml(b.name) + '"><div class="other-card-body"><div class="other-card-top"><h3>' + escapeHtml(b.name) + '</h3></div><p>' + escapeHtml(b.description || "").substring(0, 60) + "...</p><div class=\"other-meta\"><span class=\"other-tag\"><i class=\"fa-solid fa-tag\"></i>" + escapeHtml(b.service || "") + "</span></div></div>";
         otherBusinessesGridEl.appendChild(card);
       });
     }
 
-    function populate() {
-      const phoneDigits = sanitizePhone(business.phone);
-      const phoneDisplay = business.phone || "Phone unavailable";
-      const rating = getRating();
-
-      nameEl.textContent = business.name || "Business profile";
-      descTopEl.textContent = business.description || "Explore services, pricing, and contact options for this local business.";
-      descEl.textContent = business.description || "No description available yet.";
+    function render() {
+      nameEl.textContent = business.name || "Business Name";
+      descTopEl.textContent = (business.description || "").substring(0, 80) + "...";
+      descEl.textContent = business.description || "Business description goes here.";
       priceEl.textContent = getPrice();
-      serviceEyebrowEl.innerHTML = '<i class="fa-solid fa-store"></i> ' + (business.service || "Business profile");
-      pricePillEl.innerHTML = '<i class="fa-solid fa-wallet"></i> ' + getPrice();
-      locationPillEl.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + getLocation();
-      planChipEl.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ' + (business.plan || "Listed business");
-      phoneLabelEl.textContent = phoneDisplay;
-      callLinkEl.href = phoneDigits ? "tel:" + phoneDigits : "#";
+      phoneLabelEl.textContent = sanitizePhone(business.phone);
+      callLinkEl.href = "tel:" + sanitizePhone(business.phone);
+      waLinkEl.href = "https://wa.me/" + sanitizePhone(business.phone) + "?text=Hi";
 
-      const waMessage = encodeURIComponent("Hi, I'm interested in " + (business.name || "your services"));
-      waLinkEl.href = phoneDigits ? "https://wa.me/" + phoneDigits + "?text=" + waMessage : "#";
+      const rating = getRating();
+      updateRatingUi(rating);
+
+      serviceEyebrowEl.innerHTML = '<i class="fa-solid fa-store"></i> ' + escapeHtml(business.service || "Business");
+      pricePillEl.innerHTML = '<i class="fa-solid fa-wallet"></i> ' + escapeHtml(getPrice());
+      locationPillEl.innerHTML = '<i class="fa-solid fa-location-dot"></i> ' + escapeHtml(getLocation());
+      planChipEl.innerHTML = '<i class="fa-solid fa-shield-halved"></i> ' + escapeHtml(business.plan || "Business profile");
 
       servicesListEl.innerHTML = "";
       getServices().forEach((service) => {
-        const item = document.createElement("li");
-        item.innerHTML = '<i class="fa-solid fa-check"></i> ' + service;
-        servicesListEl.appendChild(item);
+        const li = document.createElement("li");
+        li.innerHTML = '<i class="fa-solid fa-check"></i> ' + escapeHtml(service);
+        servicesListEl.appendChild(li);
       });
 
-      updateRatingUi(rating);
       renderGallery();
-      startSlideshow();
-      updateFavoriteUi();
       renderOtherBusinesses();
-      document.title = (business.name || "Business Details") + " | Local Link";
-    }
 
-    document.getElementById("whatsappBtn").onclick = () => {
-      waLinkEl.click();
-    };
+      const isFavorite = localStorage.getItem(favoriteKey) === "true";
+      if (isFavorite) favoriteBtnEl.classList.add("active");
 
-    document.getElementById("orderBtn").onclick = () => {
-      const phoneDigits = sanitizePhone(business.phone);
-      const msg = encodeURIComponent("Hi, I'd like to place an order or get a quote from " + (business.name || "your business"));
-      if (phoneDigits) window.open("https://wa.me/" + phoneDigits + "?text=" + msg, "_blank", "noopener");
-    };
+      prevSlideEl.addEventListener("click", prevSlide);
+      nextSlideEl.addEventListener("click", nextSlide);
 
-    favoriteBtnEl.onclick = () => {
-      if (localStorage.getItem(favoriteKey) === "1") {
-        localStorage.removeItem(favoriteKey);
-      } else {
-        localStorage.setItem(favoriteKey, "1");
-      }
-      updateFavoriteUi();
-    };
+      favoriteBtnEl.addEventListener("click", () => {
+        const isFavorite = favoriteBtnEl.classList.contains("active");
+        if (isFavorite) {
+          favoriteBtnEl.classList.remove("active");
+          localStorage.removeItem(favoriteKey);
+        } else {
+          favoriteBtnEl.classList.add("active");
+          localStorage.setItem(favoriteKey, "true");
+        }
+      });
 
-    document.getElementById("rateBtn").onclick = () => {
-      const input = window.prompt("Rate this business from 1 to 5");
-      const value = Number.parseInt(input, 10);
-      if (value >= 1 && value <= 5) {
-        localStorage.setItem("rating_profile_" + activeBusinessIndex, String(value));
-        updateRatingUi(value);
-        window.alert("Rating saved.");
-      }
-    };
+      rateBtn.addEventListener("click", () => {
+        const rating = Number.parseInt(window.prompt("Rate this business (1-5):") || "0", 10);
+        if (rating >= 1 && rating <= 5) {
+          localStorage.setItem("rating_profile_" + activeBusinessIndex, rating.toString());
+          updateRatingUi(rating);
+        }
+      });
 
-    document.getElementById("shareBtn").onclick = async () => {
-      try {
+      mainImageEl.addEventListener("click", () => {
+        zoomOverlayEl.style.display = "flex";
+        zoomImgEl.src = mainImageEl.src;
+      });
+
+      zoomCloseEl.addEventListener("click", () => {
+        zoomOverlayEl.style.display = "none";
+      });
+
+      zoomOverlayEl.addEventListener("click", (e) => {
+        if (e.target === zoomOverlayEl) zoomOverlayEl.style.display = "none";
+      });
+
+      whatsappBtn.addEventListener("click", () => {
+        window.open(waLinkEl.href);
+      });
+
+      shareBtn.addEventListener("click", () => {
         if (navigator.share) {
-          await navigator.share({
-            title: document.title,
-            text: "Check out this business on Local Link",
+          navigator.share({
+            title: business.name,
+            text: business.description,
             url: window.location.href
           });
-          return;
+        } else {
+          window.alert("Share this link: " + window.location.href);
         }
-      } catch {}
+      });
 
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-        window.alert("Link copied.");
-      } catch {
-        window.alert("Unable to copy the link on this browser.");
-      }
-    };
-
-    prevSlideEl.onclick = () => {
-      prevSlide();
       startSlideshow();
-    };
+    }
 
-    nextSlideEl.onclick = () => {
-      nextSlide();
-      startSlideshow();
-    };
-
-    mainImageEl.onclick = () => {
-      zoomImgEl.src = mainImageEl.src;
-      zoomOverlayEl.style.display = "flex";
-    };
-
-    mainImageEl.addEventListener("mouseenter", stopSlideshow);
-    mainImageEl.addEventListener("mouseleave", startSlideshow);
-    thumbsEl.addEventListener("mouseenter", stopSlideshow);
-    thumbsEl.addEventListener("mouseleave", startSlideshow);
-
-    zoomOverlayEl.onclick = (event) => {
-      if (event.target === zoomOverlayEl || event.target === zoomCloseEl || zoomCloseEl.contains(event.target)) {
-        zoomOverlayEl.style.display = "none";
-      }
-    };
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "ArrowLeft") {
-        prevSlide();
-        startSlideshow();
-      }
-      if (event.key === "ArrowRight") {
-        nextSlide();
-        startSlideshow();
-      }
-      if (event.key === "Escape") {
-        zoomOverlayEl.style.display = "none";
-      }
-    });
-
-    populate();
+    render();
   </script>
 </body>
 </html>
