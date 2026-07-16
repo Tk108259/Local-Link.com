@@ -840,7 +840,7 @@
         featured: true,
         image: "images/1000283155_di8lip.jpg",
         images: ["images/1000283189_ms4lxw.jpg", "images/1000283192_hyrpqt.jpg", "images/1000282275_luc64m.jpg"],
-        description: "Welcome to our bakery, where every bite is made with love! 🎂\n\nWe specialize in beautifully crafted birthday cakes, delicious dessert cakes, and freshly baked homemade scones that are perfect for any occasion.",
+        description: "Welcome to our bakery, where every bite is made with love! 🎂\n\nWe specialize in beautifully crafted birthday cakes, delicious dessert cakes, and freshly baked homemade scones.",
         phone: "27 611 558 472",
         location: "Soshanguve",
         responseTime: "Open from 8-10",
@@ -857,7 +857,7 @@
         featured: false,
         image: "images/1000289610_czhzqm.jpg",
         images: ["images/1000289579_fkvhjy.jpg", "images/1000289598_hegoqg.jpg", "images/1000289630_vnapxh.jpg"],
-        description: "Certified Plumbers, Let us bring our Best quality services to your Home !!"
+        description: "Certified Plumbers, Let us bring our Best quality services to your Home !!",
         phone: "+27 60 772 0324",
         location: "Polokwane",
         responseTime: "Weekend appointments available",
@@ -998,33 +998,53 @@
           return getBusinessSearchText(business).includes(term);
         });
 
-      return filtered;
+      return getSortedBusinesses(filtered);
     }
 
     function renderListings() {
-      const filteredBusinesses = getFilteredBusinesses();
-      const sortedBusinesses = getSortedBusinesses(filteredBusinesses);
-
-      resultsCount.textContent = filteredBusinesses.length;
+      const items = getFilteredBusinesses();
       listingContainer.innerHTML = "";
-      emptyState.style.display = filteredBusinesses.length === 0 ? "block" : "none";
-      updateFavoriteControls();
 
-      sortedBusinesses.forEach((business, index) => {
-        const originalIndex = businesses.findIndex((b) => b.id === business.id);
-        const serviceTags = (business.services || []).slice(0, 3);
+      if (items.length === 0) {
+        emptyState.style.display = "block";
+        resultsCount.textContent = "0";
+        resultsSummary.textContent = "No results match your filters";
+        return;
+      }
 
-        const article = document.createElement("article");
-        article.className = "listing-card";
-        article.innerHTML = `
+      emptyState.style.display = "none";
+      resultsCount.textContent = items.length;
+
+      if (favoritesOnly && featuredOnly) {
+        resultsSummary.textContent = "Showing featured saved listings";
+      } else if (favoritesOnly) {
+        resultsSummary.textContent = "Showing your saved listings";
+      } else if (featuredOnly) {
+        resultsSummary.textContent = "Showing featured listings";
+      } else if (activeCategory !== "All") {
+        resultsSummary.textContent = `Showing all ${activeCategory}`;
+      } else {
+        resultsSummary.textContent = "Showing all available listings";
+      }
+
+      items.forEach((business, index) => {
+        const card = document.createElement("div");
+        card.className = "listing-card";
+
+        const badgesHtml = business.featured ? '<div class="badge featured"><i class="fa-solid fa-star"></i> Featured</div>' : "";
+
+        const isFavorite = favorites.has(business.id);
+        const heartIcon = isFavorite ? "fa-solid" : "fa-regular";
+
+        card.innerHTML = `
           <div class="listing-media">
-            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}">
+            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}" onerror="this.src='images/file.jpg'">
             <div class="badge-row">
-              ${business.featured ? `<span class="badge featured"><i class="fa-solid fa-star"></i> Featured</span>` : ""}
-              <span class="badge category">${escapeHtml(business.category)}</span>
+              ${badgesHtml}
+              <div class="badge category">${escapeHtml(business.category)}</div>
             </div>
-            <button class="favorite-toggle ${favorites.has(business.id) ? "active" : ""}" data-id="${escapeHtml(business.id)}" type="button" aria-label="Save listing">
-              <i class="fa-${favorites.has(business.id) ? "solid" : "regular"} fa-heart"></i>
+            <button class="favorite-toggle ${isFavorite ? 'active' : ''}" type="button" aria-label="Save business" onclick="toggleFavorite('${business.id}', this)">
+              <i class="${heartIcon} fa-heart"></i>
             </button>
           </div>
 
@@ -1032,127 +1052,127 @@
             <div class="listing-head">
               <div>
                 <h3 class="listing-name">${escapeHtml(business.name)}</h3>
-                <p class="listing-location">
-                  <i class="fa-solid fa-map-pin"></i>
+                <div class="listing-location">
+                  <i class="fa-solid fa-location-dot"></i>
                   ${escapeHtml(business.location)}
-                </p>
+                </div>
               </div>
               <div class="price-tag">
                 <strong>${escapeHtml(business.price)}</strong>
-                <span>${business.plan}</span>
+                <span>${getAvailabilityLabel(business)}</span>
               </div>
             </div>
 
             <div class="meta-row">
               <div class="meta-pill">
-                <span class="rating-stars">${getRatingStars(business.rating)}</span>
+                <i class="fa-solid fa-star rating-stars"></i>
+                <span>${business.rating}/5</span>
               </div>
               <div class="meta-pill">
                 <i class="fa-solid fa-clock"></i>
-                ${escapeHtml(business.responseTime)}
-              </div>
-              <div class="meta-pill">
-                <i class="fa-solid ${business.openNow ? "fa-circle-check" : "fa-calendar-check"}"></i>
-                ${escapeHtml(getAvailabilityLabel(business))}
+                <span>${escapeHtml(business.responseTime)}</span>
               </div>
             </div>
 
             <p class="listing-desc">${escapeHtml(business.description)}</p>
+
             <div class="service-tags">
-              ${serviceTags.map((service) => `<span class="service-tag"><i class="fa-solid fa-check"></i> ${escapeHtml(service)}</span>`).join("")}
+              ${(business.services || []).slice(0, 3).map((service) => `<span class="service-tag">${escapeHtml(service)}</span>`).join("")}
             </div>
 
             <div class="listing-footer">
               <div class="contact-line">
-                <i class="fa-solid fa-phone-volume"></i>
+                <i class="fa-solid fa-phone"></i>
                 <a href="tel:${escapeHtml(business.phone)}">${escapeHtml(formatPhoneDisplay(business.phone))}</a>
               </div>
-
               <div class="listing-actions">
-                <a class="listing-btn primary" href="Details.html?id=${originalIndex}">
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                  View details
+                <a href="Details.html?id=${index}" class="listing-btn primary">
+                  <i class="fa-solid fa-arrow-right"></i> View profile
                 </a>
-                <a class="listing-btn whatsapp" href="https://wa.me/${escapeHtml(business.phone)}" target="_blank" rel="noopener noreferrer">
-                  <i class="fa-brands fa-whatsapp"></i>
-                  WhatsApp
-                </a>
-                <a class="listing-btn secondary" href="tel:${escapeHtml(business.phone)}">
-                  <i class="fa-solid fa-phone"></i>
-                  Call now
+                <a href="https://wa.me/${business.phone.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="listing-btn whatsapp">
+                  <i class="fa-brands fa-whatsapp"></i> WhatsApp
                 </a>
               </div>
             </div>
           </div>
         `;
 
-        listingContainer.appendChild(article);
-      });
-
-      bindFavoriteButtons();
-    }
-
-    function bindFavoriteButtons() {
-      document.querySelectorAll(".favorite-toggle").forEach((button) => {
-        button.onclick = () => {
-          const id = button.dataset.id;
-          if (favorites.has(id)) {
-            favorites.delete(id);
-          } else {
-            favorites.add(id);
-          }
-          localStorage.setItem("favoriteBusinesses", JSON.stringify([...favorites]));
-          renderListings();
-        };
+        listingContainer.appendChild(card);
       });
     }
 
-    function setActiveCategory(category) {
-      activeCategory = category;
-      categorySelect.value = category;
-      chips.forEach((chip) => chip.classList.toggle("active", chip.dataset.category === category));
-      renderListings();
-    }
-
-    function resetFilters() {
-      featuredOnly = false;
-      favoritesOnly = false;
-      searchInput.value = "";
-      sortSelect.value = "recommended";
-      setActiveCategory("All");
-    }
-
-    function showFeaturedOnly() {
-      featuredOnly = !featuredOnly;
-      renderListings();
-      scrollToListings();
-    }
-
-    function toggleFavoritesOnly() {
-      favoritesOnly = !favoritesOnly;
-      renderListings();
-      scrollToListings();
-    }
-
-    function startListing(plan) {
-      window.location.href = "Index.html?plan=" + encodeURIComponent(plan);
+    function scrollToListings() {
+      document.getElementById("browse").scrollIntoView({ behavior: "smooth" });
     }
 
     function scrollToSignup() {
       document.getElementById("signup").scrollIntoView({ behavior: "smooth" });
     }
 
-    function scrollToListings() {
-      document.getElementById("browse").scrollIntoView({ behavior: "smooth", block: "start" });
+    function filterByCategory(category) {
+      activeCategory = category;
+      chips.forEach((chip) => {
+        chip.classList.toggle("active", chip.dataset.category === category);
+      });
+      renderListings();
     }
 
-    searchInput.addEventListener("input", renderListings);
-    categorySelect.addEventListener("change", (event) => setActiveCategory(event.target.value));
-    sortSelect.addEventListener("change", renderListings);
+    function showFeaturedOnly() {
+      featuredOnly = !featuredOnly;
+      updateFavoriteControls();
+      renderListings();
+    }
+
+    function toggleFavoritesOnly() {
+      favoritesOnly = !favoritesOnly;
+      updateFavoriteControls();
+      renderListings();
+    }
+
+    function resetFilters() {
+      searchInput.value = "";
+      categorySelect.value = "All";
+      activeCategory = "All";
+      featuredOnly = false;
+      favoritesOnly = false;
+      chips.forEach((chip) => {
+        chip.classList.toggle("active", chip.dataset.category === "All");
+      });
+      updateFavoriteControls();
+      renderListings();
+    }
+
+    function toggleFavorite(id, button) {
+      if (favorites.has(id)) {
+        favorites.delete(id);
+        button.classList.remove("active");
+        button.querySelector("i").className = "fa-regular fa-heart";
+      } else {
+        favorites.add(id);
+        button.classList.add("active");
+        button.querySelector("i").className = "fa-solid fa-heart";
+      }
+      localStorage.setItem("favoriteBusinesses", JSON.stringify([...favorites]));
+      updateFavoriteControls();
+    }
+
+    function startListing(plan) {
+      alert(`Starting a ${plan} listing. Integration pending.`);
+    }
+
     chips.forEach((chip) => {
-      chip.addEventListener("click", () => setActiveCategory(chip.dataset.category));
+      chip.addEventListener("click", () => {
+        filterByCategory(chip.dataset.category);
+      });
     });
 
+    searchInput.addEventListener("input", renderListings);
+    categorySelect.addEventListener("change", () => {
+      filterByCategory(categorySelect.value);
+    });
+    sortSelect.addEventListener("change", renderListings);
+
+    updateFavoriteControls();
     renderListings();
   </script>
 </body>
