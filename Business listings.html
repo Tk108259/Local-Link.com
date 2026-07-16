@@ -840,7 +840,7 @@
         featured: true,
         image: "images/1000283155_di8lip.jpg",
         images: ["images/1000283189_ms4lxw.jpg", "images/1000283192_hyrpqt.jpg", "images/1000282275_luc64m.jpg"],
-        description: "Welcome to our bakery, where every bite is made with love! 🎂\n\nWe specialize in beautifully crafted birthday cakes, delicious dessert cakes, and freshly baked homemade scones.",
+        description: "Welcome to our bakery, where every bite is made with love! 🎂\n\nWe specialize in beautifully crafted birthday cakes, delicious dessert cakes, and freshly baked homemade scones[...]",
         phone: "27 611 558 472",
         location: "Soshanguve",
         responseTime: "Open from 8-10",
@@ -925,6 +925,7 @@
     }));
 
     localStorage.setItem("businesses", JSON.stringify(detailsPayload));
+    localStorage.setItem("businessIds", JSON.stringify(businesses.map(b => b.id)));
     statBusinesses.textContent = businesses.length;
 
     function getRatingStars(rating) {
@@ -1001,104 +1002,159 @@
       return getSortedBusinesses(filtered);
     }
 
+    function findBusinessIndexById(businessId) {
+      return businesses.findIndex(b => b.id === businessId);
+    }
+
     function renderListings() {
-      const items = getFilteredBusinesses();
+      const filtered = getFilteredBusinesses();
       listingContainer.innerHTML = "";
 
-      if (items.length === 0) {
-        emptyState.style.display = "block";
-        resultsCount.textContent = "0";
-        resultsSummary.textContent = "No results match your filters";
-        return;
-      }
-
-      emptyState.style.display = "none";
-      resultsCount.textContent = items.length;
-
-      if (favoritesOnly && featuredOnly) {
-        resultsSummary.textContent = "Showing featured saved listings";
-      } else if (favoritesOnly) {
-        resultsSummary.textContent = "Showing your saved listings";
-      } else if (featuredOnly) {
-        resultsSummary.textContent = "Showing featured listings";
-      } else if (activeCategory !== "All") {
-        resultsSummary.textContent = `Showing all ${activeCategory}`;
-      } else {
-        resultsSummary.textContent = "Showing all available listings";
-      }
-
-      items.forEach((business, index) => {
+      filtered.forEach((business) => {
+        const businessIndex = findBusinessIndexById(business.id);
         const card = document.createElement("div");
         card.className = "listing-card";
-
-        const badgesHtml = business.featured ? '<div class="badge featured"><i class="fa-solid fa-star"></i> Featured</div>' : "";
-
-        const isFavorite = favorites.has(business.id);
-        const heartIcon = isFavorite ? "fa-solid" : "fa-regular";
-
         card.innerHTML = `
           <div class="listing-media">
-            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}" onerror="this.src='images/file.jpg'">
-            <div class="badge-row">
-              ${badgesHtml}
-              <div class="badge category">${escapeHtml(business.category)}</div>
-            </div>
-            <button class="favorite-toggle ${isFavorite ? 'active' : ''}" type="button" aria-label="Save business" onclick="toggleFavorite('${business.id}', this)">
-              <i class="${heartIcon} fa-heart"></i>
+            ${business.featured ? '<div class="badge-row"><span class="badge featured"><i class="fa-solid fa-star"></i> Featured</span></div>' : ""}
+            <button class="favorite-toggle ${favorites.has(business.id) ? "active" : ""}" type="button" onclick="toggleFavorite('${business.id}')">
+              <i class="fa-${favorites.has(business.id) ? "solid" : "regular"} fa-heart"></i>
             </button>
+            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}">
           </div>
-
           <div class="listing-body">
             <div class="listing-head">
               <div>
                 <h3 class="listing-name">${escapeHtml(business.name)}</h3>
-                <div class="listing-location">
-                  <i class="fa-solid fa-location-dot"></i>
+                <p class="listing-location">
+                  <i class="fa-solid fa-map-pin"></i>
                   ${escapeHtml(business.location)}
-                </div>
+                </p>
               </div>
               <div class="price-tag">
                 <strong>${escapeHtml(business.price)}</strong>
-                <span>${getAvailabilityLabel(business)}</span>
+                <span>${escapeHtml(business.plan)}</span>
               </div>
             </div>
 
             <div class="meta-row">
-              <div class="meta-pill">
-                <i class="fa-solid fa-star rating-stars"></i>
-                <span>${business.rating}/5</span>
-              </div>
-              <div class="meta-pill">
+              <span class="meta-pill">
+                <span class="rating-stars">${getRatingStars(business.rating)}</span>
+                ${business.rating}
+              </span>
+              <span class="meta-pill">
                 <i class="fa-solid fa-clock"></i>
-                <span>${escapeHtml(business.responseTime)}</span>
-              </div>
+                ${escapeHtml(getAvailabilityLabel(business))}
+              </span>
             </div>
 
-            <p class="listing-desc">${escapeHtml(business.description)}</p>
+            <p class="listing-desc">${escapeHtml(business.description.substring(0, 120))}...</p>
 
             <div class="service-tags">
-              ${(business.services || []).slice(0, 3).map((service) => `<span class="service-tag">${escapeHtml(service)}</span>`).join("")}
+              ${(business.services || []).slice(0, 3).map(service => `<span class="service-tag">${escapeHtml(service)}</span>`).join("")}
             </div>
 
             <div class="listing-footer">
               <div class="contact-line">
                 <i class="fa-solid fa-phone"></i>
-                <a href="tel:${escapeHtml(business.phone)}">${escapeHtml(formatPhoneDisplay(business.phone))}</a>
+                <a href="tel:${business.phone}">${escapeHtml(formatPhoneDisplay(business.phone))}</a>
               </div>
               <div class="listing-actions">
-                <a href="Details.html?id=${index}" class="listing-btn primary">
-                  <i class="fa-solid fa-arrow-right"></i> View profile
+                <a href="Details.html?id=${businessIndex}" class="listing-btn primary">
+                  <i class="fa-solid fa-arrow-right"></i> View
                 </a>
                 <a href="https://wa.me/${business.phone.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="listing-btn whatsapp">
                   <i class="fa-brands fa-whatsapp"></i> WhatsApp
                 </a>
+                <button class="listing-btn secondary" type="button" onclick="shareBusiness('${business.id}')">
+                  <i class="fa-solid fa-share-nodes"></i> Share
+                </button>
               </div>
             </div>
           </div>
         `;
-
         listingContainer.appendChild(card);
       });
+
+      resultsCount.textContent = filtered.length;
+      emptyState.style.display = filtered.length === 0 ? "block" : "none";
+
+      let summary = "Showing all available listings";
+      if (activeCategory !== "All") summary = `Showing ${filtered.length} ${activeCategory} listing${filtered.length !== 1 ? "s" : ""}`;
+      if (favoritesOnly) summary = `Showing ${filtered.length} saved listing${filtered.length !== 1 ? "s" : ""}`;
+      resultsSummary.textContent = summary;
+    }
+
+    function updateListings() {
+      renderListings();
+    }
+
+    searchInput.addEventListener("input", updateListings);
+    sortSelect.addEventListener("change", updateListings);
+
+    chips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        chips.forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        activeCategory = chip.dataset.category;
+        categorySelect.value = activeCategory;
+        updateListings();
+      });
+    });
+
+    categorySelect.addEventListener("change", () => {
+      activeCategory = categorySelect.value;
+      chips.forEach(c => c.classList.remove("active"));
+      chips.find(c => c.dataset.category === activeCategory)?.classList.add("active");
+      updateListings();
+    });
+
+    function showFeaturedOnly() {
+      featuredOnly = !featuredOnly;
+      updateListings();
+      updateFavoriteControls();
+    }
+
+    function toggleFavoritesOnly() {
+      favoritesOnly = !favoritesOnly;
+      updateListings();
+      updateFavoriteControls();
+    }
+
+    function resetFilters() {
+      activeCategory = "All";
+      featuredOnly = false;
+      favoritesOnly = false;
+      searchInput.value = "";
+      sortSelect.value = "recommended";
+      chips.forEach(c => c.classList.remove("active"));
+      chips[0].classList.add("active");
+      updateListings();
+      updateFavoriteControls();
+    }
+
+    function toggleFavorite(businessId) {
+      if (favorites.has(businessId)) {
+        favorites.delete(businessId);
+      } else {
+        favorites.add(businessId);
+      }
+      localStorage.setItem("favoriteBusinesses", JSON.stringify([...favorites]));
+      updateListings();
+      updateFavoriteControls();
+    }
+
+    function shareBusiness(businessId) {
+      const business = businesses.find(b => b.id === businessId);
+      if (navigator.share) {
+        navigator.share({
+          title: business.name,
+          text: business.description,
+          url: window.location.href
+        }).catch(err => console.log("Error sharing:", err));
+      } else {
+        alert("Check out " + business.name + " on Local Link!");
+      }
     }
 
     function scrollToListings() {
@@ -1109,71 +1165,12 @@
       document.getElementById("signup").scrollIntoView({ behavior: "smooth" });
     }
 
-    function filterByCategory(category) {
-      activeCategory = category;
-      chips.forEach((chip) => {
-        chip.classList.toggle("active", chip.dataset.category === category);
-      });
-      renderListings();
-    }
-
-    function showFeaturedOnly() {
-      featuredOnly = !featuredOnly;
-      updateFavoriteControls();
-      renderListings();
-    }
-
-    function toggleFavoritesOnly() {
-      favoritesOnly = !favoritesOnly;
-      updateFavoriteControls();
-      renderListings();
-    }
-
-    function resetFilters() {
-      searchInput.value = "";
-      categorySelect.value = "All";
-      activeCategory = "All";
-      featuredOnly = false;
-      favoritesOnly = false;
-      chips.forEach((chip) => {
-        chip.classList.toggle("active", chip.dataset.category === "All");
-      });
-      updateFavoriteControls();
-      renderListings();
-    }
-
-    function toggleFavorite(id, button) {
-      if (favorites.has(id)) {
-        favorites.delete(id);
-        button.classList.remove("active");
-        button.querySelector("i").className = "fa-regular fa-heart";
-      } else {
-        favorites.add(id);
-        button.classList.add("active");
-        button.querySelector("i").className = "fa-solid fa-heart";
-      }
-      localStorage.setItem("favoriteBusinesses", JSON.stringify([...favorites]));
-      updateFavoriteControls();
-    }
-
     function startListing(plan) {
-      alert(`Starting a ${plan} listing. Integration pending.`);
+      alert("Start your " + plan + " listing! (Implementation pending)");
     }
 
-    chips.forEach((chip) => {
-      chip.addEventListener("click", () => {
-        filterByCategory(chip.dataset.category);
-      });
-    });
-
-    searchInput.addEventListener("input", renderListings);
-    categorySelect.addEventListener("change", () => {
-      filterByCategory(categorySelect.value);
-    });
-    sortSelect.addEventListener("change", renderListings);
-
+    updateListings();
     updateFavoriteControls();
-    renderListings();
   </script>
 </body>
 </html>
