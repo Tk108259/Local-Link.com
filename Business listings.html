@@ -1002,66 +1002,68 @@
       return getSortedBusinesses(filtered);
     }
 
-    function findBusinessIndexById(businessId) {
-      return businesses.findIndex(b => b.id === businessId);
-    }
-
     function renderListings() {
       const filtered = getFilteredBusinesses();
       listingContainer.innerHTML = "";
 
       filtered.forEach((business) => {
-        const businessIndex = findBusinessIndexById(business.id);
         const card = document.createElement("div");
         card.className = "listing-card";
         card.innerHTML = `
           <div class="listing-media">
-            ${business.featured ? '<div class="badge-row"><span class="badge featured"><i class="fa-solid fa-star"></i> Featured</span></div>' : ""}
-            <button class="favorite-toggle ${favorites.has(business.id) ? "active" : ""}" type="button" onclick="toggleFavorite('${business.id}')">
+            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}" onerror="this.src='images/file.jpg'">
+            <div class="badge-row">
+              ${business.featured ? '<span class="badge featured"><i class="fa-solid fa-star"></i> Featured</span>' : ""}
+              <span class="badge category">${escapeHtml(business.category)}</span>
+            </div>
+            <button class="favorite-toggle ${favorites.has(business.id) ? "active" : ""}" onclick="toggleFavorite('${business.id}')" type="button" aria-label="Save ${escapeHtml(business.name)}">
               <i class="fa-${favorites.has(business.id) ? "solid" : "regular"} fa-heart"></i>
             </button>
-            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}">
           </div>
           <div class="listing-body">
             <div class="listing-head">
               <div>
                 <h3 class="listing-name">${escapeHtml(business.name)}</h3>
-                <p class="listing-location">
+                <div class="listing-location">
                   <i class="fa-solid fa-map-pin"></i>
                   ${escapeHtml(business.location)}
-                </p>
+                </div>
               </div>
               <div class="price-tag">
                 <strong>${escapeHtml(business.price)}</strong>
-                <span>${escapeHtml(business.plan)}</span>
+                <span>${business.plan}</span>
               </div>
             </div>
 
             <div class="meta-row">
               <span class="meta-pill">
                 <span class="rating-stars">${getRatingStars(business.rating)}</span>
-                ${business.rating}
               </span>
               <span class="meta-pill">
                 <i class="fa-solid fa-clock"></i>
-                ${escapeHtml(getAvailabilityLabel(business))}
+                ${escapeHtml(business.responseTime)}
+              </span>
+              <span class="meta-pill">
+                <i class="fa-solid fa-circle" style="font-size: 0.5rem; color: ${business.openNow ? "var(--success)" : "var(--danger)"}"></i>
+                ${getAvailabilityLabel(business)}
               </span>
             </div>
 
-            <p class="listing-desc">${escapeHtml(business.description.substring(0, 120))}...</p>
+            <p class="listing-desc">${escapeHtml(business.description)}</p>
 
             <div class="service-tags">
-              ${(business.services || []).slice(0, 3).map(service => `<span class="service-tag">${escapeHtml(service)}</span>`).join("")}
+              ${business.services.map(service => `<span class="service-tag">${escapeHtml(service)}</span>`).join("")}
             </div>
 
             <div class="listing-footer">
               <div class="contact-line">
                 <i class="fa-solid fa-phone"></i>
-                <a href="tel:${business.phone}">${escapeHtml(formatPhoneDisplay(business.phone))}</a>
+                <a href="tel:${business.phone.replace(/\D/g, '')}">${escapeHtml(business.phone)}</a>
               </div>
+
               <div class="listing-actions">
-                <a href="Details.html?id=${businessIndex}" class="listing-btn primary">
-                  <i class="fa-solid fa-arrow-right"></i> View
+                <a href="tel:${business.phone.replace(/\D/g, '')}" class="listing-btn primary">
+                  <i class="fa-solid fa-phone"></i> Call
                 </a>
                 <a href="https://wa.me/${business.phone.replace(/\D/g, '')}" target="_blank" rel="noopener noreferrer" class="listing-btn whatsapp">
                   <i class="fa-brands fa-whatsapp"></i> WhatsApp
@@ -1166,7 +1168,7 @@
     }
 
     function startListing(plan) {
-      alert("Start your " + plan + " listing! (Implementation pending)");
+      window.location.href = "index.html";
     }
 
     updateListings();
