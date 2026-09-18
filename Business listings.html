@@ -370,6 +370,21 @@
 
     .listing-media img { width: 100%; height: 100%; object-fit: cover; }
 
+    .listing-media-link {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .listing-media-link img {
+      transition: transform 0.25s ease;
+    }
+
+    .listing-media-link:hover img {
+      transform: scale(1.03);
+    }
+
     .badge-row {
       position: absolute;
       left: 14px;
@@ -840,7 +855,7 @@
         featured: true,
         image: "images/1000283155_di8lip.jpg",
         images: ["images/1000283189_ms4lxw.jpg", "images/1000283192_hyrpqt.jpg", "images/1000282275_luc64m.jpg"],
-        description: "Welcome to our bakery, where every bite is made with love! 🎂\n\nWe specialize in beautifully crafted birthday cakes, delicious dessert cakes, and freshly baked homemade scones[...]",
+        description: "Welcome to our bakery, where every bite is made with love! 🎂\n\nWe specialize in beautifully crafted birthday cakes, delicious dessert cakes, and freshly baked homemade scones.",
         phone: "27 611 558 472",
         location: "Soshanguve",
         responseTime: "Open from 8-10",
@@ -983,7 +998,7 @@
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
+        .replace(/\"/g, "&quot;")
         .replace(/'/g, "&#39;");
     }
 
@@ -1002,6 +1017,11 @@
       return getSortedBusinesses(filtered);
     }
 
+    function getBusinessDetailsUrl(business) {
+      const businessIndex = businesses.indexOf(business);
+      return `Details.html?id=${businessIndex}`;
+    }
+
     function renderListings() {
       const filtered = getFilteredBusinesses();
       listingContainer.innerHTML = "";
@@ -1011,7 +1031,9 @@
         card.className = "listing-card";
         card.innerHTML = `
           <div class="listing-media">
-            <img src="${escapeHtml(business.image)}" alt="${escapeHtml(business.name)}" onerror="this.src='images/file.jpg'">
+            <a class="listing-media-link" href="${getBusinessDetailsUrl(business)}" aria-label="View details for ${escapeHtml(business.name)}">
+              <img src="${escapeHtml(business.image)}" alt="View details for ${escapeHtml(business.name)}" onerror="this.src='images/file.jpg'">
+            </a>
             <div class="badge-row">
               ${business.featured ? '<span class="badge featured"><i class="fa-solid fa-star"></i> Featured</span>' : ""}
               <span class="badge category">${escapeHtml(business.category)}</span>
@@ -1096,31 +1118,28 @@
 
     chips.forEach(chip => {
       chip.addEventListener("click", () => {
-        chips.forEach(c => c.classList.remove("active"));
-        chip.classList.add("active");
+        chips.forEach(c => c.classList.toggle("active", c === chip));
         activeCategory = chip.dataset.category;
-        categorySelect.value = activeCategory;
         updateListings();
       });
     });
 
-    categorySelect.addEventListener("change", () => {
-      activeCategory = categorySelect.value;
-      chips.forEach(c => c.classList.remove("active"));
-      chips.find(c => c.dataset.category === activeCategory)?.classList.add("active");
+    categorySelect.addEventListener("change", (event) => {
+      activeCategory = event.target.value;
+      chips.forEach(chip => chip.classList.toggle("active", chip.dataset.category === activeCategory));
       updateListings();
     });
 
     function showFeaturedOnly() {
       featuredOnly = !featuredOnly;
-      updateListings();
       updateFavoriteControls();
+      updateListings();
     }
 
     function toggleFavoritesOnly() {
       favoritesOnly = !favoritesOnly;
-      updateListings();
       updateFavoriteControls();
+      updateListings();
     }
 
     function resetFilters() {
@@ -1128,11 +1147,11 @@
       featuredOnly = false;
       favoritesOnly = false;
       searchInput.value = "";
+      categorySelect.value = "All";
       sortSelect.value = "recommended";
-      chips.forEach(c => c.classList.remove("active"));
-      chips[0].classList.add("active");
-      updateListings();
+      chips.forEach(chip => chip.classList.toggle("active", chip.dataset.category === "All"));
       updateFavoriteControls();
+      updateListings();
     }
 
     function toggleFavorite(businessId) {
@@ -1142,20 +1161,23 @@
         favorites.add(businessId);
       }
       localStorage.setItem("favoriteBusinesses", JSON.stringify([...favorites]));
-      updateListings();
       updateFavoriteControls();
+      updateListings();
     }
 
     function shareBusiness(businessId) {
-      const business = businesses.find(b => b.id === businessId);
+      const business = businesses.find(item => item.id === businessId);
+      if (!business) return;
+
+      const shareText = `Check out ${business.name} on Local Link: ${window.location.href.split("#")[0]}`;
       if (navigator.share) {
         navigator.share({
           title: business.name,
-          text: business.description,
-          url: window.location.href
-        }).catch(err => console.log("Error sharing:", err));
+          text: shareText,
+          url: `${window.location.href.split("#")[0]}`
+        }).catch(() => {});
       } else {
-        alert("Check out " + business.name + " on Local Link!");
+        navigator.clipboard.writeText(shareText).then(() => alert("Link copied to clipboard")).catch(() => {});
       }
     }
 
@@ -1168,11 +1190,11 @@
     }
 
     function startListing(plan) {
-      window.location.href = "Index.html";
+      alert(`Starting a ${plan} listing setup.`);
     }
 
-    updateListings();
     updateFavoriteControls();
+    updateListings();
   </script>
 </body>
 </html>
